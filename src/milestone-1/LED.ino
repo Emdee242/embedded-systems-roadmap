@@ -11,6 +11,9 @@ void on(){
 void off(){
   digitalWrite(pin, LOW);
 }
+void setMode(bool x){
+  pinMode(led1.getPin(), x);
+}
 LED(int x){
 pin = x;
 }
@@ -19,7 +22,7 @@ int getPin(){return pin;}
 LED led1(7);  
 void setup() {
   // put your setup code here, to run once:
-pinMode(led1.getPin(), OUTPUT);
+setMode(1);
 
 }
 
