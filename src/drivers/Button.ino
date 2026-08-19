@@ -3,7 +3,7 @@ private:
 const int pin;
 public:
 void Button const(int x): pin(x){}
-int begin(){
+void begin(){
   pinMode(pin, INPUT_PULLUP);
 }
 int readPin(){
