@@ -17,5 +17,5 @@ Button Button1(7);
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+Button1.readPin;
 }
