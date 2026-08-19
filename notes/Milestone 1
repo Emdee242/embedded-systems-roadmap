@@ -1,0 +1,30 @@
+LED DRIVER
+What I Was Confused About:
+At first i did not know what a driver was; was it a class? a seperate file? a class in a seperate file that could be called by another file?
+Eventually i did understand what it was. and got done with this first project relatively quickly.
+
+Enlightenment:
+To be honest not much here. All i did here was utilize classes to do a basic led blinking state machine.
+
+Questions:
+My current led driver has a setup function and a loop function built into it. Meaning it is its standalone code and not a full on led driver yet.
+After doing some research i did find out i will eventually make it a .cpp file and then will it be an independent driver. but it is still a question till then nevertheless.
+
+
+
+BUTTON DRIVER
+What I was Confused About:
+This one was slightly different as it introduced more concepts; mainly making some variable const; and i had some trouble understanding how i was supposed to initialize a const variable upon creation.
+Also slight trouble understanding the difference between putting a const variable in the beginning of a function versus at the end of the function.
+
+Enlightenment:
+Understood a Member Initializer List as that was necessary to understand how to initialize a const variable upon creation.
+Got a hang of the difference between putting a const at the beginning versus at the end of a function.
+
+Questions:
+I do not fully understand why i have to make the read function a const. Since it is a function incapable of modifying values why do i have to make it a const?
+
+
+
+DEBOUNCER
+
