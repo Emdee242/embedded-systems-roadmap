@@ -1,21 +1,19 @@
 class Button{
 private:
-const int pin;
+const uint8_t pin;
 public:
-void Button const(int x): pin(x){}
-void begin(){
+Button (uint8_t x) : pin(x){}
+void begin() const{
   pinMode(pin, INPUT_PULLUP);
 }
-int readPin(){
+bool readPin () const{
   return digitalRead(pin);
 }
 };
 void setup() {
   // put your setup code here, to run once:
-Button Button1(7);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-Button1.readPin;
 }
