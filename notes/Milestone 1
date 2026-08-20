@@ -27,4 +27,14 @@ I do not fully understand why i have to make the read function a const. Since it
 
 
 DEBOUNCER
+What I Was Confused About:
+At first i did not understand how i was going to use my button driver class to make the debouncer (link them together and create a temporary reference object inside the debouncer class).
+I also did not understand the logic of a debouncer and kind of derailed (thinking a debouncer checks once every 50 millisecond and goes blind for another 50 millisecond).
 
+Enlightenment:
+How to make a const reference object in another class calling a seperate class.
+Debouncer logic and code structure
+Understood a bit more how amazingly fast a microcontroller is. so much so that each iteration takes nanoseconds. This made me look at my code in a different light.
+
+Questions:
+I do not really have questions.
