@@ -1,6 +1,6 @@
 class Timer{
   private:
-  constexpr unsigned long intervalTime;
+  const unsigned long intervalTime;
   unsigned long recordTime = 0;
   public:
   Timer (unsigned long x) : intervalTime(x){}
@@ -13,6 +13,8 @@ class Timer{
     return result;
   }
 };
+constexpr unsigned long specificTimer = 1000;
+Timer Timer1(specificTimer);
 void setup(){
   
 }
