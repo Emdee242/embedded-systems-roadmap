@@ -3,33 +3,32 @@ unsigned long checkRefTime = 0;
 int ledState = 1;
 class LED{
 private:
-int pin;
+const int pin;
 public:
+LED(int x) : pin(x){}
 void on(){
-  digitalWrite(pin, HIGH);
+  digitalWrite(getPin(), HIGH);
 }
 void off(){
-  digitalWrite(pin, LOW);
+  digitalWrite(getPin(), LOW);
 }
-void setMode(bool x){
-  pinMode(led1.getPin(), x);
+void setMode(int x){
+  pinMode(getPin(), x);
 }
-LED(int x){
-pin = x;
-}
-int getPin(){return pin;}
+
+int getPin() const {return pin;}
 };
 LED led1(7);  
 void setup() {
   // put your setup code here, to run once:
-setMode(1);
+led1.setMode(OUTPUT);
 
 }
 
 void loop() { 
   // put your main code here, to run repeatedly:
 checkSystemTime = millis();
-if((checkSystemTime - checkRefTime)  > 500){
+if((checkSystemTime - checkRefTime)  >= 500){
   checkRefTime = checkSystemTime;
   if(ledState){
     led1.on();
