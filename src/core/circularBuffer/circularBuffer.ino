@@ -1,37 +1,38 @@
-#include <iostream>
 class Buffer{
 private:
 constexpr static int size = 8;
 int buffArray[size];
 int head = 0;
 int tail = 0;
-bool isArrayFull = false;
+u_int16_t isArrayFull = 0;
 public:
-bool write(int x){
-  if(((head + 1) & (size - 1)) == ((tail) & (size - 1))){
-    isArrayFull = true;
-    return false;
-    
-  }else{
-    buffArray[head] = x;
-    head = (head + 1) & (size - 1);
-    isArrayFull = false;
-    return true;
+void write(int x){
+buffArray[head] = x;
+head = (head + 1) & (size - 1);
+if(isFull() != size){
+isArrayFull++;
+}else if (isFull() == size){
+tail = (tail + 1) & (size - 1);
   }
 }
 int read(){
-  int readVar;
-    readVar = buffArray[tail];  
-  if(isArrayFull == false && ((head) & (size - 1)) == ((tail) & (size - 1))){
-    return 0;
-  }else{
-    tail = (tail + 1) & (size - 1);
-    return readVar;
-  }
-  
-  
+int readVar;
+readVar = buffArray[tail];
+if(isFull() == 0){
+return 0;
+}else{
+isArrayFull--;
+tail = (tail + 1) & (size - 1);
+return readVar;
 }
-bool isFull() const{
-  return isArrayFull;
+}
+int isFull() const{
+return isArrayFull;
 }
 };
+void setup(){
+
+}
+void loop(){
+
+}
