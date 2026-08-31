@@ -1,6 +1,6 @@
 class Buffer{
 private:
-constexpr static int size = 8;
+constexpr static int size = 1024;
 int buffArray[size];
 int head = 0;
 int tail = 0;

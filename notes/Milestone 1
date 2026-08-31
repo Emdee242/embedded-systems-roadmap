@@ -38,3 +38,32 @@ Understood a bit more how amazingly fast a microcontroller is. so much so that e
 
 Questions:
 I do not really have questions.
+
+
+
+
+SOFTWARE TIMER
+What I Was Confused About:
+Being honest, the logic tripped me up slightly more than i'm proud to admit. Otherwise everything else was just reapplication some concepts.
+
+Enlightenment:
+None really
+
+Questions:
+None really
+
+
+
+
+
+CIRCULAR BUFFER
+What I Was Confused About:
+I was confused about how an array was supposed to overwrite its first array after being full. so the logic. I also applied constexpr here as the array size so applying that solidified my knowledge on it.
+
+Enlightenment:
+How to use constexpr
+How the modulus operator functions in a circular buffer
+Anger Management
+
+Questions:
+none. I spent the most time here so i had ample time to reflect and get all the answers to my questions. This is also the project that demanded understanding the most. I had to understand fully how arrays, constexpr, manipulating memory etc works to code it. 
