@@ -4,7 +4,7 @@ constexpr static int size = 1024;
 int buffArray[size];
 int head = 0;
 int tail = 0;
-u_int16_t isArrayFull = 0;
+uint16_t isArrayFull = 0;
 public:
 void write(int x){
 buffArray[head] = x;
