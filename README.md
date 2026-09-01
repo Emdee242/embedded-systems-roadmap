@@ -49,6 +49,7 @@ Every milestone builds upon the previous one.
 ## Repository Structure
 
 ```
+assets/
 docs/
 notes/
 src/
