@@ -12,6 +12,9 @@ After doing some research i did find out i will eventually make it a .cpp file a
 
 
 
+
+
+
 BUTTON DRIVER
 What I was Confused About:
 This one was slightly different as it introduced more concepts; mainly making some variable const; and i had some trouble understanding how i was supposed to initialize a const variable upon creation.
@@ -23,6 +26,9 @@ Got a hang of the difference between putting a const at the beginning versus at 
 
 Questions:
 I do not fully understand why i have to make the read function a const. Since it is a function incapable of modifying values why do i have to make it a const?
+
+
+
 
 
 
@@ -38,6 +44,7 @@ Understood a bit more how amazingly fast a microcontroller is. so much so that e
 
 Questions:
 I do not really have questions.
+
 
 
 
@@ -67,3 +74,21 @@ Anger Management
 
 Questions:
 none. I spent the most time here so i had ample time to reflect and get all the answers to my questions. This is also the project that demanded understanding the most. I had to understand fully how arrays, constexpr, manipulating memory etc works to code it. 
+
+
+
+
+
+LOGGER
+What I Was Confused About:
+Meaning of a Logger, for some reason it was impossible to find code or implementation of an embedded logger. couldn't even find a normal c++ logger in youtube.
+The syntax.. again due to the scarcity of information
+a char pointer too. it was new information learning about how it works
+
+Enlgihtenment:
+How to use an enum
+How to use char pointers
+loggers and a little bit of what it takes to build one that can store memory.
+
+Questions
+One of the paths i could have chosen was delibrately use my circular buffer to store the data entries of my logger. But that was too complicated. And one of the things i'm intentionally avoiding is overengineering stuff.. so i guess i'm kinda curious as to how that works? cuz i'll have to change the int array to a class array.. which would also change a bunch of other things.
