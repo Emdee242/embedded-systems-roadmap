@@ -92,3 +92,17 @@ loggers and a little bit of what it takes to build one that can store memory.
 
 Questions
 One of the paths i could have chosen was delibrately use my circular buffer to store the data entries of my logger. But that was too complicated. And one of the things i'm intentionally avoiding is overengineering stuff.. so i guess i'm kinda curious as to how that works? cuz i'll have to change the int array to a class array.. which would also change a bunch of other things.
+
+
+
+
+
+EMBEDDED UTILITY LIBRARY
+What I Was Confused About:
+Nothing much. Building unto these projects gave me a good mental model of how they would work together. although i struggled a bit with the syntax. I also struggled a bit with the "instant reward" mechanism of the button where the led lights up instantly. as well as increasing my codes efficiency (avoiding spagetti code, unnecessary method calls etc)
+
+Enlightenment:
+I started seeing other better architectural alternatives when building this one. like the syntax difference between the button driver and led driver and how they should correlate. as well as additional methods that would do good to add as well as better naming conventions.
+
+Questions
+I now know about a way to make my software timer better and more "efficient"? i am not really sure. but since i am especially trying to avoid "overengineering" stuff. i will hold off on that till it is actually useful.
