@@ -1,13 +1,18 @@
 class Timer{
   private:
-  const unsigned long intervalTime;
+  unsigned long intervalTime = 0;
   unsigned long recordTime = 0;
   public:
-  Timer (unsigned long x) : intervalTime(x){}
-  bool interval(){
+  void reset(){
+    recordTime = millis();
+  }
+  void setTimer(unsigned long x){
+    intervalTime = x;
+  }
+  bool intervalPassed(){
     bool result = false;
     if((millis() - recordTime) >= intervalTime){
-      recordTime = millis();
+      recordTime += intervalTime;
       result = true;
     }
     return result;
