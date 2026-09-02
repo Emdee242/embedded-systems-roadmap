@@ -22,8 +22,10 @@ Serial.println("ERROR");
 }
 }
 void setup(){
-
+pinMode(7, INPUT);
 }
 void loop(){
-
+if(digitalRead(7) == HIGH){
+Log("Sensor noise detected", Severity::WARN);   // This whole if statement is just for demonstration.. holding the button doesn't translate to sensor noise
+}
 }
