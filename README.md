@@ -53,6 +53,8 @@ assets/
 docs/
 notes/
 src/
+embedded-systems-roadmap.ino
+README.md
 ```
 
 More folders will be added as the project evolves.

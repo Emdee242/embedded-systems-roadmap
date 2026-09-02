@@ -125,23 +125,7 @@ enum class Severity{
   WARN,
   ERROR
 };
-void Log(const char* message, Severity Level){
-Serial.print(message); Serial.print("      ");
-switch(Level){
-  case(Severity::INFO):
-Serial.println("INFO");
-break;
-case(Severity::WARN):
-Serial.println("WARN");
-  break;
-case(Severity::ERROR):
-Serial.println("ERROR");
-  break;
-  default:
-  Serial.println("Invalid input");
-  break;
-}
-}
+
 LED embedLED(8);
 Button embedButton(7);
 Debouncer embedDebounce(embedButton);
