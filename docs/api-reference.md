@@ -208,7 +208,7 @@ A combined reusable library containing the components developed throughout Miles
 - Logger
 
 **Structure:**
-[architecture diagram]
+[![architecture diagram](assets/Diagram/embedded utility library.svg)]
 
 **Usage:**
 ```cpp
@@ -252,4 +252,3 @@ if(buttonPressed){
 }
 ```
 **Known Limitations:** The file contains the main code of all the components involved. Which will change when the .ino files are converted to .cpp and .h files in milestone 4.
-...
