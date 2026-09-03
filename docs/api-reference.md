@@ -75,7 +75,7 @@ Takes a noisy raw button signal and outputs a single stable state, using `millis
 
 **Public API**
 
-- `check()` — returns the current debounced (clean) state of the button.
+- `update()` — detects the current debounced (clean) state of the button and updates the initial and official state accordingly.
 - `fall()` — returns `true` exactly once, on the instant a clean HIGH→LOW transition is detected.
 
 **Usage**
@@ -83,18 +83,19 @@ Takes a noisy raw button signal and outputs a single stable state, using `millis
 ```cpp
 Button Button1(7);
 Debouncer Debouncer1(Button1);
-
-void setup() {
-  Serial.begin(9600);
-  Button1.begin();
+void setup(){
+Serial.begin(9600);
+Button1.begin();
 }
-
-void loop() {
-  Serial.print(Debouncer1.check());
+void loop(){
+Debouncer1.update();
+if(Debouncer1.fall()){
+  Serial.println(1);
+}
 }
 ```
 
-**Known limitations:** The 50ms debounce window is hardcoded inside the class — not configurable through the constructor, so every Debouncer instance is stuck with the same bounce time regardless of the actual switch being used. `fall()` only detects a falling edge; there's no equivalent `rise()` for the opposite transition. Debouncer takes its Button by reference, so it's tightly coupled to a specific Button instance for its whole lifetime. the fall() function does two actions. checking system state and modifying a system command.
+**Known limitations:** The 50ms debounce window is hardcoded inside the class — not configurable through the constructor, so every Debouncer instance is stuck with the same bounce time regardless of the actual switch being used. `fall()` only detects a falling edge; there's no equivalent `rise()` for the opposite transition. Debouncer takes its Button by reference, so it's tightly coupled to a specific Button instance for its whole lifetime.
 
 ---
 
@@ -217,7 +218,6 @@ Button embedButton(7);
 Debouncer embedDebounce(embedButton);
 Timer embedTimer;
 Buffer embedBuffer;
-
 void setup(){
 embedLED.begin();
 embedButton.begin();
@@ -225,11 +225,9 @@ Serial.begin(9600);
 embedTimer.setTimer(300);
 embedTimer.reset();
 }
-
 bool buttonPressed = true;
-
 void loop(){
-if(embedDebounce.check() == LOW){
+if(embedDebounce.fall()){
 if(buttonPressed){
   embedTimer.reset();
   buttonPressed = false;
