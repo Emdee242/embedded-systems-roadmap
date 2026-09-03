@@ -12,9 +12,9 @@ bool readPin () const{
 };
 class Debouncer{
   private:
-bool initialState = HIGH;
-bool officialState = HIGH;
-bool lockTime = HIGH;
+bool initialState = true;
+bool officialState = true;
+bool lastRawRead = true;
 const Button& refButton;
 unsigned long refBounceTime = 50;
 unsigned long changeDetect = 0;
@@ -32,7 +32,7 @@ unsigned long changeDetect = 0;
     lastRawRead = tempReadState;
   }
   bool fall(){
-  bool triggered = LOW;
+  bool triggered = false;
   if(initialState == HIGH && officialState == LOW){
     triggered = true;
   }
@@ -47,5 +47,7 @@ Button1.begin();
 }
 void loop(){
 Debouncer1.update();
-
+if(Debouncer1.fall()){
+  Serial.println(1);
+}
 }

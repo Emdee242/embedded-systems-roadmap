@@ -31,37 +31,32 @@ bool readPin () const{
   return digitalRead(pin);
 }
 };
-
 class Debouncer{
   private:
-bool initialState = HIGH;
-bool officialState = HIGH;
-bool transition = HIGH;
+bool initialState = true;
+bool officialState = true;
+bool lastRawRead = true;
 const Button& refButton;
 unsigned long refBounceTime = 50;
 unsigned long changeDetect = 0;
   public:
   Debouncer(const Button& btn) : refButton(btn){};
-  bool check(){
+  void update(){
+    initialState = officialState;
     bool tempReadState = refButton.readPin();
-    if(initialState != tempReadState){
+    if(lastRawRead != tempReadState){
       changeDetect = millis();
     }
     if((millis() - changeDetect) >= refBounceTime){
-      if(officialState != tempReadState){
-        officialState = tempReadState;
-      }
+      officialState = tempReadState;
     }
-    initialState = tempReadState;
-   return officialState; 
+    lastRawRead = tempReadState;
   }
   bool fall(){
-  bool triggered = LOW;
-  int recentTransition = check();
-  if(transition == HIGH && recentTransition == LOW){
+  bool triggered = false;
+  if(initialState == HIGH && officialState == LOW){
     triggered = true;
   }
-  transition = recentTransition;
   return triggered;
   }
 };
@@ -140,7 +135,7 @@ embedTimer.reset();
 }
 bool buttonPressed = true;
 void loop(){
-if(embedDebounce.check() == LOW){
+if(embedDebounce.fall()){
 if(buttonPressed){
   embedTimer.reset();
   buttonPressed = false;
