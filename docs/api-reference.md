@@ -208,7 +208,7 @@ A combined reusable library containing the components developed throughout Miles
 - Logger
 
 **Structure:**
-[![architecture diagram](assets/Diagram/embedded_utility_library.svg)]
+![Architecture Diagram](assets/Diagram/embedded_utility_library.svg)
 
 **Usage:**
 ```cpp
