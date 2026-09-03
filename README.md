@@ -79,7 +79,7 @@ Throughout this roadmap I will document:
 I will publish two progress videos every week documenting my learning journey, project evolution, and technical challenges.
 
 ### Week 1: Climbing the Embedded Ladder
-[![Week 1 Update](assets/Milestone1_thumbnail.jpg)](https://youtu.be/4rOoZHeShZc)
+[![Week 1 Update](assets/Thumbnails/Milestone1_thumbnail.jpg)](https://youtu.be/4rOoZHeShZc)
 
 ---
 
