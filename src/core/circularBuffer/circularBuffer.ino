@@ -30,9 +30,11 @@ int isFull() const{
 return isArrayFull;
 }
 };
+Buffer Buffer1
 void setup(){
 
 }
 void loop(){
-
+Buffer1.write(42);
+int value = Buffer1.read();
 }

@@ -1,7 +1,12 @@
 unsigned long checkSystemTime;
 unsigned long checkRefTime = 0;
 int ledState = 1;
-cLED(int x) : pin(x){}
+class LED{
+private:
+const int pin;
+bool isOn = false;
+public:
+LED(int x) : pin(x){}
 void on(){
   digitalWrite(pin, HIGH);
   isOn = true;
@@ -19,7 +24,7 @@ bool ledState() const {return isOn;}
 LED led1(7);  
 void setup() {
   // put your setup code here, to run once:
-led1.setMode(OUTPUT);
+led1.begin();
 
 }
 

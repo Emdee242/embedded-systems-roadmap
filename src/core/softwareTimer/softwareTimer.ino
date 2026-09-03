@@ -18,11 +18,15 @@ class Timer{
     return result;
   }
 };
-constexpr unsigned long specificTimer = 1000;
-Timer Timer1(specificTimer);
+const unsigned long specificTimer = 1000;
+Timer sensorTimer;
 void setup(){
-  
+Serial.begin(9600);
+sensorTimer.setTimer(specificTimer);
+sensorTimer.reset();
 }
 void loop(){
-
+if(sensorTimer.intervalPassed()){
+  Serial.println(1);
+}
 }

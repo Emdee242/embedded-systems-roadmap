@@ -13,8 +13,9 @@ A class that wraps `digitalWrite()` so an LED's pin lives as a private member in
 
 - `on()` — supplies the pin with voltage. Turns the LED on.
 - `off()` — supplies the pin with zero voltage. Turns the LED off.
-- `setMode(int x)` — configures the pin as INPUT or OUTPUT.
+- `begin()` — configures the pin as OUTPUT.
 - `getPin()` — returns the pin number assigned at construction.
+- `ledState()` — returns the current LED state.
 
 **Usage**
 
@@ -22,18 +23,19 @@ A class that wraps `digitalWrite()` so an LED's pin lives as a private member in
 LED led1(7);
 
 void setup() {
-  led1.setMode(OUTPUT);
+  led1.begin();
 }
 
-void loop() {
-  led1.on();
-  delay(500);
-  led1.off();
-  delay(500);
+void loop() { 
+  // put your main code here, to run repeatedly:
+led1.on();
+delay(500);
+led1.off();
+delay(500);
 }
 ```
 
-**Known limitations:** `setMode()` has to be called manually in `setup()` — the class doesn't configure its own pin mode on construction, so it's easy to forget. No validation that the pin number passed in is actually a valid GPIO pin.
+**Known limitations:** No validation that the pin number passed in is actually a valid GPIO pin.
 
 ---
 
@@ -104,21 +106,26 @@ A reusable, non-blocking "has N milliseconds passed?" class — the generalized 
 **Public API**
 
 - `interval()` — returns `true` exactly once every time the configured interval has elapsed, then resets internally.
+- `setTimer(unsigned long x)` —  declares the interval time.
 
 **Usage**
 
 ```cpp
-constexpr unsigned long specificTimer = 1000;
-Timer Timer1(specificTimer);
-
-void loop() {
-  if (Timer1.interval()) {
-    // runs once every 1000ms
-  }
+const unsigned long specificTimer = 1000;
+Timer sensorTimer;
+void setup(){
+Serial.begin(9600);
+sensorTimer.setTimer(specificTimer);
+sensorTimer.reset();
+}
+void loop(){
+if(sensorTimer.intervalPassed()){
+  Serial.println(1);
+}
 }
 ```
 
-**Known limitations:** The interval value is `const`, set once at construction — no way to change it later without creating a new Timer object. No `stop()` or `reset()` method; the only way to interact with it is checking `interval()`.
+**Known limitations:** The interval value is `const`, set once at construction — no way to change it later without creating a new Timer object. The only way to interact with it is checking `interval()`.
 
 ---
 
@@ -145,3 +152,27 @@ void loop() {
 ```
 
 **Known limitations:** `read()` returns `0` both as a legitimate stored value and as the "buffer is empty" signal — there's no way for the caller to tell those two cases apart. No way to peek at the buffer's contents without consuming an item. `isFull()` is named like a boolean check but actually returns the item count, not a true/false — worth renaming or splitting into a separate `isFull()`/`getCount()` pair later. Not thread-safe (not a concern yet, becomes relevant once FreeRTOS tasks are introduced in Milestone 6).
+
+---
+
+## Logger
+
+**What it is:**
+A Log function that records the current hardware state and uses an enum class to denote the severity of the message.
+
+**Public API**
+
+- `write(int x)` — writes a value into the buffer. If full, silently overwrites the oldest entry and advances both `head` and `tail`.
+- `read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
+- `isFull()` — returns the current count of valid items in the buffer.
+
+**Usage**
+
+```cpp
+Buffer Buffer1;
+
+void loop() {
+  Buffer1.write(42);
+  int value = Buffer1.read();
+}
+```
