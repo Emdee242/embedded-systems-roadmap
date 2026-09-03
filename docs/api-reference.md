@@ -94,7 +94,7 @@ void loop() {
 }
 ```
 
-**Known limitations:** The 50ms debounce window is hardcoded inside the class — not configurable through the constructor, so every Debouncer instance is stuck with the same bounce time regardless of the actual switch being used. `fall()` only detects a falling edge; there's no equivalent `rise()` for the opposite transition. Debouncer takes its Button by reference, so it's tightly coupled to a specific Button instance for its whole lifetime.
+**Known limitations:** The 50ms debounce window is hardcoded inside the class — not configurable through the constructor, so every Debouncer instance is stuck with the same bounce time regardless of the actual switch being used. `fall()` only detects a falling edge; there's no equivalent `rise()` for the opposite transition. Debouncer takes its Button by reference, so it's tightly coupled to a specific Button instance for its whole lifetime. the fall() function does two actions. checking system state and modifying a system command.
 
 ---
 
@@ -113,11 +113,13 @@ A reusable, non-blocking "has N milliseconds passed?" class — the generalized 
 ```cpp
 const unsigned long specificTimer = 1000;
 Timer sensorTimer;
+
 void setup(){
 Serial.begin(9600);
 sensorTimer.setTimer(specificTimer);
 sensorTimer.reset();
 }
+
 void loop(){
 if(sensorTimer.intervalPassed()){
   Serial.println(1);
@@ -125,7 +127,7 @@ if(sensorTimer.intervalPassed()){
 }
 ```
 
-**Known limitations:** The interval value is `const`, set once at construction — no way to change it later without creating a new Timer object. The only way to interact with it is checking `interval()`.
+**Known limitations:** The only way to interact with it is checking `interval()`.
 
 ---
 
@@ -158,11 +160,22 @@ void loop() {
 ## Logger
 
 **What it is:**
-A Log function that records the current hardware state and uses an enum class to denote the severity of the message.
+A Log function that reports the current hardware state and uses an enum class to denote the severity of the message.
+
+**Severity:** 
+Defines the severity levels for log messages.
+
+```cpp
+enum class Severity {
+    INFO,
+    WARN,
+    ERROR
+};
+```
 
 **Public API**
 
-- `write(int x)` — writes a value into the buffer. If full, silently overwrites the oldest entry and advances both `head` and `tail`.
+- `Log(const char* message, Severity Level)` — displays the inputted string message as well as severity level.
 - `read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
 - `isFull()` — returns the current count of valid items in the buffer.
 
@@ -176,3 +189,67 @@ void loop() {
   int value = Buffer1.read();
 }
 ```
+
+**Known limitations:** The output of Log is not being stored. 
+
+---
+
+###### Embedded Utility Library
+
+**What it is:**
+A combined reusable library containing the components developed throughout Milestone 1.
+
+**Components:**
+- LED
+- Button
+- Debouncer
+- Timer
+- Circular Buffer
+- Logger
+
+**Structure:**
+[architecture diagram]
+
+**Usage:**
+```cpp
+LED embedLED(8);
+Button embedButton(7);
+Debouncer embedDebounce(embedButton);
+Timer embedTimer;
+Buffer embedBuffer;
+
+void setup(){
+embedLED.begin();
+embedButton.begin();
+Serial.begin(9600);
+embedTimer.setTimer(300);
+embedTimer.reset();
+}
+
+bool buttonPressed = true;
+
+void loop(){
+if(embedDebounce.check() == LOW){
+if(buttonPressed){
+  embedTimer.reset();
+  buttonPressed = false;
+  embedLED.on();
+  embedBuffer.write(1);
+}
+  if(embedTimer.intervalPassed()){
+    if(embedLED.ledState()){
+    embedLED.off();
+    embedBuffer.write(0);  
+    }else{
+      embedLED.on();
+      embedBuffer.write(1);
+    }
+  }
+}else{
+  embedLED.off();
+  buttonPressed = true;
+}
+}
+```
+**Known Limitations:** The file contains the main code of all the components involved. Which will change when the .ino files are converted to .cpp and .h files in milestone 4.
+...
