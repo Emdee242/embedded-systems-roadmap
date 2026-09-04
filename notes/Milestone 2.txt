@@ -7,3 +7,17 @@ I understood those new functions. and since this project did not require much it
 
 Questions:
 None. twas quite easy. after i have understood how the functions was that is.
+
+Datasheet Reading And Bit Manipulation
+What I Was Confused About:
+how memory (bit) manipulation worked, i didn't quite get how the ampersand and "|" operator worked at first.
+I was also confused as to why i was changing a few bytes in a register in memory.
+I also didn't quite understand what a bitmask meant at first and why we couldn't just flip a bit in the middle of a register without using it.
+
+Enlightenment:
+What a bitmap was and how it worked.
+the ampersand and "|" operator and its uses.
+I also feel a little more enlightened as to how microcontrollers work inside. How they function fundamentally (a little)
+
+Questions:
+Apart from sleep timers, i do quite wonder how useful bit manipulation in registers can be.
