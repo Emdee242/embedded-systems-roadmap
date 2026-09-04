@@ -109,7 +109,7 @@ if(Serial.available()){
 
 - Sensor: MPU6050
 - Register: WHO_AM_I
-- Address: 0x68
+- Address: 0x75
 - Expected value: 0x68
 - Why it matters: this is the first register you read once real I2C communication starts (Day 3) — it confirms you're actually talking to the correct chip before trusting any other data from it.
 
