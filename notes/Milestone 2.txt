@@ -1,0 +1,9 @@
+UART Echo
+What I Was Confused About:
+The new functions that i was introduced to (Serial.available(), Serial.read(), Serial.write()) were slightly confusing to wrap my head around.
+
+Enlightenment:
+I understood those new functions. and since this project did not require much it gave me time to digest the concepts fully.
+
+Questions:
+None. twas quite easy. after i have understood how the functions was that is.

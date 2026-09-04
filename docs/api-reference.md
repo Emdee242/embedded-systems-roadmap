@@ -250,3 +250,50 @@ if(buttonPressed){
 }
 ```
 **Known Limitations:** The file contains the main code of all the components involved. Which will change when the .ino files are converted to .cpp and .h files in milestone 4.
+
+
+
+
+
+
+
+
+# Milestone 2 — Hardware Communication
+Four communication protocols, built day by day. These will be the foundations which the drivers will rely upon. ested entirely in Wokwi / Serial Monitor — no physical hardware yet.
+
+---
+
+## UART Echo
+
+**What it is:**
+A function demonstrating UART protocol and data exchange between the board and the serial monitor.
+
+**Public API**
+
+- `Serial.begin()` — configures the UART hardware's timing.
+- `Serial.available()` — returns the amount of valid bytes sitting in the recieving RX buffer.
+- `Serial.read()` — returns in ASCII value, the first valid byte in the RX buffer (). It returns -1 when the buffer is empty.
+- `Serial.print(x)` — sends the parameter from the TX buffer to the serial monitor.
+
+**Usage**
+
+```cpp
+void setup(){
+Serial.begin(9600);
+}
+char incomingString;
+void loop(){
+if(Serial.available()){
+  incomingString = Serial.read();
+  Serial.print(incomingString);
+  if(incomingString == '\n'){
+    Serial.println();
+  }
+}
+}
+```
+
+**Known limitations:** UART has a lower transfer than modern communication protocols (I2C, SPI).
+
+---
+
