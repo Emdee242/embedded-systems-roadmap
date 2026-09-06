@@ -81,6 +81,9 @@ I will publish two progress videos every week documenting my learning journey, p
 ### Week 1: Climbing the Embedded Ladder
 [![Week 1 Update](assets/Thumbnails/Milestone1_thumbnail.jpg)](https://youtu.be/4rOoZHeShZc)
 
+### Week 2: Climbing the Embedded Ladder
+[![Week 2 Update](assets/Thumbnails/Milestone2_thumbnail.jpg)](https://youtu.be/L_nQa1SyUgs)
+
 ---
 
 ## Final Goal
