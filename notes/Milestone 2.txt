@@ -8,6 +8,12 @@ I understood those new functions. and since this project did not require much it
 Questions:
 None. twas quite easy. after i have understood how the functions was that is.
 
+
+
+
+
+
+
 Datasheet Reading And Bit Manipulation
 What I Was Confused About:
 how memory (bit) manipulation worked, i didn't quite get how the ampersand and "|" operator worked at first.
@@ -21,3 +27,25 @@ I also feel a little more enlightened as to how microcontrollers work inside. Ho
 
 Questions:
 Apart from sleep timers, i do quite wonder how useful bit manipulation in registers can be.
+
+
+
+
+
+
+
+I2C PROTOCOL
+What I Was Confused About:
+master to slave relationship
+how a master is supposed to "claim the bus"
+the i2c wire function in arduino came with some pre-configured pins and pre-configured stuff overall, it was confusing understanding how certain things were supposed to work without knowing which pin was which (this was before i understood the pre-configured function and allat)
+functions overall were difficult to wrap my head around (why the hell did i take this long for this project)
+
+Enlightenment:
+How an i2c protocol worked (goes without saying lol)
+the functions and how much "training wheels" come pre-built in arduino ide compared to the esp idf
+a little more on how pull up resistors, registers and memory worked
+the art of bitmasks are almost fully in my hands (i think)
+
+Questions:
+how to do all these things i did in the arduino ide in esp idf.. i saw it and it looked slightly more complicated.
