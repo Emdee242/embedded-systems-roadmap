@@ -111,7 +111,6 @@ if(Serial.available()){
 - Register: WHO_AM_I
 - Address: 0x75
 - Expected value: 0x68
-- Why it matters: this is the first register you read once real I2C communication starts (Day 3) — it confirms you're actually talking to the correct chip before trusting any other data from it.
 
 **Bit manipulation practice**
 
@@ -126,3 +125,40 @@ uint8_t convertZero = registerVal & ~bitMask;    // clear
 ```
 
 **Known limitations:** This is preparation work, not yet connected to real hardware — the WHO_AM_I register hasn't actually been read over I2C yet; that's Day 3.
+
+---
+
+##Day 3 - I2C Communication Protocol Practice
+**What it is:** Not a driver - this was a skill-building exercise: mapping out the i2c arduino based functions and i2c communication protocol architecture in my head and practicing it on a dummy WHO_AM_I register.
+
+**Findings**
+
+- Sensor: MPU6050
+- Register: WHO_AM_I
+- Address: 0x75
+- Expected value: 0x68
+
+**I2C Protocol practice**
+
+Practiced Wire functions on the dummy WHO_AM_I register of the mpu address. stating the mpu sensor address and establishing the master-slave connection. sending the dummy WHO_AM_I register address and reading the value from it.
+
+```cpp
+#include <Wire.h>
+void setup(){
+Serial.begin(9600);
+Wire.begin();
+int mpuRegister = 0x75;
+int mpuAddress = 0x68;
+int consoleOutput;
+Wire.beginTransmission(mpuAddress);
+Wire.write(mpuRegister);
+Wire.endTransmission(true);
+Wire.requestFrom(mpuAddress, 1);
+consoleOutput = Wire.read();
+Serial.print(consoleOutput, HEX);
+}
+void loop(){
+}
+```
+
+***Known limitations:** This is practice work and hasn't been tested on real hardware. It is also using arduino based functions instead of the esp idf functions. Which will come later in the roadmap.
