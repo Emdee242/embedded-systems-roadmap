@@ -67,7 +67,7 @@ Four communication protocols, built day by day. These will be the foundations wh
 
 ---
 
-## UART Echo
+## Day 1 - UART Echo Communication Protocol Practice
 
 **What it is:**
 A function demonstrating UART protocol and data exchange between the board and the serial monitor.
@@ -96,7 +96,6 @@ if(Serial.available()){
 }
 }
 ```
-
 **Known limitations:** UART has a lower transfer than modern communication protocols (I2C, SPI).
 
 ---
@@ -128,7 +127,7 @@ uint8_t convertZero = registerVal & ~bitMask;    // clear
 
 ---
 
-##Day 3 - I2C Communication Protocol Practice
+## Day 3 - I2C Communication Protocol Practice
 **What it is:** Not a driver - this was a skill-building exercise: mapping out the i2c arduino based functions and i2c communication protocol architecture in my head and practicing it on a dummy WHO_AM_I register.
 
 **Findings**
@@ -160,5 +159,48 @@ Serial.print(consoleOutput, HEX);
 void loop(){
 }
 ```
+**Known limitations:** This is practice work and hasn't been tested on real hardware. It is also using arduino based functions instead of the esp idf functions. Which will come later in the roadmap.
 
-***Known limitations:** This is practice work and hasn't been tested on real hardware. It is also using arduino based functions instead of the esp idf functions. Which will come later in the roadmap.
+---
+
+## Day 4 - SPI COmmunication Protocol Practice
+**What it is:** Not a driver - this is a skill-building exercise: understanding the arduino based spi functions and how to apply them to a bmp280 sensor due to spi not being supported on my mpu6050 sensor.
+
+**Public API**
+- `SPISettings.mySettings(speedMax, dataOrder, dataMode)` - configures the protocol using the given settings (speedMax for maximum supported speed, dataOrder for msb or lsb and dataMode for the mode decided upon).
+- `SPI.beginTransaction(mySettings)` - this initiates the clock line and "flips" it.
+- `SPI.transfer(data)` - this transmits the data while simultaneously sending data back to the esp32.
+- `SPI.endTransaction()` - this flips back the clock line to its idle state
+
+**Findings**
+
+- Sensor: BMP280
+- Register: chip_id
+- Address: 0xD0
+- Expected value: 0x58
+
+**SPI Protocol practice**
+
+Practiced SPI arduino based functions on a dummy chip_id register of the bmp address (all for illustrative purposes, i do not intend on using this sensor). using a function to select the pin, specifying my address and switching the transaction state to read mode. then reading a value from it.
+
+```cpp
+#include <SPI.h>
+SPISettings mySettings(1000000, MSBFIRST, SPI_MODE0);
+int idRegister = 0xD0;
+int holdData;
+void setup(){
+  pinMode(8, OUTPUT);
+  SPI.begin();
+  Serial.begin(9600);
+}
+void loop(){
+SPI.beginTransaction(mySettings);
+digitalWrite(8, LOW);
+SPI.transfer(idRegister | 0x80);
+holdData = SPI.transfer(0x00);
+Serial.println(holdData, HEX);
+digitalWrite(8, HIGH);
+SPI.endTransaction();
+}
+```
+**Known limitatios:** The SPI communication protocol is not natively supported by the mpu6050. which is the sensor i will be using throught the roadmap. This is why i used the bmp280 sensor to demonstrate and practice. This does not affect the structure of the roadmap or the end goal (Iot node) due to them predominantly using the I2C communication protocol.
