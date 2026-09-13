@@ -49,3 +49,25 @@ the art of bitmasks are almost fully in my hands (i think)
 
 Questions:
 how to do all these things i did in the arduino ide in esp idf.. i saw it and it looked slightly more complicated.
+
+
+
+
+
+
+
+
+
+SPI PROTOCOL
+What I Was Confused About:
+how the clock works hand in hand with the miso and mosi for timing of the hold and processing of bytes
+the functions (as always lol)
+its special function of being full-duplex and being able to communicate to and fro at the same time
+
+Enlightenment:
+How the functions worked
+a little more on the insides of micrcontrollers
+the whole master-slave relationship
+
+Questions:
+After some digging i found out that the spi does not work for my current sensor (mpu6050). i wonder if that was a hindsight on my part or if that will lead to cascading effects on my roadmap down the road.
