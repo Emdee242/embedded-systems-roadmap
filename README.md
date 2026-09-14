@@ -85,7 +85,7 @@ I will publish two progress videos every week documenting my learning journey, p
 [![Week 2 Update](assets/Thumbnails/Week2_thumbnail.jpg)](https://youtu.be/L_nQa1SyUgs)
 
 ### Week 3: Climbing the Embedded Ladder
-[![Week 3 Update](assets/Thumbnails/Week3_thumbnail.jpg)](https://youtu.be/zEWcs_-R8Dw)
+[![Week 3 Update](assets/Thumbnails/Week3_thumbnail.jpg)](https://youtu.be/CRQgbJfLEZo)
 
 ---
 
