@@ -1,0 +1,13 @@
+MPU 6050 Datasheet Review
+What I Was Confused About:
+Which register was i supposed to read? all of them?
+How was i supposed to read it? memorize? jot down the numbers i think are important?
+Some technical terms thrown around frequently in the documentation..
+apart from that, shii was sweet.
+
+Enlightenment:
+A little more on how register works (like i just found out registers can have access to other registers.. or one register and another having the same function (essentially reaching towards the same register)
+the decimal and hexadecimal address of cool registers (RESET, some i2c features, power management, gyroscope and accelerometer initialization etc)
+
+Questions:
+How am i going to call these registers and read or write to or from the through code.

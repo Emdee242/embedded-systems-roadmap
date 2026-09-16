@@ -71,3 +71,4 @@ the whole master-slave relationship
 
 Questions:
 After some digging i found out that the spi does not work for my current sensor (mpu6050). i wonder if that was a hindsight on my part or if that will lead to cascading effects on my roadmap down the road.
+(turns out it wont, my iot node makes use of the i2c communication protocol)
