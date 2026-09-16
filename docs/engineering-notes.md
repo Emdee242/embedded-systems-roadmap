@@ -204,3 +204,78 @@ SPI.endTransaction();
 }
 ```
 **Known limitatios:** The SPI communication protocol is not natively supported by the mpu6050. which is the sensor i will be using throught the roadmap. This is why i used the bmp280 sensor to demonstrate and practice. This does not affect the structure of the roadmap or the end goal (Iot node) due to them predominantly using the I2C communication protocol.
+
+
+
+# Milestone 2 — Driver Development
+
+Starting of the implementation of my own sensor (MPU6050) driver foundation. 
+
+**Task done**
+Scanned through the mpu6050 register map datasheet and jotted down the specifics of the registers I think will be important for implementation of the driver.
+
+##F#indings
+
+####Sample Rate Divider Register
+- Address: 0x19
+- Expected value:
+- Findings: configures sample rate for the mpu 6050
+
+####Configuration
+- Address: 0x24
+- Expected value: 0
+- Findings: configures FSYNC for gyroscope and accelerometer.
+
+####Gyroscope Configuration
+- Address: 0x1B
+- Expected value: 
+- Findings: for configuration and self test of gyroscope.
+
+##Accelerometer Configuration
+- Address: 0x1C
+- Expected value: 
+- Findings: for configuration and self test of accelerometer.
+
+##Interrupt Enable
+- Address: 0x38
+- Expected value: 
+- Findings: enables a variable change when a change in state happens in the mpu.
+
+##Temperature Measurements
+- Address: 0x41, 0x42
+- Expected value: 
+- Findings: returns the most recent temperature readings.
+
+##Accelerometer Measurements
+- Address: 0x3B, 0x3C, 0x3D, 0x3E, 0x3F, 0x40
+- Expected value: 
+- Findings: returns the most recent accelerometer readings.
+
+##Gyroscope Measurements
+- Address: 0x43, 0x44, 0x45, 0x46, 0x47, 0x48
+- Expected value: 
+- Findings: returns the most recent gyroscope readings.
+
+##Signal Path Reset
+- Address: 0x68
+- Expected value: 
+- Findings: used for resetting analogue and digital signal paths of the gyroscope, accelerometer and temperature sensor.
+
+##User Control
+- Address: 0x68
+- Expected value: 
+- Findings: allows for either disable or enable of fifo buffer
+
+##Power Management
+- Address: 0x68
+- Expected value: 
+- Findings: Used to configure power settings and clock source.
+
+##Who Am I
+- Address: 0x75
+- Expected value: 
+- Findings: verifies identity of device. as well as if a connection was established.
+
+**Known limitations:** Not all registers scanned and acknowledged will be useful to the implementation of driver. So there are some registers listed that will not be used.
+
+---
