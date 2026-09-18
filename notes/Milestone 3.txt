@@ -11,3 +11,20 @@ the decimal and hexadecimal address of cool registers (RESET, some i2c features,
 
 Questions:
 How am i going to call these registers and read or write to or from the through code.
+
+
+
+
+
+
+R/W Operations to the Power Management Register
+What I Was Confused About:
+The "lifespan" of transactions. that shii made me pull my damn hair.. 
+The register to choose from was also quite confusing to choose. But i soon realized i was overthinking it.
+
+Enlightenment:
+Each transaction need to accomplish a certain (one) action. no more than that (usually)
+a transaction does not mean a loop iteration. nor does the protocol lifespan.
+
+Questions:
+Eh, pulling my hair gave me all the enlightenment i need i guess.
