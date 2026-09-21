@@ -1,4 +1,5 @@
 #include <Wire.h>
+#include <optional>
 struct AccelerometerReading{
   public:
   uint16_t x;
@@ -179,7 +180,7 @@ void gyroReset(bool x){
     return;
   }
 }
-AccelerometerReading measureAccel(){
+std::optional<AccelerometerReading>measureAccel(){
     if(isReady){
       AccelerometerReading Accelerometer;
       uint8_t accel_X_H;
@@ -206,11 +207,12 @@ AccelerometerReading measureAccel(){
   Accelerometer.z |= accel_Z_L;
   return Accelerometer;
     }else{
-      return ;
+      return{};
     }
   }
-void measureGyro(GyroscopeReading& Gyroscope){
+std::optional<GyroscopeReading>measureGyro(){
     if(isReady){
+      GyroscopeReading Gyroscope;
       uint8_t gyro_X_H;
       uint8_t gyro_X_L;
       uint8_t gyro_Y_H;
@@ -233,13 +235,14 @@ void measureGyro(GyroscopeReading& Gyroscope){
   gyro_Z_L = Wire.read();
   Gyroscope.z = gyro_Z_H << 8;
   Gyroscope.z |= gyro_Z_L;
+  return Gyroscope;
   }else{
-  return;
+  return {};
     }
   }
 };
-AccelerometerReading Accelerometer;
-GyroscopeReading Gyroscope;
+std::optional<AccelerometerReading> Accelerometer;
+std::optional<GyroscopeReading> Gyroscope;
 MPU6050 FirstMPU;
 void setup(){
 Wire.begin();
@@ -249,7 +252,11 @@ FirstMPU.sleep(0);
 FirstMPU.cycle(1);
 }
 void loop(){
-FirstMPU.measureAccel(Accelerometer);
-FirstMPU.measureGyro(Gyroscope);
-Accelerometer.
+  
+  if(FirstMPU.measureAccel()){
+  Accelerometer = FirstMPU.measureAccel();  
+  }
+if(FirstMPU.measureAccel()){
+Gyroscope = FirstMPU.measureGyro();  
+}
 }
