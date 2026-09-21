@@ -28,3 +28,23 @@ a transaction does not mean a loop iteration. nor does the protocol lifespan.
 
 Questions:
 Eh, pulling my hair gave me all the enlightenment i need i guess.
+
+
+
+
+
+
+MPU6050 Driver
+What I Was Confused About:
+At first the purpose or definition of a driver was a bit ambiguous in my head. But i was able to understand its purpose. (not necessarily a necessity but makes writing to registers "easier") though that is a little bit of an understatement.
+the whole std::optional was a new concept i was introduced to today.
+I also just found out method types can include classes. and it doesn't mean the function itself is a class but that its return type is a class. crazy..
+It took me a while trying to pick an architecture to follow on how to "save and read" the gyroscope and accelerometer readings.. Should i make them private and seperate the "sensing" action from the "getting" action? should i make the readings not objects themselves but values copied to the object the user creates at initialization (which was what i later went with)? Or should i have made the reading structs have all public variables and not private?
+
+Enlightenment:
+Much more confidence in reading datasheet and register maps.. like i was actually understanding and implementing stuff rather than seeing a bunch of confusing numbers.
+A better understanding of classes, structs and the optional library as i spent hours on hours trying to figure out how it worked.
+More variable knowledge (uint8_t, uint16_t, unsigned ints, etc)
+
+Questions:
+The wire functions... it seems to be doing a lot of things at the background automatically for me. Which is nice if i didn't have a rough internal architecture on how the code should work. but trips me up when i realize that i havent actually indicated the pin number the sensor is going to be attached to (8 for SDA and 9 for SCL (ESP32-C3 SuperMini) by default). I wonder if the ESP-IDF will also have these "training wheels" or not.
