@@ -201,3 +201,56 @@ Four communication protocols, built day by day. These will be the foundations wh
 
 ---
 
+
+# Milestone 3 - Driver Development
+
+This is where development of the mpu6050 driver begins. Tested on Hardware.
+
+---
+
+## MPU 6050 Driver
+
+**What it is:**
+A driver (class) that abstracts initialization of mpu6050 sensor. Utilizes 'AccelerometerReading' and 'GyroscopeReading' structs as well as an MPU6050 Class.
+
+**Public API**
+
+- `AccelerometerReading.get(int16_t &x1, int16_t &y2, int16_t &z3)` — copies the values of the readings inside the accelerometer objects created into the variables provided.
+- `GyroscopeReading.get(int16_t &x1, int16_t &y2, int16_t &z3)` — copies the values of the readings inside the gyroscope objects created into the variables provided.
+- `begin()` — "claims" the bus and initializes the isReady variable using the WHO_AM_I register.
+- `sleep(bool x)` — configures the sleep bit in the POWER_MANAGEMENT register.
+- `cycle(bool x)` — configures the cycle bit in the POWER_MANAGEMENT register.
+- `generalReset(bool x)` — configures the SIG_COND_RESET bit in the USER_CONTROL register to reset the signal paths for all sensors in the MPU6050.
+- `accelReset(bool x)` — configures the ACCEL_RESET bit in SIGNAL_PATH_RESET register to reset the accelerometer analog and digital signal paths.
+- `gyroReset(bool x)` — configures the GYRO_RESET bit in SIGNAL_PATH_RESET register to reset the gyroscope analog and digital signal paths.
+- `std::optional<AccelerometerReading>measureAccel()` — transfers the current accelerometer readings from the accelerometer measurement bits(3B - 40) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
+- `std::optional<GyroscopeReading>measureGyro()` — transfers the current gyroscope readings from the gyroscope measurement bits(43 - 48) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
+
+
+**Usage**
+
+```cpp
+MPU6050 FirstMPU;
+std::optional<AccelerometerReading> Accelerometer;
+std::optional<GyroscopeReading> Gyroscope;
+void setup(){
+Wire.begin();
+Serial.begin(9600);
+FirstMPU.begin();
+FirstMPU.sleep(0);
+FirstMPU.cycle(1);
+}
+void loop(){
+if(Accelerometer = FirstMPU.measureAccel(); Accelerometer){
+Serial.println("Successful!!");
+}
+if(Gyroscope = FirstMPU.measureGyro(); Gyroscope){
+Serial.println("Successful!!");
+  }
+}
+```
+
+**Known limitations:** The driver currently only contains initializer methods.
+
+---
+
