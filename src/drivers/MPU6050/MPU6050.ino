@@ -1,18 +1,30 @@
 #include <Wire.h>
 #include <optional>
 struct AccelerometerReading{
-  public:
-  uint16_t x;
-  uint16_t y;
-  uint16_t z;
+  private:
+  int16_t x;
+  int16_t y;
+  int16_t z;
   friend class MPU6050;
+  public:
+  void get(int16_t &x1, int16_t &y2, int16_t &z3) const{
+    x1 = x;
+    y2 = y;
+    z3 = z; 
+  }
 };
 struct GyroscopeReading{
-  public:
-  uint16_t x;
-  uint16_t y;
-  uint16_t z;
+  private:
+  int16_t x;
+  int16_t y;
+  int16_t z;
   friend class MPU6050;
+  public:
+  void get(int16_t &x1, int16_t &y2, int16_t &z3){
+    x1 = x;
+    y2 = y;
+    z3 = z; 
+  }
 };
 class MPU6050{
 private:
@@ -21,8 +33,8 @@ const uint8_t MPU_ADDRESS = 0x68;
 const uint8_t SIGNAL_PATH_RESET_ADDRESS = 0x68;
 const uint8_t USER_CONTROL_ADDRESS = 0x6A;
 const uint8_t WHO_AM_I_REGISTER = 0x75;
-const uint8_t GYRO_ADDRESS = 0x67;
-const uint8_t ACCEL_ADDRESS = 0x59;
+const uint8_t GYRO_ADDRESS = 0x43;
+const uint8_t ACCEL_ADDRESS = 0x3B;
 const uint8_t WHO_AM_I_VALUE = 0x68;
 uint8_t SLEEP_MASK = 1 << 6;
 uint8_t CYCLE_MASK = 1 << 5;
@@ -133,7 +145,7 @@ void accelReset(bool x){
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.endTransmission(false);
     Wire.requestFrom(MPU_ADDRESS, 1);
-    signalPathResetValue = Wire.read() | GYRO_RESET_MASK;
+    signalPathResetValue = Wire.read() | ACCEL_RESET_MASK;
     Wire.beginTransmission(MPU_ADDRESS);
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.write(signalPathResetValue);
@@ -143,7 +155,7 @@ void accelReset(bool x){
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.endTransmission(false);
     Wire.requestFrom(MPU_ADDRESS, 1);
-    signalPathResetValue = Wire.read() & ~GYRO_RESET_MASK;
+    signalPathResetValue = Wire.read() & ~ACCEL_RESET_MASK;
     Wire.beginTransmission(MPU_ADDRESS);
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.write(signalPathResetValue);
@@ -160,7 +172,7 @@ void gyroReset(bool x){
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.endTransmission(false);
     Wire.requestFrom(MPU_ADDRESS, 1);
-    signalPathResetValue = Wire.read() | ACCEL_RESET_MASK;
+    signalPathResetValue = Wire.read() | GYRO_RESET_MASK;
     Wire.beginTransmission(MPU_ADDRESS);
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.write(signalPathResetValue);
@@ -170,7 +182,7 @@ void gyroReset(bool x){
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.endTransmission(false);
     Wire.requestFrom(MPU_ADDRESS, 1);
-    signalPathResetValue = Wire.read() & ~ACCEL_RESET_MASK;
+    signalPathResetValue = Wire.read() & ~GYRO_RESET_MASK;
     Wire.beginTransmission(MPU_ADDRESS);
     Wire.write(SIGNAL_PATH_RESET_ADDRESS);
     Wire.write(signalPathResetValue);
@@ -241,9 +253,7 @@ std::optional<GyroscopeReading>measureGyro(){
     }
   }
 };
-std::optional<AccelerometerReading> Accelerometer;
-std::optional<GyroscopeReading> Gyroscope;
-MPU6050 FirstMPU;
+
 void setup(){
 Wire.begin();
 Serial.begin(9600);
@@ -252,11 +262,11 @@ FirstMPU.sleep(0);
 FirstMPU.cycle(1);
 }
 void loop(){
-  
-  if(FirstMPU.measureAccel()){
-  Accelerometer = FirstMPU.measureAccel();  
-  }
-if(FirstMPU.measureAccel()){
-Gyroscope = FirstMPU.measureGyro();  
+if(Accelerometer = FirstMPU.measureAccel(); Accelerometer){
+Serial.println("Successful!!");
 }
+Gyroscope = FirstMPU.measureGyro();  
+if(FirstMPU.measureGyro()){
+Serial.println("Successful!!");
+  }
 }
