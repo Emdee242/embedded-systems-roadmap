@@ -16,7 +16,7 @@ case(Severity::ERROR):
 Serial.println("ERROR");
   break;
   default:
-  std::cout << "Invalid input";
+Serial.println("Invalid input");
   break;
 }
 }
