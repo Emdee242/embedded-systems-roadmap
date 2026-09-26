@@ -83,7 +83,7 @@ private:
   uint8_t GYRO_RESET_MASK = 1 << 2;
   uint8_t ACCEL_RESET_MASK = 1 << 1;
   bool isMpuReady = false;
-  bool 
+  bool whoAreYou = false;
   int powerManagementRegisterValue;
   int signalPathResetValue;
   int userControlValue;
@@ -92,19 +92,46 @@ public:
   bool begin() {
     Wire.beginTransmission(MPU_ADDRESS);
     Wire.write(WHO_AM_I_REGISTER);
-    Wire.endTransmission(false);
-    Wire.requestFrom(MPU_ADDRESS, 1);
-    if (Wire.read() == WHO_AM_I_VALUE) {
+    if (Wire.endTransmission(false) == 0) {
       isMpuReady = true;
-      return 1;
-    } else {
-      isMpuReady = false;
-      firstLog.Log("MPU initialization failed", Severity::ERROR);
+      whoAreYou = true;
+      firstLog.Log("Successful", Severity::INFO);
       return 0;
+    } else {
+      switch (Wire.endTransmission(false)) {
+        case 1:
+          isMpuReady = false;
+          firstLog.Log("Data is too long", Severity::ERROR);
+          return 1;
+        case 2:
+          isMpuReady = false;
+          firstLog.Log("Invalid device address", Severity::ERROR);
+          return 2;
+        case 3:
+          isMpuReady = true;
+          whoAreYou = false;
+          firstLog.Log("Invalid register address", Severity::ERROR);
+          return 3;
+        case 4:
+          isMpuReady = false;
+          whoAreYou = false;
+          firstLog.Log("Unrecognized error", Severity::ERROR);
+          return 4;
+        case 5:
+          isMpuReady = false;
+          whoAreYou = false;
+          firstLog.Log("Timeout", Severity::ERROR);
+          return 5;
+        default:
+          isMpuReady = false;
+          whoAreYou = false;
+          firstLog.Log("invalid return state", Severity::ERROR);
+          return 6;
+      }
     }
   }
   void sleep(bool x) {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       if (x) {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
@@ -132,7 +159,7 @@ public:
     }
   }
   void cycle(bool x) {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       if (x) {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
@@ -160,7 +187,7 @@ public:
     }
   }
   void generalReset(bool x) {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       if (x) {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(USER_CONTROL_ADDRESS);
@@ -188,7 +215,7 @@ public:
     }
   }
   void accelReset(bool x) {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       if (x) {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
@@ -216,7 +243,7 @@ public:
     }
   }
   void gyroReset(bool x) {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       if (x) {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
@@ -244,7 +271,7 @@ public:
     }
   }
   std::optional<AccelerometerReading> measureAccel() {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       AccelerometerReading Accelerometer;
       uint8_t accel_X_H;
       uint8_t accel_X_L;
@@ -275,7 +302,7 @@ public:
     }
   }
   std::optional<GyroscopeReading> measureGyro() {
-    if (isReady) {
+    if (isMpuReady && whoAreYou) {
       GyroscopeReading Gyroscope;
       uint8_t gyro_X_H;
       uint8_t gyro_X_L;
