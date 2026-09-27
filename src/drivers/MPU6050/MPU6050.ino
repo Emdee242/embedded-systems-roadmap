@@ -89,59 +89,66 @@ private:
   int userControlValue;
 public:
   Logger firstLog;
-  bool begin() {
+  int begin() {
+    int storeTransmission;
     Wire.beginTransmission(MPU_ADDRESS);
     Wire.write(WHO_AM_I_REGISTER);
-    if (Wire.endTransmission(false) == 0) {
+    storeTransmission = Wire.endTransmission(false);
+    if (storeTransmission == 0) {
       isMpuReady = true;
       whoAreYou = true;
       firstLog.Log("Successful", Severity::INFO);
       return 0;
-    } else {
-      switch (Wire.endTransmission(false)) {
-        case 1:
-          isMpuReady = false;
-          firstLog.Log("Data is too long", Severity::ERROR);
-          return 1;
-        case 2:
-          isMpuReady = false;
-          firstLog.Log("Invalid device address", Severity::ERROR);
-          return 2;
-        case 3:
-          isMpuReady = true;
-          whoAreYou = false;
-          firstLog.Log("Invalid register address", Severity::ERROR);
-          return 3;
-        case 4:
-          isMpuReady = false;
-          whoAreYou = false;
-          firstLog.Log("Unrecognized error", Severity::ERROR);
-          return 4;
-        case 5:
-          isMpuReady = false;
-          whoAreYou = false;
-          firstLog.Log("Timeout", Severity::ERROR);
-          return 5;
-        default:
-          isMpuReady = false;
-          whoAreYou = false;
-          firstLog.Log("invalid return state", Severity::ERROR);
-          return 6;
-      }
+    } else if(storeTransmission == 1){
+      isMpuReady = false;
+      whoAreYou = false;
+      firstLog.Log("Data is too long", Severity::ERROR);
+      return 1;
+    } else if(storeTransmission == 2){
+      isMpuReady = false;
+      whoAreYou = false;
+      firstLog.Log("Invalid device address", Severity::ERROR);
+      return 2;
+    } else if(storeTransmission == 3){
+      isMpuReady = true;
+      whoAreYou = false;
+      firstLog.Log("Invalid register address", Severity::ERROR);
+      return 3;
+    } else if(storeTransmission == 4){
+      isMpuReady = false;
+      whoAreYou = false;
+      firstLog.Log("Unrecognized error", Severity::ERROR);
+      return 4;
+    } else if(storeTransmission == 5){
+      isMpuReady = false;
+      whoAreYou = false;
+      firstLog.Log("Timeout", Severity::ERROR);
+      return 5;
+    }else{
+      isMpuReady = false;
+      whoAreYou = false;
+      firstLog.Log("non-existing return type, check current endTransmission documentation (return 6)", Severity::ERROR);
+      return 6;
     }
   }
   void sleep(bool x) {
     if (isMpuReady && whoAreYou) {
       if (x) {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         powerManagementRegisterValue = Wire.read() | SLEEP_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
-        Wire.write(powerManagementRegisterValue);
+        Wire.write(powerManagementRegisterValue); 
         Wire.endTransmission(true);
+        }else{
+        firstLog.Log("sleep write operation failed", Severity::ERROR);
+        }
+        
       } else {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
@@ -154,22 +161,28 @@ public:
         Wire.endTransmission(true);
       }
     } else {
-      firstLog.Log("MPU sleep operation failed", Severity::ERROR);
+      firstLog.Log("MPU sleep operation failed (check begin function)", Severity::ERROR);
       return;
     }
   }
   void cycle(bool x) {
     if (isMpuReady && whoAreYou) {
       if (x) {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         powerManagementRegisterValue = Wire.read() | CYCLE_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
         Wire.write(powerManagementRegisterValue);
-        Wire.endTransmission(true);
+        Wire.endTransmission(true);  
+        }else{
+        firstLog.Log("MPU cycle write operation failed", Severity::ERROR);
+        }
+        
       } else {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
@@ -182,22 +195,28 @@ public:
         Wire.endTransmission(true);
       }
     } else {
-      firstLog.Log("MPU cycle operation failed", Severity::ERROR);
+      firstLog.Log("MPU cycle operation failed (check begin function)", Severity::ERROR);
       return;
     }
   }
   void generalReset(bool x) {
     if (isMpuReady && whoAreYou) {
       if (x) {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(USER_CONTROL_ADDRESS);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         userControlValue = Wire.read() | GENERAL_RESET_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(USER_CONTROL_ADDRESS);
         Wire.write(userControlValue);
-        Wire.endTransmission(true);
+        Wire.endTransmission(true);  
+        }else{
+          firstLog.Log("general reset operation failed", Severity::ERROR);
+        }
+        
       } else {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(USER_CONTROL_ADDRESS);
@@ -210,22 +229,28 @@ public:
         Wire.endTransmission(true);
       }
     } else {
-      firstLog.Log("MPU general reset operation failed", Severity::ERROR);
+      firstLog.Log("MPU general reset operation failed (check begin function)", Severity::ERROR);
       return;
     }
   }
   void accelReset(bool x) {
     if (isMpuReady && whoAreYou) {
       if (x) {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         signalPathResetValue = Wire.read() | ACCEL_RESET_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
         Wire.write(signalPathResetValue);
         Wire.endTransmission(true);
+        }else{
+        firstLog.Log("accelerometer write operation failed", Severity::ERROR);
+        }
+        
       } else {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
@@ -238,22 +263,27 @@ public:
         Wire.endTransmission(true);
       }
     } else {
-      firstLog.Log("MPU accelerometer reset operation failed", Severity::ERROR);
+      firstLog.Log("MPU accelerometer reset operation failed (check begin function)", Severity::ERROR);
       return;
     }
   }
   void gyroReset(bool x) {
     if (isMpuReady && whoAreYou) {
       if (x) {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         signalPathResetValue = Wire.read() | GYRO_RESET_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
         Wire.write(signalPathResetValue);
         Wire.endTransmission(true);
+        }else{
+        firstLog.Log("gyrometer write operation failed", Severity::ERROR);
+        }
       } else {
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
@@ -266,12 +296,13 @@ public:
         Wire.endTransmission(true);
       }
     } else {
-      firstLog.Log("MPU gyroscope reset operation failed", Severity::ERROR);
+      firstLog.Log("MPU gyroscope reset operation failed (check begin function)", Severity::ERROR);
       return;
     }
   }
   std::optional<AccelerometerReading> measureAccel() {
     if (isMpuReady && whoAreYou) {
+      int storeTransmission;
       AccelerometerReading Accelerometer;
       uint8_t accel_X_H;
       uint8_t accel_X_L;
@@ -281,7 +312,8 @@ public:
       uint8_t accel_Z_L;
       Wire.beginTransmission(MPU_ADDRESS);
       Wire.write(ACCEL_ADDRESS);
-      Wire.endTransmission(false);
+      storeTransmission = Wire.endTransmission(false);
+      if(storeTransmission == 0){
       Wire.requestFrom(MPU_ADDRESS, 6);
       accel_X_H = Wire.read();
       accel_X_L = Wire.read();
@@ -295,14 +327,19 @@ public:
       accel_Z_L = Wire.read();
       Accelerometer.z = accel_Z_H << 8;
       Accelerometer.z |= accel_Z_L;
-      return Accelerometer;
+      return Accelerometer;  
+      }else{
+        firstLog.Log("acceleration read operation failed", Severity::ERROR)
+      }
+      
     } else {
-      firstLog.Log("MPU measure acceleration operation failed", Severity::ERROR);
+      firstLog.Log("MPU measure acceleration operation failed (check begin function)", Severity::ERROR);
       return {};
     }
   }
   std::optional<GyroscopeReading> measureGyro() {
     if (isMpuReady && whoAreYou) {
+      int storeTransmission;
       GyroscopeReading Gyroscope;
       uint8_t gyro_X_H;
       uint8_t gyro_X_L;
@@ -312,7 +349,8 @@ public:
       uint8_t gyro_Z_L;
       Wire.beginTransmission(MPU_ADDRESS);
       Wire.write(GYRO_ADDRESS);
-      Wire.endTransmission(false);
+      storeTransmission = Wire.endTransmission(false);
+      if(storeTransmission == 0){
       Wire.requestFrom(MPU_ADDRESS, 6);
       gyro_X_H = Wire.read();
       gyro_X_L = Wire.read();
@@ -327,23 +365,25 @@ public:
       Gyroscope.z = gyro_Z_H << 8;
       Gyroscope.z |= gyro_Z_L;
       return Gyroscope;
+      }else{
+      firstLog.Log("gyroscope read operation failed", Severity::ERROR);
+      }
     } else {
-      firstLog.Log("MPU measure gyroscope operation failed", Severity::ERROR);
+      firstLog.Log("MPU measure gyroscope operation failed (check begin function)", Severity::ERROR);
       return {};
     }
   }
 };
 MPU6050 FirstMPU;
-Logger mpuLog;
 std::optional<AccelerometerReading> Accelerometer;
 std::optional<GyroscopeReading> Gyroscope;
 void setup() {
+  FirstMPU.firstLog.setLimit(Severity::INFO);
   Wire.begin();
   Serial.begin(9600);
   FirstMPU.begin();
   FirstMPU.sleep(0);
   FirstMPU.cycle(1);
-  mpuLog.setLimit(Severity::INFO);
 }
 void loop() {
   if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
