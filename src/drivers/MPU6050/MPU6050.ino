@@ -146,19 +146,25 @@ public:
         Wire.write(powerManagementRegisterValue); 
         Wire.endTransmission(true);
         }else{
-        firstLog.Log("sleep write operation failed", Severity::ERROR);
+        firstLog.Log("sleep write (1) operation failed", Severity::ERROR);
         }
         
       } else {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         powerManagementRegisterValue = Wire.read() & ~SLEEP_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
         Wire.write(powerManagementRegisterValue);
         Wire.endTransmission(true);
+        }else{
+          firstLog.Log("sleep write (0) operation failed", Severity::ERROR);
+        }
+        
       }
     } else {
       firstLog.Log("MPU sleep operation failed (check begin function)", Severity::ERROR);
@@ -180,19 +186,25 @@ public:
         Wire.write(powerManagementRegisterValue);
         Wire.endTransmission(true);  
         }else{
-        firstLog.Log("MPU cycle write operation failed", Severity::ERROR);
+        firstLog.Log("MPU cycle write (1) operation failed", Severity::ERROR);
         }
         
       } else {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         powerManagementRegisterValue = Wire.read() & ~CYCLE_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(POWER_MANAGEMENT_REGISTER);
         Wire.write(powerManagementRegisterValue);
         Wire.endTransmission(true);
+        }else{
+          firstLog.Log("MPU cycle write (0) operation failed", Severity::ERROR);
+        }
+        
       }
     } else {
       firstLog.Log("MPU cycle operation failed (check begin function)", Severity::ERROR);
@@ -214,19 +226,25 @@ public:
         Wire.write(userControlValue);
         Wire.endTransmission(true);  
         }else{
-          firstLog.Log("general reset operation failed", Severity::ERROR);
+          firstLog.Log("general reset write (1) operation failed", Severity::ERROR);
         }
         
       } else {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(USER_CONTROL_ADDRESS);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         userControlValue = Wire.read() & ~GENERAL_RESET_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(USER_CONTROL_ADDRESS);
         Wire.write(userControlValue);
         Wire.endTransmission(true);
+        }else{
+          firstLog.Log("general reset write (0) operation failed", Severity::ERROR);
+        }
+        
       }
     } else {
       firstLog.Log("MPU general reset operation failed (check begin function)", Severity::ERROR);
@@ -248,19 +266,25 @@ public:
         Wire.write(signalPathResetValue);
         Wire.endTransmission(true);
         }else{
-        firstLog.Log("accelerometer write operation failed", Severity::ERROR);
+        firstLog.Log("accelerometer reset write (1) operation failed", Severity::ERROR);
         }
         
       } else {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         signalPathResetValue = Wire.read() & ~ACCEL_RESET_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
         Wire.write(signalPathResetValue);
         Wire.endTransmission(true);
+        }else{
+          firstLog.Log("accelerometer reset write (0) operation failed", Severity::ERROR);
+        }
+        
       }
     } else {
       firstLog.Log("MPU accelerometer reset operation failed (check begin function)", Severity::ERROR);
@@ -282,18 +306,24 @@ public:
         Wire.write(signalPathResetValue);
         Wire.endTransmission(true);
         }else{
-        firstLog.Log("gyrometer write operation failed", Severity::ERROR);
+        firstLog.Log("gyrometer reset write (1) operation failed", Severity::ERROR);
         }
       } else {
+        int storeTransmission;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
-        Wire.endTransmission(false);
+        storeTransmission = Wire.endTransmission(false);
+        if(storeTransmission == 0){
         Wire.requestFrom(MPU_ADDRESS, 1);
         signalPathResetValue = Wire.read() & ~GYRO_RESET_MASK;
         Wire.beginTransmission(MPU_ADDRESS);
         Wire.write(SIGNAL_PATH_RESET_ADDRESS);
         Wire.write(signalPathResetValue);
         Wire.endTransmission(true);
+        }else{
+          firstLog.Log("gyrometer reset write (0) operation failed", Severity::ERROR);
+        }
+        
       }
     } else {
       firstLog.Log("MPU gyroscope reset operation failed (check begin function)", Severity::ERROR);
@@ -329,7 +359,8 @@ public:
       Accelerometer.z |= accel_Z_L;
       return Accelerometer;  
       }else{
-        firstLog.Log("acceleration read operation failed", Severity::ERROR)
+        firstLog.Log("acceleration read operation failed", Severity::ERROR);
+        return {};
       }
       
     } else {
@@ -367,6 +398,7 @@ public:
       return Gyroscope;
       }else{
       firstLog.Log("gyroscope read operation failed", Severity::ERROR);
+      return {};
       }
     } else {
       firstLog.Log("MPU measure gyroscope operation failed (check begin function)", Severity::ERROR);
