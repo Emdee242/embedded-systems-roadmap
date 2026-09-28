@@ -48,3 +48,25 @@ More variable knowledge (uint8_t, uint16_t, unsigned ints, etc)
 
 Questions:
 The wire functions... it seems to be doing a lot of things at the background automatically for me. Which is nice if i didn't have a rough internal architecture on how the code should work. but trips me up when i realize that i havent actually indicated the pin number the sensor is going to be attached to (8 for SDA and 9 for SCL (ESP32-C3 SuperMini) by default). I wonder if the ESP-IDF will also have these "training wheels" or not.
+
+
+
+
+
+
+
+MPU6050 Driver Error Handling
+What I Was Confused About:
+How to minimize my if statements into one if statements and a switch-case.
+Where i should add a log. Which function deserves a specific logger and which deserves a one if loop logger and where.
+What type of specific error cases my begin function is supposed to be able to predict (this was even before i knew endTransmission returns values depending on the error encountered)
+Four the fourth (or third?) return message (undefined error. the one before timeout), i was confused on what it meant specifically. and the scope of it all. are the error messages sequencial? (meaning one can only happen after the other) or can anyone happen at anytime.. (i later found out some are sequencial (ACK from address and data (return 1 and 2)) and some just happen whenever (the rest of the returns apart from success (return 0)))
+
+Enlightenment:
+Got more knowledge on optimizing code and writing less spagetti.
+How log messages are supposed to function specifically and where they deserve to be placed)
+How endTransmission() worked and the fact that it returned something (crazy how i missed that during the first arduino docs debriefing i did on it)
+How those return messages function individually and together in endTransmission. it made me understand a bit more on How return messages as a whole work. especially if a function could return more than one or two.
+
+Questions:
+Not really a question but, i realize the code currently has a design flaw. It has way too many if-else statements. I will prolly have to create an object to abstract the whole if else error handling edge cases due to how similar all of them look. and i know that is going to be hella tough.. (i think?) or maybe it won't...
