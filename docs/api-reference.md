@@ -1,13 +1,11 @@
-# Milestone 1 — Embedded C++ Foundations
-
-Five small classes, built day by day, each one adding a new C++ concept on top of the last. Tested entirely in Wokwi / Serial Monitor — no physical hardware yet.
+# drivers/
 
 ---
 
 ## LED Driver
 
 **What it is:**
-A class that wraps `digitalWrite()` so an LED's pin lives as a private member instead of a loose global. `on()`, `off()`, and `setMode()` are the only ways to touch it from outside.
+A class that wraps `digitalWrite()` so an LED's pin lives as a private member instead of a loose global variable. `on()`, `off()`, `begin()`, `getPin()` and `ledState()` are the only ways to touch it from outside.
 
 **Public API**
 
@@ -68,6 +66,99 @@ void loop() {
 
 ---
 
+## MPU 6500 Driver
+
+**What it is:**
+A driver (class) that abstracts initialization of mpu6500 sensor. Utilizes 'AccelerometerReading' and 'GyroscopeReading' structs as well as an MPU6500 Class.
+
+**Public API**
+
+- `AccelerometerReading.get(int16_t &x1, int16_t &y2, int16_t &z3)` — copies the values of the readings inside the accelerometer objects created into the variables provided.
+- `GyroscopeReading.get(int16_t &x1, int16_t &y2, int16_t &z3)` — copies the values of the readings inside the gyroscope objects created into the variables provided.
+- `begin()` — "claims" the bus and initializes the isReady variable using the WHO_AM_I register.
+- `sleep(bool x)` — configures the sleep bit in the POWER_MANAGEMENT register.
+- `cycle(bool x)` — configures the cycle bit in the POWER_MANAGEMENT register.
+- `generalReset(bool x)` — configures the SIG_COND_RESET bit in the USER_CONTROL register to reset the signal paths for all sensors in the MPU6500.
+- `accelReset(bool x)` — configures the ACCEL_RESET bit in SIGNAL_PATH_RESET register to reset the accelerometer analog and digital signal paths.
+- `gyroReset(bool x)` — configures the GYRO_RESET bit in SIGNAL_PATH_RESET register to reset the gyroscope analog and digital signal paths.
+- `std::optional<AccelerometerReading>measureAccel()` — transfers the current accelerometer readings from the accelerometer measurement bits(3B - 40) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
+- `std::optional<GyroscopeReading>measureGyro()` — transfers the current gyroscope readings from the gyroscope measurement bits(43 - 48) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
+
+
+**Usage**
+
+```cpp
+MPU6500 FirstMPU(Wire);
+std::optional<AccelerometerReading> Accelerometer;
+std::optional<GyroscopeReading> Gyroscope;
+int16_t ax;
+int16_t ay;
+int16_t az;
+int16_t gx;
+int16_t gy;
+int16_t gz;
+void setup() {
+  FirstMPU.firstLog.setLimit(Severity::INFO);
+  Wire.begin();
+  Serial.begin(9600);
+  FirstMPU.begin();
+  FirstMPU.sleep(0);
+  FirstMPU.cycle(1);
+}
+void loop() {
+  if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
+    Accelerometer->get(ax, ay, az);
+    Serial.print(ax);
+    Serial.print("       ");
+    Serial.print(ay);
+    Serial.print("       ");
+    Serial.println(az);
+  }
+  if (Gyroscope = FirstMPU.measureGyro(); Gyroscope) {
+    Gyroscope->get(gx, gy, gz);
+    Serial.print(gx);
+    Serial.print("       ");
+    Serial.print(gy);
+    Serial.print("       ");
+    Serial.println(gz);
+  }
+}
+```
+
+**Known limitations:** The driver currently only contains initializer methods.
+
+---
+
+# core/
+
+---
+
+## Circular Buffer
+
+**What it is:**
+A fixed-size array (1024 slots) that wraps around using `head`/`tail` indices and bitmask arithmetic instead of modulo. When full, new writes overwrite the oldest unread entry rather than getting rejected — matches how real UART/I²C FIFOs and rolling sensor logs behave.
+
+**Public API**
+
+- `write(int x)` — writes a value into the buffer. If full, silently overwrites the oldest entry and advances both `head` and `tail`.
+- `read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
+- `isFull()` — returns the current count of valid items in the buffer.
+
+**Usage**
+
+```cpp
+Buffer Buffer1;
+
+void loop() {
+  Buffer1.write(42);
+  int value = Buffer1.read();
+}
+```
+
+**Known limitations:** `read()` returns `0` both as a legitimate stored value and as the "buffer is empty" signal — there's no way for the caller to tell those two cases apart. No way to peek at the buffer's contents without consuming an item. `isFull()` is named like a boolean check but actually returns the item count, not a true/false — worth renaming or splitting into a separate `isFull()`/`getCount()` pair later. Not thread-safe (not a concern yet, becomes relevant once FreeRTOS tasks are introduced in Milestone 6).
+
+---
+
 ## Debouncer
 
 **What it is:**
@@ -99,65 +190,6 @@ if(Debouncer1.fall()){
 
 ---
 
-## Software Timer
-
-**What it is:**
-A reusable, non-blocking "has N milliseconds passed?" class — the generalized version of the timing logic hand-built inside the Debouncer. This becomes the backbone for most future non-blocking behavior in the project.
-
-**Public API**
-
-- `interval()` — returns `true` exactly once every time the configured interval has elapsed, then resets internally.
-- `setTimer(unsigned long x)` —  declares the interval time.
-
-**Usage**
-
-```cpp
-const unsigned long specificTimer = 1000;
-Timer sensorTimer;
-
-void setup(){
-Serial.begin(9600);
-sensorTimer.setTimer(specificTimer);
-sensorTimer.reset();
-}
-
-void loop(){
-if(sensorTimer.intervalPassed()){
-  Serial.println(1);
-}
-}
-```
-
-**Known limitations:** The only way to interact with it is checking `interval()`.
-
----
-
-## Circular Buffer
-
-**What it is:**
-A fixed-size array (1024 slots) that wraps around using `head`/`tail` indices and bitmask arithmetic instead of modulo. When full, new writes overwrite the oldest unread entry rather than getting rejected — matches how real UART/I²C FIFOs and rolling sensor logs behave.
-
-**Public API**
-
-- `write(int x)` — writes a value into the buffer. If full, silently overwrites the oldest entry and advances both `head` and `tail`.
-- `read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
-- `isFull()` — returns the current count of valid items in the buffer.
-
-**Usage**
-
-```cpp
-Buffer Buffer1;
-
-void loop() {
-  Buffer1.write(42);
-  int value = Buffer1.read();
-}
-```
-
-**Known limitations:** `read()` returns `0` both as a legitimate stored value and as the "buffer is empty" signal — there's no way for the caller to tell those two cases apart. No way to peek at the buffer's contents without consuming an item. `isFull()` is named like a boolean check but actually returns the item count, not a true/false — worth renaming or splitting into a separate `isFull()`/`getCount()` pair later. Not thread-safe (not a concern yet, becomes relevant once FreeRTOS tasks are introduced in Milestone 6).
-
----
-
 ## Logger
 
 **What it is:**
@@ -183,74 +215,52 @@ enum class Severity {
 **Usage**
 
 ```cpp
-Buffer Buffer1;
-
-void loop() {
-  Buffer1.write(42);
-  int value = Buffer1.read();
+Logger testLog;
+void setup(){
+pinMode(7, INPUT);
+testLog.setLimit(Severity::INFO);
 }
+void loop(){
+if(digitalRead(7) == HIGH){
+testLog.Log("Sensor noise detected", Severity::WARN);
 ```
 
 **Known limitations:** The output of Log is not being stored. 
 
 ---
 
-
-# Milestone 2 — Hardware Communication
-Four communication protocols, built day by day. These will be the foundations which the drivers will rely upon. ested entirely in Wokwi / Serial Monitor — no physical hardware yet.
-
----
-
-
-# Milestone 3 - Driver Development
-
-This is where development of the mpu6500 driver begins. Tested on Hardware.
-
----
-
-## MPU 6500 Driver
+## Software Timer
 
 **What it is:**
-A driver (class) that abstracts initialization of mpu6500 sensor. Utilizes 'AccelerometerReading' and 'GyroscopeReading' structs as well as an MPU6500 Class.
+A reusable, non-blocking "has N milliseconds passed?" class — the generalized version of the timing logic hand-built inside the Debouncer. This becomes the backbone for most future non-blocking behavior in the project.
 
 **Public API**
 
-- `AccelerometerReading.get(int16_t &x1, int16_t &y2, int16_t &z3)` — copies the values of the readings inside the accelerometer objects created into the variables provided.
-- `GyroscopeReading.get(int16_t &x1, int16_t &y2, int16_t &z3)` — copies the values of the readings inside the gyroscope objects created into the variables provided.
-- `begin()` — "claims" the bus and initializes the isReady variable using the WHO_AM_I register.
-- `sleep(bool x)` — configures the sleep bit in the POWER_MANAGEMENT register.
-- `cycle(bool x)` — configures the cycle bit in the POWER_MANAGEMENT register.
-- `generalReset(bool x)` — configures the SIG_COND_RESET bit in the USER_CONTROL register to reset the signal paths for all sensors in the MPU6500.
-- `accelReset(bool x)` — configures the ACCEL_RESET bit in SIGNAL_PATH_RESET register to reset the accelerometer analog and digital signal paths.
-- `gyroReset(bool x)` — configures the GYRO_RESET bit in SIGNAL_PATH_RESET register to reset the gyroscope analog and digital signal paths.
-- `std::optional<AccelerometerReading>measureAccel()` — transfers the current accelerometer readings from the accelerometer measurement bits(3B - 40) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
-- `std::optional<GyroscopeReading>measureGyro()` — transfers the current gyroscope readings from the gyroscope measurement bits(43 - 48) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
-
+- `intervalPassed()` — returns `true` exactly once every time the configured interval has elapsed, then resets internally.
+- `setTimer(unsigned long x)` —  declares the interval time.
+- `reset()` —  sets the first interval time to the microcontrollers internal clock during the first iteration.
 
 **Usage**
 
 ```cpp
-MPU6500 FirstMPU;
-std::optional<AccelerometerReading> Accelerometer;
-std::optional<GyroscopeReading> Gyroscope;
+const unsigned long specificTimer = 1000;
+Timer sensorTimer;
+
 void setup(){
-Wire.begin();
 Serial.begin(9600);
-FirstMPU.begin();
-FirstMPU.sleep(0);
-FirstMPU.cycle(1);
+sensorTimer.setTimer(specificTimer);
+sensorTimer.reset();
 }
+
 void loop(){
-if(Accelerometer = FirstMPU.measureAccel(); Accelerometer){
-Serial.println("Successful!!");
+if(sensorTimer.intervalPassed()){
+  Serial.println(1);
 }
-if(Gyroscope = FirstMPU.measureGyro(); Gyroscope){
-Serial.println("Successful!!");
-  }
 }
 ```
 
-**Known limitations:** The driver currently only contains initializer methods.
+**Known limitations:** The only way to interact with it is checking `interval()`.
 
 ---
+
 

@@ -70,3 +70,22 @@ How those return messages function individually and together in endTransmission.
 
 Questions:
 Not really a question but, i realize the code currently has a design flaw. It has way too many if-else statements. I will prolly have to create an object to abstract the whole if else error handling edge cases due to how similar all of them look. and i know that is going to be hella tough.. (i think?) or maybe it won't...
+
+
+
+
+
+
+MPU Refactoring
+What I Was Confused About:
+Apparantly my wire object was hardcoded (only accepted one wire object) and wouldn't work for if the user wanted to create mpu drivers for two different wire objects. 
+The log functions... If-else loops and the whole structure was a little strenuous to map out.
+Turns out i bought an MPU6500 AND NOT AN mpu6050. So i was confused as to why my who_am_i register was returning an "value in who am i does not match expected value" typa statement. I take some pride in the fact that i figured the fact that it was a different mpu by myself. In 20 minutes no less no more too.
+
+Enlightenment:
+Debugging skills went up?
+This was also the first time wiring hardware directly. So i got to see how all of that worked. which was suprisingly easy... for now.
+I also learnt to look a bit more in the descriptions of onine marketplaces when i want to buy sensors (not sure how that is related to the topic at hand but i'm sure it is)
+
+Questions:
+How this whole mpu6500 being different will affect my roadmap as a whole. and what type of change is to ensue.
