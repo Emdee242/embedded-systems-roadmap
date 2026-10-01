@@ -205,9 +205,9 @@ SPI.endTransaction();
 ```
 **Known limitatios:** The SPI communication protocol is not natively supported by the mpu6050. which is the sensor i will be using throught the roadmap. This is why i used the bmp280 sensor to demonstrate and practice. This does not affect the structure of the roadmap or the end goal (Iot node) due to them predominantly using the I2C communication protocol.
 
+---
 
-
-# Milestone 2 — Driver Development
+# Milestone 3 — Driver Development
 
 Starting of the implementation of my own sensor (MPU6050) driver foundation. 
 
@@ -279,3 +279,10 @@ Scanned through the mpu6050 register map datasheet and jotted down the specifics
 **Known limitations:** Not all registers scanned and acknowledged will be useful to the implementation of driver. So there are some registers listed that will not be used.
 
 ---
+
+##Day 5 - Refactoring
+**Expectation** To cleanly print the accelerometer and gyroscope measure values of the esp32 c3 supermini on my serial monitor.
+
+**Reality** The serial monitor showed the who am i value being different from the expected value of 0x68. This made me backtrack and realize that i bought the wrong mpu sensor (mpu6500 and not mpu6050).
+
+**Resulting Changes** Adjusting the who_am_i value to the expected one, replacing the former assumed mpu name with the current one and reflecting this error on my codebase, engineering notes as well as my personal note.

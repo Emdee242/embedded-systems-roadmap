@@ -204,14 +204,14 @@ Four communication protocols, built day by day. These will be the foundations wh
 
 # Milestone 3 - Driver Development
 
-This is where development of the mpu6050 driver begins. Tested on Hardware.
+This is where development of the mpu6500 driver begins. Tested on Hardware.
 
 ---
 
-## MPU 6050 Driver
+## MPU 6500 Driver
 
 **What it is:**
-A driver (class) that abstracts initialization of mpu6050 sensor. Utilizes 'AccelerometerReading' and 'GyroscopeReading' structs as well as an MPU6050 Class.
+A driver (class) that abstracts initialization of mpu6500 sensor. Utilizes 'AccelerometerReading' and 'GyroscopeReading' structs as well as an MPU6500 Class.
 
 **Public API**
 
@@ -220,7 +220,7 @@ A driver (class) that abstracts initialization of mpu6050 sensor. Utilizes 'Acce
 - `begin()` — "claims" the bus and initializes the isReady variable using the WHO_AM_I register.
 - `sleep(bool x)` — configures the sleep bit in the POWER_MANAGEMENT register.
 - `cycle(bool x)` — configures the cycle bit in the POWER_MANAGEMENT register.
-- `generalReset(bool x)` — configures the SIG_COND_RESET bit in the USER_CONTROL register to reset the signal paths for all sensors in the MPU6050.
+- `generalReset(bool x)` — configures the SIG_COND_RESET bit in the USER_CONTROL register to reset the signal paths for all sensors in the MPU6500.
 - `accelReset(bool x)` — configures the ACCEL_RESET bit in SIGNAL_PATH_RESET register to reset the accelerometer analog and digital signal paths.
 - `gyroReset(bool x)` — configures the GYRO_RESET bit in SIGNAL_PATH_RESET register to reset the gyroscope analog and digital signal paths.
 - `std::optional<AccelerometerReading>measureAccel()` — transfers the current accelerometer readings from the accelerometer measurement bits(3B - 40) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
@@ -230,7 +230,7 @@ A driver (class) that abstracts initialization of mpu6050 sensor. Utilizes 'Acce
 **Usage**
 
 ```cpp
-MPU6050 FirstMPU;
+MPU6500 FirstMPU;
 std::optional<AccelerometerReading> Accelerometer;
 std::optional<GyroscopeReading> Gyroscope;
 void setup(){
