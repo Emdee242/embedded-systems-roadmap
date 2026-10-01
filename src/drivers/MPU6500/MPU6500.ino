@@ -73,6 +73,8 @@ private:
   uint8_t MPU_ADDRESS = 0x68;
   const uint8_t SIGNAL_PATH_RESET_ADDRESS = 0x68;
   const uint8_t USER_CONTROL_ADDRESS = 0x6A;
+  const uint8_t ACCEL_CONFIG_ADDRESS = 0x1C;
+  const uint8_t GYRO_CONFIG_ADDRESS = 0x1B;
   const uint8_t WHO_AM_I_REGISTER = 0x75;
   const uint8_t GYRO_ADDRESS = 0x43;
   const uint8_t ACCEL_ADDRESS = 0x3B;
@@ -87,6 +89,8 @@ private:
   int powerManagementRegisterValue;
   int signalPathResetValue;
   int userControlValue;
+  int accelConfigValue;
+  int gyroConfigValue;
   TwoWire &MpuWire;
 public:
   MPU6500(TwoWire &tw)
@@ -407,6 +411,60 @@ public:
     }
   }
 
+  void configAccel(bool x, bool y) {
+    if (isMpuReady && whoAreYou) {
+      int storeTransmission;
+      uint8_t CONFIG_ACCEL_MASK = (1 << 3) | (1 << 4);
+      uint8_t CONFIG_ACCEL_VALUE = (x << 3) | (y << 4);
+      MpuWire.beginTransmission(MPU_ADDRESS);
+      MpuWire.write(ACCEL_CONFIG_ADDRESS);
+      storeTransmission = MpuWire.endTransmission(false);
+      if (storeTransmission == 0) {
+        int storeRequest;
+        storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
+        if (storeRequest == 1) {
+          accelConfigValue = (MpuWire.read() & ~CONFIG_ACCEL_MASK) | CONFIG_ACCEL_VALUE;
+          MpuWire.beginTransmission(MPU_ADDRESS);
+          MpuWire.write(ACCEL_CONFIG_ADDRESS);
+          MpuWire.write(accelConfigValue);
+          MpuWire.endTransmission(true);
+        } else {
+          firstLog.Log("Number of bytes read from the configAccel method is not the requested amount", Severity::ERROR);
+        }
+      } else {
+        firstLog.Log("accelerometer configuration write operation failed", Severity::ERROR);
+      }
+    } else{
+      firstLog.Log("MPU acceleration configure operation failed (check begin function)", Severity::ERROR);
+    }
+  }
+  void configGyro(bool x, bool y){
+    if (isMpuReady && whoAreYou) {
+      int storeTransmission;
+      uint8_t CONFIG_GYRO_MASK = (1 << 3) | (1 << 4);
+      uint8_t CONFIG_GYRO_VALUE = (x << 3) | (y << 4);
+      MpuWire.beginTransmission(MPU_ADDRESS);
+      MpuWire.write(GYRO_CONFIG_ADDRESS);
+      storeTransmission = MpuWire.endTransmission(false);
+      if (storeTransmission == 0) {
+        int storeRequest;
+        storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
+        if (storeRequest == 1) {
+          gyroConfigValue = (MpuWire.read() & ~CONFIG_GYRO_MASK) | CONFIG_GYRO_VALUE;
+          MpuWire.beginTransmission(MPU_ADDRESS);
+          MpuWire.write(GYRO_CONFIG_ADDRESS);
+          MpuWire.write(gyroConfigValue);
+          MpuWire.endTransmission(true);
+        } else {
+          firstLog.Log("Number of bytes read from the configGyro method is not the requested amount", Severity::ERROR);
+        }
+      } else {
+        firstLog.Log("gyroscope configuration write operation failed", Severity::ERROR);
+      }
+    } else{
+      firstLog.Log("MPU gyroscope configure operation failed (check begin function)", Severity::ERROR);
+    }
+  }
   std::optional<AccelerometerReading> measureAccel() {
     if (isMpuReady && whoAreYou) {
       int storeTransmission;
@@ -513,24 +571,28 @@ void setup() {
   Serial.begin(9600);
   FirstMPU.begin();
   FirstMPU.sleep(0);
-  FirstMPU.cycle(1);
+  FirstMPU.cycle(0);
+  FirstMPU.configAccel(0, 0);
+  FirstMPU.configGyro(0, 0);
 }
 void loop() {
   if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
     Accelerometer->get(ax, ay, az);
-    Serial.print(ax);
+    Serial.print("Accelerometer:       ");
+    Serial.print(static_cast<double>(ax) / 16324);
     Serial.print("       ");
-    Serial.print(ay);
+    Serial.print(static_cast<double>(ay) / 16324);
     Serial.print("       ");
-    Serial.println(az);
+    Serial.println(static_cast<double>(az) / 16324);
   }
   if (Gyroscope = FirstMPU.measureGyro(); Gyroscope) {
     Gyroscope->get(gx, gy, gz);
-    Serial.print(gx);
+    Serial.print("Gyroscope:           ");
+    Serial.print(static_cast<double>(gx) / 131);
     Serial.print("       ");
-    Serial.print(gy);
+    Serial.print(static_cast<double>(gy) / 131);
     Serial.print("       ");
-    Serial.println(gz);
+    Serial.println(static_cast<double>(gz) / 131);
   }
-  delay(1000);
+  delay(500);
 }
