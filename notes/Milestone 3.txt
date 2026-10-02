@@ -81,11 +81,18 @@ What I Was Confused About:
 Apparantly my wire object was hardcoded (only accepted one wire object) and wouldn't work for if the user wanted to create mpu drivers for two different wire objects. 
 The log functions... If-else loops and the whole structure was a little strenuous to map out.
 Turns out i bought an MPU6500 AND NOT AN mpu6050. So i was confused as to why my who_am_i register was returning an "value in who am i does not match expected value" typa statement. I take some pride in the fact that i figured the fact that it was a different mpu by myself. In 20 minutes no less no more too.
+Why i was getting values that were so high, why there were so many settings and what they meant (+ or - 2g, 4g, 8g and 16g for accelerometer and so on).
+And how this all tied back to me getting a reasonable value.
 
 Enlightenment:
 Debugging skills went up?
 This was also the first time wiring hardware directly. So i got to see how all of that worked. which was suprisingly easy... for now.
 I also learnt to look a bit more in the descriptions of onine marketplaces when i want to buy sensors (not sure how that is related to the topic at hand but i'm sure it is)
+Found out cycle turns off the gyroscope for the mpu6500 unlike the 6050
+I now understand how to configure gyroscope and accelerometer readings depending on acceleration and angular velocity per second of the project. 
+I also learnt how to convert raw values into specialized readings tailored to what i want.
+I also learnt about "sensor noise" and how to account for that (by offsetting it).
+I wrote to two bits in a specific register. Due to the combination being a tad repetitive, i was able to see the logic in a whole new light. I now understand my code better and should be able to trim the if-else statement littered around a little
 
 Questions:
 How this whole mpu6500 being different will affect my roadmap as a whole. and what type of change is to ensue.

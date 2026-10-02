@@ -588,11 +588,11 @@ void loop() {
   if (Gyroscope = FirstMPU.measureGyro(); Gyroscope) {
     Gyroscope->get(gx, gy, gz);
     Serial.print("Gyroscope:           ");
-    Serial.print(static_cast<double>(gx) / 131);
+    Serial.print((static_cast<double>(gx) / 131) + 1.9);
     Serial.print("       ");
-    Serial.print(static_cast<double>(gy) / 131);
+    Serial.print((static_cast<double>(gy) / 131 ) - 2.5);
     Serial.print("       ");
-    Serial.println(static_cast<double>(gz) / 131);
+    Serial.println((static_cast<double>(gz) / 131) + 1.3);
   }
   delay(500);
 }
