@@ -81,6 +81,8 @@ A driver (class) that abstracts initialization of mpu6500 sensor. Utilizes 'Acce
 - `generalReset(bool x)` — configures the SIG_COND_RESET bit in the USER_CONTROL register to reset the signal paths for all sensors in the MPU6500.
 - `accelReset(bool x)` — configures the ACCEL_RESET bit in SIGNAL_PATH_RESET register to reset the accelerometer analog and digital signal paths.
 - `gyroReset(bool x)` — configures the GYRO_RESET bit in SIGNAL_PATH_RESET register to reset the gyroscope analog and digital signal paths.
+- `configAccel(bool x, bool y)` — configures the accelerometer full scale range according to your input (00 - 1, 01 - 2, 10 - 3, 11 - 4).
+- `configGyro(bool x, bool y)` — configures the gyroscope full scale range according to your input (00 - 1, 01 - 2, 10 - 3, 11 - 4).
 - `std::optional<AccelerometerReading>measureAccel()` — transfers the current accelerometer readings from the accelerometer measurement bits(3B - 40) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
 - `std::optional<GyroscopeReading>measureGyro()` — transfers the current gyroscope readings from the gyroscope measurement bits(43 - 48) and stores them in a private object variable that it returns. It returns a nullopt when the reading is unsuccessful.
 
@@ -97,35 +99,41 @@ int16_t az;
 int16_t gx;
 int16_t gy;
 int16_t gz;
+
 void setup() {
   FirstMPU.firstLog.setLimit(Severity::INFO);
   Wire.begin();
   Serial.begin(9600);
   FirstMPU.begin();
   FirstMPU.sleep(0);
-  FirstMPU.cycle(1);
+  FirstMPU.cycle(0);
+  FirstMPU.configAccel(0, 0);
+  FirstMPU.configGyro(0, 0);
 }
+
 void loop() {
   if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
     Accelerometer->get(ax, ay, az);
-    Serial.print(ax);
+    Serial.print("Accelerometer:       ");
+    Serial.print(static_cast<double>(ax) / 16324);
     Serial.print("       ");
-    Serial.print(ay);
+    Serial.print(static_cast<double>(ay) / 16324);
     Serial.print("       ");
-    Serial.println(az);
+    Serial.println(static_cast<double>(az) / 16324);
   }
   if (Gyroscope = FirstMPU.measureGyro(); Gyroscope) {
     Gyroscope->get(gx, gy, gz);
-    Serial.print(gx);
+    Serial.print("Gyroscope:           ");
+    Serial.print((static_cast<double>(gx) / 131) + 1.9);
     Serial.print("       ");
-    Serial.print(gy);
+    Serial.print((static_cast<double>(gy) / 131 ) - 2.5);
     Serial.print("       ");
-    Serial.println(gz);
+    Serial.println((static_cast<double>(gz) / 131) + 1.3);
   }
 }
 ```
 
-**Known limitations:** The driver currently only contains initializer methods.
+**Known limitations:** The driver currently only contains initializer methods. There is currently too much if-else statements in the code.
 
 ---
 
