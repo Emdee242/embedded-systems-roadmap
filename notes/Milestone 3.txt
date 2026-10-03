@@ -96,3 +96,4 @@ I wrote to two bits in a specific register. Due to the combination being a tad r
 
 Questions:
 How this whole mpu6500 being different will affect my roadmap as a whole. and what type of change is to ensue.
+I now realize there is a way to add a helper and caller? but i do not understand its content (how to go about its logic). I have plenty of theories. but this type of cleanup and stuff is milestone 4 - milestone 5 material.
