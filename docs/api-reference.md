@@ -155,7 +155,7 @@ A fixed-size array (1024 slots) that wraps around using `head`/`tail` indices an
 **Usage**
 
 ```cpp
-Buffer Buffer1;
+CircularBuffer Buffer1;
 
 void loop() {
   Buffer1.write(42);

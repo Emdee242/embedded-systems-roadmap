@@ -26,7 +26,7 @@ Led embedLED(8);
 Button embedButton(7);
 Debouncer embedDebounce(embedButton);
 Timer embedTimer;
-Buffer embedBuffer;
+CircularBuffer embedBuffer;
 void setup(){
 embedLED.begin();
 embedButton.begin();
