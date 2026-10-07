@@ -476,10 +476,11 @@ int16_t az;
 int16_t gx;
 int16_t gy;
 int16_t gz;
+int check = true;
 void setup() {
   FirstMPU.firstLog.setLimit(Severity::INFO);
   Wire.begin();
-  Serial.begin(9600);
+  Serial.begin(115200);
   FirstMPU.begin();
   FirstMPU.sleep(0);
   FirstMPU.cycle(0);
@@ -487,6 +488,11 @@ void setup() {
   FirstMPU.configGyro(0, 0);
 }
 void loop() {
+  if (check) {
+    Serial.println("Successful");
+  } else {
+    Serial.println("Unsuccessful");
+  };
   if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
     Accelerometer->get(ax, ay, az);
     Serial.print("Accelerometer:       ");
