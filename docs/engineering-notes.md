@@ -10,7 +10,7 @@ Five small classes, built day by day, each one adding a new C++ concept on top o
 A combined reusable library containing the components developed throughout Milestone 1.
 
 **Components:**
-- LED
+- Led
 - Button
 - Debouncer
 - Timer
@@ -22,7 +22,7 @@ A combined reusable library containing the components developed throughout Miles
 
 **Usage:**
 ```cpp
-LED embedLED(8);
+Led embedLED(8);
 Button embedButton(7);
 Debouncer embedDebounce(embedButton);
 Timer embedTimer;

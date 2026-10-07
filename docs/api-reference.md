@@ -18,7 +18,7 @@ A class that wraps `digitalWrite()` so an LED's pin lives as a private member in
 **Usage**
 
 ```cpp
-LED led1(7);
+Led led1(7);
 
 void setup() {
   led1.begin();
