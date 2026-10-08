@@ -300,3 +300,13 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 **Task done** Seperation of my .ino projects into three files: .h for the header, .cpp for the source file and .ino for the main implementation
 
 **Known Limitations** some classes take in other classes for their construction parameters (mpu driver, debouncer, embedded-systems-roadmap). Due to arduino based projects not being able to use headers outside the project folder scope, i had to duplicate those specific object parameters (header and source file) into where they are called. This should and will be changed in due time. When project restructuring is done.
+
+---
+
+##Day 2 - Abstraction & Virtual Functions
+
+**Task done** Studying about abstract interfaces and practicing virtual functions.
+
+**Reality** The purpose of this concept is to allow/enable reusability of class methods. So my application layer can accept data from a method irrespective of which class it came from. I decided against implementing this due to the nature of my project and how it revolves around one sensor (mpu6500).
+
+**Known Limitation** Not implemented because it does not improve or add any value to the project. Exists for educational purposes and recognizing the pattern or use when its implementation is needed.
