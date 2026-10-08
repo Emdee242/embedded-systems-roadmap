@@ -10,3 +10,24 @@ I also learnt about tabs and why .ino files are not showing in folders inside fo
 
 Questions:
 My file structure. How is that supposed to work? Does my roadmap account for the fact that calling headers from a different folder is not possible in arduino? does the migration to esp-idf account for that or should i learn platformio instead?
+
+
+
+
+
+
+
+Virtual Functions & Abstraction
+What I Was Confused About:
+I had some problems understanding why i couldn't just inherit read(). and i can.. till it is time to add my parameter in the function at least..
+
+Enlightenment:
+int something(Sensor &s){
+return s.read();
+}
+```
+adding the inherited "child" class as a parameter in your main code would make the compiler be like "i see, you called a class that inherited this certain thing from another class. imma copy the function from that class instead".
+Virtual functions are for when you want to just accept data. Irrespective of which class it comes from. You want to be able to accept the read function irrespective of if it comes from the mpu class or another sensor class and use it to do cool stuff.
+
+Questions:
+How (if eventually, i do it) i am going to integrate something like this into a sensor class and make the read() function or something "malleable". 
