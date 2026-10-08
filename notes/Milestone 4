@@ -1,0 +1,12 @@
+Header/Source Seperation
+What I Was Confused About:
+I struggled with understanding the seperation as a whole and where i should call headers.
+How i was supposed to call headers in other project folders in specific places i need to use them.
+
+Enlightenment:
+The name that comes after ifndef is and can be different from your file name. they share no link whatsoever.
+Understood the whole file structure and how arduino handles files (.ino, .cpp and .h) and how it only works with files in its project repo.
+I also learnt about tabs and why .ino files are not showing in folders inside folders of a specific arduino project.
+
+Questions:
+My file structure. How is that supposed to work? Does my roadmap account for the fact that calling headers from a different folder is not possible in arduino? does the migration to esp-idf account for that or should i learn platformio instead?
