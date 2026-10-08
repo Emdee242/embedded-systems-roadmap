@@ -214,7 +214,7 @@ Starting of the implementation of my own sensor (MPU6050) driver foundation.
 **Task done**
 Scanned through the mpu6050 register map datasheet and jotted down the specifics of the registers I think will be important for implementation of the driver.
 
-##F#indings
+##Findings
 
 ####Sample Rate Divider Register
 - Address: 0x19
@@ -286,3 +286,17 @@ Scanned through the mpu6050 register map datasheet and jotted down the specifics
 **Reality** The serial monitor showed the who am i value being different from the expected value of 0x68. This made me backtrack and realize that i bought the wrong mpu sensor (mpu6500 and not mpu6050).
 
 **Resulting Changes** Adjusting the who_am_i value to the expected one, replacing the former assumed mpu name with the current one and reflecting this error on my codebase, engineering notes as well as my personal note.
+
+---
+
+# Milestone 4 - Firmware Architecture
+
+Refactoring current project repo into several layers (Application -> Service, Driver -> Hardware Abstraction -> Hardware)
+
+---
+
+##Day 1 - Header/Source Seperation
+
+**Task done** Seperation of my .ino projects into three files: .h for the header, .cpp for the source file and .ino for the main implementation
+
+**Known Limitations** some classes take in other classes for their construction parameters (mpu driver, debouncer, embedded-systems-roadmap). Due to arduino based projects not being able to use headers outside the project folder scope, i had to duplicate those specific object parameters (header and source file) into where they are called. This should and will be changed in due time. When project restructuring is done.
