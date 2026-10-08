@@ -1,99 +1,12 @@
+#include "Mpu6500.h"
+#include "Logger.h"
 #include <Wire.h>
 #include <optional>
-enum class Severity {
-  INFO,
-  WARN,
-  ERROR
 
-};
-enum class Result {
-  SUCCESS,
-  INVALID_REG,
-  TOO_MANY_BYTES,
-  INVALID_SENSOR,
-  INVALID_REG_VALUE,
-  TIMEOUT,
-  NULL_RETURN_TYPE,
-  INVALID_REG_LENGTH,
-  ERROR
-};
-class Logger {
-private:
-  Severity maxLogger = Severity::INFO;
-public:
-  void setLimit(Severity Level) {
-    maxLogger = Level;
-  }
-  void Log(const char *message, Severity Level) {
-
-    if (Level >= maxLogger) {
-      switch (Level) {
-        case (Severity::INFO):
-          Serial.print(message);
-          Serial.print("      ");
-          Serial.println("INFO");
-          break;
-        case (Severity::WARN):
-          Serial.print(message);
-          Serial.print("      ");
-          Serial.println("WARN");
-          break;
-        case (Severity::ERROR):
-          Serial.print(message);
-          Serial.print("      ");
-          Serial.println("ERROR");
-          break;
-      }
-    } else {
-    }
-  }
-};
-
-struct AccelerometerReading {
-private:
-  int16_t x;
-  int16_t y;
-  int16_t z;
-  friend class MPU6500;
-public:
-  void get(int16_t &x1, int16_t &y2, int16_t &z3) const {
-    x1 = x;
-    y2 = y;
-    z3 = z;
-  }
-};
-struct GyroscopeReading {
-private:
-  int16_t x;
-  int16_t y;
-  int16_t z;
-  friend class MPU6500;
-public:
-  void get(int16_t &x1, int16_t &y2, int16_t &z3) const {
-    x1 = x;
-    y2 = y;
-    z3 = z;
-  }
-};
-class MPU6500 {
-private:
-  static constexpr uint8_t POWER_MANAGEMENT_REGISTER = 0x6B;
-  uint8_t MPU_ADDRESS = 0x68;
-  static constexpr uint8_t SIGNAL_PATH_RESET_ADDRESS = 0x68;
-  static constexpr uint8_t USER_CONTROL_ADDRESS = 0x6A;
-  static constexpr uint8_t ACCEL_CONFIG_ADDRESS = 0x1C;
-  static constexpr uint8_t GYRO_CONFIG_ADDRESS = 0x1B;
-  static constexpr uint8_t WHO_AM_I_REGISTER = 0x75;
-  static constexpr uint8_t GYRO_ADDRESS = 0x43;
-  static constexpr uint8_t ACCEL_ADDRESS = 0x3B;
-  static constexpr uint8_t WHO_AM_I_VALUE = 0x70;
-  bool isMpuReady = false;
-  TwoWire &MpuWire;
-public:
-  MPU6500(TwoWire &tw)
+  Mpu6500::Mpu6500(TwoWire &tw)
     : MpuWire(tw){};
   Logger firstLog;
-  Result begin() {
+  Result Mpu6500::begin() {
     int storeTransmission;
     MpuWire.beginTransmission(MPU_ADDRESS);
     MpuWire.write(WHO_AM_I_REGISTER);
@@ -144,10 +57,7 @@ public:
       return Result::NULL_RETURN_TYPE;
     }
   }
-  void setMpuAddress(uint8_t x) {
-    MPU_ADDRESS = x;
-  }
-  Result sleep(bool x) {
+  Result Mpu6500::sleep(bool x) {
     if (isMpuReady) {
       int storeTransmission;
       int powerManagementRegisterValue;
@@ -179,7 +89,7 @@ public:
       return Result::INVALID_SENSOR;
     }
   }
-  Result cycle(bool x) {
+  Result Mpu6500::cycle(bool x) {
     if (isMpuReady) {
       int storeTransmission;
       int powerManagementRegisterValue;
@@ -212,7 +122,7 @@ public:
       return Result::INVALID_SENSOR;
     }
   }
-  Result signalReset(bool x) {
+  Result Mpu6500::signalReset(bool x) {
     if (isMpuReady) {
       int storeTransmission;
       int userControlValue;
@@ -245,7 +155,7 @@ public:
       return Result::INVALID_SENSOR;
     }
   }
-  Result accelReset(bool x) {
+  Result Mpu6500::accelReset(bool x) {
     if (isMpuReady) {
       int storeTransmission;
       int signalPathResetValue;
@@ -278,7 +188,7 @@ public:
     }
   }
 
-  Result gyroReset(bool x) {
+  Result Mpu6500::gyroReset(bool x) {
     if (isMpuReady) {
       int storeTransmission;
       int signalPathResetValue;
@@ -312,7 +222,7 @@ public:
     }
   }
 
-  Result configAccel(bool x, bool y) {
+  Result Mpu6500::configAccel(bool x, bool y) {
     if (isMpuReady) {
       int storeTransmission;
       int accelConfigValue;
@@ -344,7 +254,7 @@ public:
       return Result::INVALID_SENSOR;
     }
   }
-  Result configGyro(bool x, bool y) {
+  Result Mpu6500::configGyro(bool x, bool y) {
     if (isMpuReady) {
       int storeTransmission;
       int gyroConfigValue;
@@ -376,7 +286,7 @@ public:
       return Result::INVALID_SENSOR;
     }
   }
-  std::optional<AccelerometerReading> measureAccel() {
+  std::optional<AccelerometerReading> Mpu6500::measureAccel() {
     if (isMpuReady) {
       int storeTransmission;
       AccelerometerReading Accelerometer;
@@ -422,7 +332,7 @@ public:
     }
   }
 
-  std::optional<GyroscopeReading> measureGyro() {
+  std::optional<GyroscopeReading> Mpu6500::measureGyro() {
     if (isMpuReady) {
       int storeTransmission;
       GyroscopeReading Gyroscope;
@@ -465,51 +375,3 @@ public:
       return {};
     }
   }
-};
-
-MPU6500 FirstMPU(Wire);
-std::optional<AccelerometerReading> Accelerometer;
-std::optional<GyroscopeReading> Gyroscope;
-int16_t ax;
-int16_t ay;
-int16_t az;
-int16_t gx;
-int16_t gy;
-int16_t gz;
-int check = true;
-void setup() {
-  FirstMPU.firstLog.setLimit(Severity::INFO);
-  Wire.begin();
-  Serial.begin(115200);
-  FirstMPU.begin();
-  FirstMPU.sleep(0);
-  FirstMPU.cycle(0);
-  FirstMPU.configAccel(0, 0);
-  FirstMPU.configGyro(0, 0);
-}
-void loop() {
-  if (check) {
-    Serial.println("Successful");
-  } else {
-    Serial.println("Unsuccessful");
-  };
-  if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
-    Accelerometer->get(ax, ay, az);
-    Serial.print("Accelerometer:       ");
-    Serial.print(static_cast<double>(ax) / 16384);
-    Serial.print("       ");
-    Serial.print(static_cast<double>(ay) / 16384);
-    Serial.print("       ");
-    Serial.println(static_cast<double>(az) / 16384);
-  }
-  if (Gyroscope = FirstMPU.measureGyro(); Gyroscope) {
-    Gyroscope->get(gx, gy, gz);
-    Serial.print("Gyroscope:           ");
-    Serial.print((static_cast<double>(gx) / 131) + 1.9);
-    Serial.print("       ");
-    Serial.print((static_cast<double>(gy) / 131) - 2.5);
-    Serial.print("       ");
-    Serial.println((static_cast<double>(gz) / 131) + 1.3);
-  }
-  delay(500);
-}
