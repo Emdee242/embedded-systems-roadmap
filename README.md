@@ -53,6 +53,7 @@ assets/
 docs/
 notes/
 src/
+experiments/
 embedded-systems-roadmap.ino
 README.md
 ```
