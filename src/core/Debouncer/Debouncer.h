@@ -13,6 +13,9 @@ unsigned long changeDetect = 0;
   Debouncer(const Button& btn);
   void update();
   bool fall();
+  void setBounceTime(unsigned long x){
+    refBounceTime = x;
+  }
 };
 
 #endif
