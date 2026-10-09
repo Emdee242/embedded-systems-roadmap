@@ -2,13 +2,13 @@
 
 ## Goal
 
-Become employable as a Junior Embedded/Firmware Engineer by building one production-quality firmware project over six weeks.
+Become employable as a Junior Embedded/Firmware Engineer by building one production-quality firmware project.
 
 ---
 
 ## About This Repository
 
-This repository documents my six-week journey into professional embedded systems and firmware development.
+This repository documents my journey into professional embedded systems and firmware development.
 
 Rather than building multiple unrelated projects, I am developing one firmware project that evolves throughout the roadmap—from simple embedded C++ foundations to a complete Industrial IoT node using ESP32, FreeRTOS and ESP-IDF.
 
@@ -77,7 +77,7 @@ Throughout this roadmap I will document:
 
 ## Weekly Videos
 
-I will publish two progress videos every week documenting my learning journey, project evolution, and technical challenges.
+I will publish one or two progress videos every week documenting my learning journey, project evolution, and technical challenges.
 
 ### Week 1: Climbing the Embedded Ladder
 [![Week 1 Update](assets/Thumbnails/Week1_thumbnail.jpg)](https://youtu.be/4rOoZHeShZc)
