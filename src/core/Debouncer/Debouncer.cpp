@@ -7,9 +7,13 @@
     bool tempReadState = refButton.readPin();
     if(lastRawRead != tempReadState){
       changeDetect = millis();
+      currentState = State::CHECKING;
     }
     if((millis() - changeDetect) >= refBounceTime){
       officialState = tempReadState;
+      currentState = State::IDLE;
+    }else{
+     currentState = State::CHECKING; 
     }
     lastRawRead = tempReadState;
   }
