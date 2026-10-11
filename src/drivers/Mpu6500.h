@@ -17,28 +17,34 @@ enum class Result {
 
 struct AccelerometerReading {
 private:
-  double x;
-  double y;
-  double z;
+  int16_t x;
+  int16_t y;
+  int16_t z;
+  float aX;
+  float aY;
+  float aZ;
   friend class Mpu6500;
 public:
-  void get(double &x1, double &y2, double &z3) const {
-    x1 = x;
-    y2 = y;
-    z3 = z;
+  void get(float &x1, float &y2, float &z3) const {
+    x1 = aX;
+    y2 = aY;
+    z3 = aZ;
   }
 };
 struct GyroscopeReading {
 private:
-  double x;
-  double y;
-  double z;
+  int16_t x;
+  int16_t y;
+  int16_t z;
+  float gX;
+  float gY;
+  float gZ;
   friend class Mpu6500;
 public:
-  void get(double &x1, double &y2, double &z3) const {
-    x1 = x;
-    y2 = y;
-    z3 = z;
+  void get(float &x1, float &y2, float &z3) const {
+    x1 = gX;
+    y2 = gY;
+    z3 = gZ;
   }
 };
 class Mpu6500 {
@@ -53,6 +59,8 @@ private:
   static constexpr uint8_t GYRO_ADDRESS = 0x43;
   static constexpr uint8_t ACCEL_ADDRESS = 0x3B;
   static constexpr uint8_t WHO_AM_I_VALUE = 0x70;
+  float accelConfigValue = 16384;
+  float gyroConfigValue = 131;
   bool isMpuReady = false;
   TwoWire &MpuWire;
 public:
