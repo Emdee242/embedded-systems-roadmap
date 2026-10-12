@@ -1,5 +1,5 @@
 #include "Debouncer.h"
-#include "Button.h"
+#include "../drivers/Button.h"
 #include <Arduino.h>
   Debouncer::Debouncer(const Button& btn) : refButton(btn){};
   void Debouncer::update(){
@@ -17,6 +17,13 @@
   bool Debouncer::fall(){
   bool triggered = false;
   if(initialState == HIGH && officialState == LOW){
+    triggered = true;
+  }
+  return triggered;
+  }
+  bool Debouncer::lift(){
+  bool triggered = false;
+  if(initialState == LOW && officialState == HIGH){
     triggered = true;
   }
   return triggered;

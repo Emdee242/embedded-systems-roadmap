@@ -1,6 +1,6 @@
 #ifndef MPU6500_H
 #define MPU6500_H
-#include "Logger.h"
+#include "../core/Logger.h"
 #include <Wire.h>
 #include <optional>
 enum class Result {

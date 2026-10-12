@@ -1,6 +1,6 @@
 #ifndef DEBOUNCER_H
 #define DEBOUNCER_H
-#include <Button.h>
+#include "../drivers/Button.h"
 class Debouncer {
 private:
   bool initialState = true;
@@ -13,6 +13,7 @@ public:
   Debouncer(const Button& btn);
   void update();
   bool fall();
+  bool lift();
   void setBounceTime(unsigned long x) {
     refBounceTime = x;
   }

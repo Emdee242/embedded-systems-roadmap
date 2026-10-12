@@ -2,16 +2,16 @@
 #include "../drivers/Button.h"
 #include "../core/Debouncer.h"
 #include "../core/CircularBuffer.h"
-#include "../core/SoftwareTimer.h"
 #include "../drivers/Mpu6500.h"
+#include "../core/SoftwareTimer.h"
 #include <Wire.h>
 #include <optional>
 void Application::start(){
   Wire.begin();
   Serial.begin(115200);
   CoreButton.begin();
-  CoreTimer.setTimer();
   CoreTimer.reset();
+  CoreTimer.setTimer(readInterval);
   CoreMPU.begin();
   CoreMPU.sleep(0);
   CoreMPU.cycle(0);
@@ -28,6 +28,13 @@ float gy;
 float gz;
 CoreDebouncer.update();
 if(CoreDebouncer.fall()){
+  ApplicationState = CurrentState::ACTIVE;
+}else if(CoreDebouncer.lift()){
+ApplicationState = CurrentState::IDLE;
+}
+  if(CoreTimer.intervalPassed()){ 
+switch(ApplicationState){
+  case(CurrentState::ACTIVE):
   if (Accelerometer = CoreMPU.measureAccel(); Accelerometer) {
     Accelerometer->get(ax, ay, az);
     Serial.print("Accelerometer:       ");
@@ -50,7 +57,15 @@ if(CoreDebouncer.fall()){
     GyroBuffer.write(gy);
     Serial.print("       ");
     Serial.println(gz);
-    GyroBUffer.write(gz);
+    GyroBuffer.write(gz);
   }
+  break;
+  case(CurrentState::IDLE):
+    Serial.println("----------------------");
+  break;
+  default:
+  Serial.println(".........................");
+  break;
+}
 }
 }
