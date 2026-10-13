@@ -27,14 +27,12 @@ float gx;
 float gy;
 float gz;
 CoreDebouncer.update();
-if(CoreDebouncer.fall()){
-  ApplicationState = CurrentState::ACTIVE;
-}else if(CoreDebouncer.lift()){
-ApplicationState = CurrentState::IDLE;
-}
   if(CoreTimer.intervalPassed()){ 
 switch(ApplicationState){
   case(CurrentState::ACTIVE):
+  if(CoreDebouncer.lift()){
+  ApplicationState = CurrentState::IDLE;
+}
   if (Accelerometer = CoreMPU.measureAccel(); Accelerometer) {
     Accelerometer->get(ax, ay, az);
     Serial.print("Accelerometer:       ");
@@ -61,11 +59,14 @@ switch(ApplicationState){
   }
   break;
   case(CurrentState::IDLE):
+  if(CoreDebouncer.fall()){
+  ApplicationState = CurrentState::ACTIVE;
+  }
     Serial.println("----------------------");
   break;
   default:
   Serial.println(".........................");
   break;
-}
-}
+    }
+  }
 }
