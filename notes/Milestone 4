@@ -31,3 +31,28 @@ Virtual functions are for when you want to just accept data. Irrespective of whi
 
 Questions:
 How (if eventually, i do it) i am going to integrate something like this into a sensor class and make the read() function or something "malleable". 
+
+
+
+
+
+
+
+
+
+
+
+
+State Machines
+What I Was COnfused About:
+I went through my codebase kind of confused on where to implement my state machines. I first choose the software timer as it does have a bool controlling its state.. But decided against it cuz whilst technically possible, it would do more harm than good. And would also count as overengineering. Same as my debouncer. Whilst i could, a state machine that is monitoring the one or two states at most isn't really doing much. Especially if i don't even expect a scale-up of that codebase in the future (where i might increase the state machines with ratio to increasing code complexity and hardware state). I eventually went with implementing it at the application layer.
+I was confused on the implementation of my application. It would need a restructuring of my codebase.
+
+
+Enlightenment:
+State machines. How to implement them, the purpose they served etc.
+How to seperate the application from its implementation. And bundle everything that will be called into a class with two methods. And just call those in the main embedded.systems.roadmap.ino file.
+I also had to learn to switch workflow between vs codium for header and source files that wouldn't be visible due to them not being bundled with a .ino file in arduino ide and the main embedded-systems-roadmap.ino file could only be ran in arduino ide.
+
+Questions:
+How to create general state machiens (individual ones with headers and source files that i call individually)
