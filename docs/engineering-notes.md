@@ -357,7 +357,7 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 - Logger
 
 **Structure:**
-![Architecture diagram](../state_machine_application.svg)
+![Architecture diagram](../assets/Diagram/state_machine_application.svg)
 
 **Usage:**
 ```cpp
