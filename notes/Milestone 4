@@ -92,7 +92,11 @@ What I Was Confused About:
 I was supposed to integrate the prototype or "virtual" project to the real one once i saw it worked. But since i was working with the real one all along, i ended up not doing much here lol.
 
 Enlightenment:
+Checking if my actual work satisfies my checklist was satisfying and did provide some insight on what a "completed project" is supposed to look like.
+I think i have enforced habits of double checking if my code is working, testing with hardware, double checking the code for wrong includes and so on.
+Goes without saying but the application works well. I hold the button and it reads acceleration and gyroscopic .. (whatever thats called) every second.
 I think i should probably have a virtual identical project somewhere else. that i will tinker with before pushing to my actual codebase to see how it works.
 
 Questions:
-Does it matter though? With github and version control (if thats what it is called), i can grap past codebases, see specific codes in specific timeframes and do a bunch of other stuff. What would be the advantage of having another "test" project to be using instead?
+Does it matter though? With github and version control (if thats what it is called), i can grab past codebases, see specific codes in specific timeframes and do a bunch of other stuff. What would be the advantage of having another "test" project to be using instead?
+I am also very much curious as to how much my current codebase fares as much as "professional standards" go.
