@@ -295,7 +295,7 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 
 ---
 
-##Day 1 - Header/Source Seperation
+## Day 1 - Header/Source Seperation
 
 **Task done** Seperation of my .ino projects into three files: .h for the header, .cpp for the source file and .ino for the main implementation
 
@@ -303,7 +303,7 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 
 ---
 
-##Day 2 - Abstraction & Virtual Functions
+## Day 2 - Abstraction & Virtual Functions
 
 **Task done** Studying about abstract interfaces and practicing virtual functions.
 
@@ -313,10 +313,30 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 
 ---
 
-##Day 3 - State Machines
+## Day 3 - State Machines
 
 **Task done** Implementing a state machine in the place of scattered if-else flags in my application.
 
 **Reality** The state machine implementation required an application for it to be implemented. Or scattered if-else flags at least. The debouncer would have been a suitable candidate if i had plans to scale it up or the flags passed two. This led me to creating an application which used the state machine with two states (idle and active).
 
 **Known Limitation** The current state machine is relatively crude and will be refined in the future depending on how much i scale the project.
+
+---
+
+## Day 4 - Static Allocation & Dependency Direction Checks
+
+**Task done** I didn't learn or change the codebase today. I mostly checked for static allocations and any dependency (#include) errors. I checked the circular buffer for possible static allocations and went through the entire codebase for wrong directory includes. Including reverses like drivers calling the application.
+
+**Reality** The circular buffer utilized an array and integer for position of head and tail. So there was not any static allocation. The dependency direction was also fine. As i had already made sure the directories were included well when debugging using hardware.
+
+**Known Limitation** None.
+
+---
+
+## Day 5 - Full Refactor (Merging prototype code with the main codebase)
+
+**Task done** No change to codebase. Today was for full refactoring. Debugging the code till it works.
+
+**Reality** This day was relatively short as i had already made sure the code worked the day before using an esp32-c3 microcontroller and mpu6500 sensor. I focused on checking for errors and overlooked syntax flaws.
+
+**Known Limitation** None.
