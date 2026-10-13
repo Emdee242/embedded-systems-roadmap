@@ -44,7 +44,7 @@ How (if eventually, i do it) i am going to integrate something like this into a 
 
 
 State Machines
-What I Was COnfused About:
+What I Was Confused About:
 I went through my codebase kind of confused on where to implement my state machines. I first choose the software timer as it does have a bool controlling its state.. But decided against it cuz whilst technically possible, it would do more harm than good. And would also count as overengineering. Same as my debouncer. Whilst i could, a state machine that is monitoring the one or two states at most isn't really doing much. Especially if i don't even expect a scale-up of that codebase in the future (where i might increase the state machines with ratio to increasing code complexity and hardware state). I eventually went with implementing it at the application layer.
 I was confused on the implementation of my application. It would need a restructuring of my codebase.
 
@@ -67,5 +67,32 @@ How to create general state machiens (individual ones with headers and source fi
 
 
 
+Static Allocation
+What I Was Confused About:
+Nothing here. I basically did nothing today because suprisingly, i didn't have any code cleanup to do. I didn't call strings, or vectors or allocate memory to heap accidentally (was holding my breath whilst checkin gmy circular buffer for this one)
+
+Enlightenment:
+None
+
+Questions:
+None
 
 
+
+
+
+
+
+
+
+
+
+Full refactor
+What I Was Confused About:
+I was supposed to integrate the prototype or "virtual" project to the real one once i saw it worked. But since i was working with the real one all along, i ended up not doing much here lol.
+
+Enlightenment:
+I think i should probably have a virtual identical project somewhere else. that i will tinker with before pushing to my actual codebase to see how it works.
+
+Questions:
+Does it matter though? With github and version control (if thats what it is called), i can grap past codebases, see specific codes in specific timeframes and do a bunch of other stuff. What would be the advantage of having another "test" project to be using instead?
