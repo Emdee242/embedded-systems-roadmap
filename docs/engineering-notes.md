@@ -310,3 +310,13 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 **Reality** The purpose of this concept is to allow/enable reusability of class methods. So my application layer can accept data from a method irrespective of which class it came from. I decided against implementing this due to the nature of my project and how it revolves around one sensor (mpu6500).
 
 **Known Limitation** Not implemented because it does not improve or add any value to the project. Exists for educational purposes and recognizing the pattern or use when its implementation is needed.
+
+---
+
+##Day 3 - State Machines
+
+**Task done** Implementing a state machine in the place of scattered if-else flags in my application.
+
+**Reality** The state machine implementation required an application for it to be implemented. Or scattered if-else flags at least. The debouncer would have been a suitable candidate if i had plans to scale it up or the flags passed two. This led me to creating an application which used the state machine with two states (idle and active).
+
+**Known Limitation** The current state machine is relatively crude and will be refined in the future depending on how much i scale the project.
