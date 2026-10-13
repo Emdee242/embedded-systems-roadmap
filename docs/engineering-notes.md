@@ -59,7 +59,7 @@ if(buttonPressed){
 }
 ```
 **Known Limitations:** The file contains the main code of all the components involved. Which will change when the .ino files are converted to .cpp and .h files in milestone 4.
-
+Superseded in Milestone 4: logic moved into Application. See “Application (State Machines)” in Milestone 4.
 
 
 # Milestone 2 — Hardware Communication
@@ -340,3 +340,43 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 **Reality** This day was relatively short as i had already made sure the code worked the day before using an esp32-c3 microcontroller and mpu6500 sensor. I focused on checking for errors and overlooked syntax flaws.
 
 **Known Limitation** None.
+
+---
+
+###### Application
+
+**What it is:** An application layer containing components developed through Milestone 1.
+
+
+**Components:**
+- Button
+- Debouncer
+- Circular Buffer
+- MPU 6500 Driver
+- SoftwareTimer
+- Logger
+
+**Structure:**
+![Architecture diagram](../assets/Diagram/embedded_utility_library.svg)
+
+**Usage:**
+```cpp
+#include "src/Application/Application.h"
+Application mainApplication;
+void setup() {
+mainApplication.start();
+}
+
+void loop() {
+mainApplication.update();
+}
+```
+
+###### State Machine
+```cpp
+enum class CurrentState{
+IDLE,
+ACTIVE
+};
+```
+**Known Limitations** Current state machine implementation only contains two states. No idea of how much this would fare in accordance to professional standards.
