@@ -361,7 +361,6 @@ Refactoring current project repo into several layers (Application -> Service, Dr
 
 **Usage:**
 ```cpp
-#include "src/Application/Application.h"
 Application mainApplication;
 void setup() {
 mainApplication.start();
