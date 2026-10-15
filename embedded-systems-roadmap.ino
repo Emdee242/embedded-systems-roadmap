@@ -1,9 +1,5 @@
 #include "src/Application/Application.h"
 Application mainApplication;
-void setup() {
-mainApplication.start();
-}
+void setup() { mainApplication.start(); }
 
-void loop() {
-mainApplication.update();
-}
+void loop() { mainApplication.update(); }
