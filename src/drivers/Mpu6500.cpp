@@ -63,7 +63,6 @@ Result Mpu6500::begin() {
 Result Mpu6500::sleep(bool x) {
     if (isMpuReady) {
         int storeTransmission;
-        int powerManagementRegisterValue;
         uint8_t SLEEP_MASK = 1 << 6;
         uint8_t SLEEP_VALUE = x << 6;
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -73,7 +72,7 @@ Result Mpu6500::sleep(bool x) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                powerManagementRegisterValue =
+                int powerManagementRegisterValue =
                     (MpuWire.read() & ~SLEEP_MASK) | SLEEP_VALUE;
                 MpuWire.beginTransmission(MPU_ADDRESS);
                 MpuWire.write(POWER_MANAGEMENT_REGISTER);
@@ -99,7 +98,6 @@ Result Mpu6500::sleep(bool x) {
 Result Mpu6500::cycle(bool x) {
     if (isMpuReady) {
         int storeTransmission;
-        int powerManagementRegisterValue;
         uint8_t CYCLE_MASK = 1 << 5;
         uint8_t CYCLE_VALUE = x << 5;
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -109,7 +107,7 @@ Result Mpu6500::cycle(bool x) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                powerManagementRegisterValue =
+                int powerManagementRegisterValue =
                     (MpuWire.read() & ~CYCLE_MASK) | CYCLE_VALUE;
                 MpuWire.beginTransmission(MPU_ADDRESS);
                 MpuWire.write(POWER_MANAGEMENT_REGISTER);
@@ -136,7 +134,6 @@ Result Mpu6500::cycle(bool x) {
 Result Mpu6500::signalReset(bool x) {
     if (isMpuReady) {
         int storeTransmission;
-        int userControlValue;
         uint8_t SIGNAL_RESET_MASK = 1 << 0;
         uint8_t SIGNAL_RESET_VALUE = x << 0;
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -146,7 +143,7 @@ Result Mpu6500::signalReset(bool x) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                userControlValue =
+                int userControlValue =
                     (MpuWire.read() & ~SIGNAL_RESET_MASK) | SIGNAL_RESET_VALUE;
                 MpuWire.beginTransmission(MPU_ADDRESS);
                 MpuWire.write(USER_CONTROL_ADDRESS);
@@ -175,7 +172,6 @@ Result Mpu6500::signalReset(bool x) {
 Result Mpu6500::accelReset(bool x) {
     if (isMpuReady) {
         int storeTransmission;
-        int signalPathResetValue;
         uint8_t ACCEL_RESET_MASK = 1 << 1;
         uint8_t ACCEL_RESET_VALUE = x << 1;
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -185,7 +181,7 @@ Result Mpu6500::accelReset(bool x) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                signalPathResetValue =
+                int signalPathResetValue =
                     (MpuWire.read() & ~ACCEL_RESET_MASK) | ACCEL_RESET_VALUE;
                 MpuWire.beginTransmission(MPU_ADDRESS);
                 MpuWire.write(SIGNAL_PATH_RESET_ADDRESS);
@@ -214,7 +210,6 @@ Result Mpu6500::accelReset(bool x) {
 Result Mpu6500::gyroReset(bool x) {
     if (isMpuReady) {
         int storeTransmission;
-        int signalPathResetValue;
         uint8_t GYRO_RESET_MASK = 1 << 2;
         uint8_t GYRO_RESET_VALUE = x << 2;
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -224,7 +219,7 @@ Result Mpu6500::gyroReset(bool x) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                signalPathResetValue =
+                int signalPathResetValue =
                     (MpuWire.read() & ~GYRO_RESET_MASK) | GYRO_RESET_VALUE;
                 ;
                 MpuWire.beginTransmission(MPU_ADDRESS);
@@ -256,23 +251,22 @@ Result Mpu6500::configAccel(bool x, bool y) {
         uint8_t configRate = (x << 1) | y;
         switch (configRate) {
         case (0):
-            accelConfigValue = 16384;
+            accelConfigRate = 16384;
             break;
         case (1):
-            accelConfigValue = 8192;
+            accelConfigRate = 8192;
             break;
         case 3:
-            accelConfigValue = 4096;
+            accelConfigRate = 4096;
             break;
         case 4:
-            accelConfigValue = 2048;
+            accelConfigRate = 2048;
             break;
         default:
-            accelConfigValue = 16384;
+            accelConfigRate = 16384;
             break;
         }
         int storeTransmission;
-        int accelConfigValue;
         uint8_t CONFIG_ACCEL_MASK = (1 << 3) | (1 << 4);
         uint8_t CONFIG_ACCEL_VALUE = (x << 3) | (y << 4);
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -282,7 +276,7 @@ Result Mpu6500::configAccel(bool x, bool y) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                accelConfigValue =
+                int accelConfigValue =
                     (MpuWire.read() & ~CONFIG_ACCEL_MASK) | CONFIG_ACCEL_VALUE;
                 MpuWire.beginTransmission(MPU_ADDRESS);
                 MpuWire.write(ACCEL_CONFIG_ADDRESS);
@@ -312,23 +306,22 @@ Result Mpu6500::configGyro(bool x, bool y) {
         uint8_t configRate = (x << 1) | y;
         switch (configRate) {
         case (0):
-            gyroConfigValue = 131;
+            gyroConfigRate = 131;
             break;
         case (1):
-            gyroConfigValue = 65.5;
+            gyroConfigRate = 65.5;
             break;
         case 3:
-            gyroConfigValue = 32.8;
+            gyroConfigRate = 32.8;
             break;
         case 4:
-            gyroConfigValue = 16.4;
+            gyroConfigRate = 16.4;
             break;
         default:
-            gyroConfigValue = 131;
+            gyroConfigRate = 131;
             break;
         }
         int storeTransmission;
-        int gyroConfigValue;
         uint8_t CONFIG_GYRO_MASK = (1 << 3) | (1 << 4);
         uint8_t CONFIG_GYRO_VALUE = (x << 3) | (y << 4);
         MpuWire.beginTransmission(MPU_ADDRESS);
@@ -338,7 +331,7 @@ Result Mpu6500::configGyro(bool x, bool y) {
             int storeRequest;
             storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
             if (storeRequest == 1) {
-                gyroConfigValue =
+                int gyroConfigValue =
                     (MpuWire.read() & ~CONFIG_GYRO_MASK) | CONFIG_GYRO_VALUE;
                 MpuWire.beginTransmission(MPU_ADDRESS);
                 MpuWire.write(GYRO_CONFIG_ADDRESS);
@@ -367,12 +360,6 @@ std::optional<AccelerometerReading> Mpu6500::measureAccel() {
     if (isMpuReady) {
         int storeTransmission;
         AccelerometerReading Accelerometer;
-        uint8_t accel_X_H;
-        uint8_t accel_X_L;
-        uint8_t accel_Y_H;
-        uint8_t accel_Y_L;
-        uint8_t accel_Z_H;
-        uint8_t accel_Z_L;
         MpuWire.beginTransmission(MPU_ADDRESS);
         MpuWire.write(ACCEL_ADDRESS);
         storeTransmission = MpuWire.endTransmission(false);
@@ -385,6 +372,12 @@ std::optional<AccelerometerReading> Mpu6500::measureAccel() {
                              Severity::ERROR);
                 return {};
             } else {
+                uint8_t accel_X_H;
+                uint8_t accel_X_L;
+                uint8_t accel_Y_H;
+                uint8_t accel_Y_L;
+                uint8_t accel_Z_H;
+                uint8_t accel_Z_L;
                 accel_X_H = MpuWire.read();
                 accel_X_L = MpuWire.read();
                 Accelerometer.x = accel_X_H << 8;
@@ -397,9 +390,9 @@ std::optional<AccelerometerReading> Mpu6500::measureAccel() {
                 accel_Z_L = MpuWire.read();
                 Accelerometer.z = accel_Z_H << 8;
                 Accelerometer.z |= accel_Z_L;
-                Accelerometer.aX = Accelerometer.x / accelConfigValue;
-                Accelerometer.aY = Accelerometer.y / accelConfigValue;
-                Accelerometer.aZ = Accelerometer.z / accelConfigValue;
+                Accelerometer.aX = Accelerometer.x / accelConfigRate;
+                Accelerometer.aY = Accelerometer.y / accelConfigRate;
+                Accelerometer.aZ = Accelerometer.z / accelConfigRate;
                 return Accelerometer;
             }
 
@@ -420,12 +413,6 @@ std::optional<GyroscopeReading> Mpu6500::measureGyro() {
     if (isMpuReady) {
         int storeTransmission;
         GyroscopeReading Gyroscope;
-        uint8_t gyro_X_H;
-        uint8_t gyro_X_L;
-        uint8_t gyro_Y_H;
-        uint8_t gyro_Y_L;
-        uint8_t gyro_Z_H;
-        uint8_t gyro_Z_L;
         MpuWire.beginTransmission(MPU_ADDRESS);
         MpuWire.write(GYRO_ADDRESS);
         storeTransmission = MpuWire.endTransmission(false);
@@ -438,6 +425,12 @@ std::optional<GyroscopeReading> Mpu6500::measureGyro() {
                              Severity::ERROR);
                 return {};
             } else {
+                uint8_t gyro_X_H;
+                uint8_t gyro_X_L;
+                uint8_t gyro_Y_H;
+                uint8_t gyro_Y_L;
+                uint8_t gyro_Z_H;
+                uint8_t gyro_Z_L;
                 gyro_X_H = MpuWire.read();
                 gyro_X_L = MpuWire.read();
                 Gyroscope.x = gyro_X_H << 8;
@@ -450,9 +443,9 @@ std::optional<GyroscopeReading> Mpu6500::measureGyro() {
                 gyro_Z_L = MpuWire.read();
                 Gyroscope.z = gyro_Z_H << 8;
                 Gyroscope.z |= gyro_Z_L;
-                Gyroscope.gX = Gyroscope.x / gyroConfigValue;
-                Gyroscope.gY = Gyroscope.y / gyroConfigValue;
-                Gyroscope.gZ = Gyroscope.z / gyroConfigValue;
+                Gyroscope.gX = Gyroscope.x / gyroConfigRate;
+                Gyroscope.gY = Gyroscope.y / gyroConfigRate;
+                Gyroscope.gZ = Gyroscope.z / gyroConfigRate;
                 return Gyroscope;
             }
         } else {

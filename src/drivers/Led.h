@@ -6,7 +6,7 @@ class Led {
     bool isOn = false;
 
   public:
-    Led(int x);
+    explicit Led(int x);
     void on();
     void off();
     void begin() const;

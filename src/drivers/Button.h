@@ -6,7 +6,7 @@ class Button {
     const uint8_t pin;
 
   public:
-    Button(uint8_t x);
+    explicit Button(uint8_t x);
     void begin() const;
     bool readPin() const;
 };

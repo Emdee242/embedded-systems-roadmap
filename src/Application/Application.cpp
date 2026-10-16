@@ -20,12 +20,6 @@ void Application::start() {
     CoreMPU.firstLog.setLimit(Severity::INFO);
 }
 void Application::update() {
-    float ax;
-    float ay;
-    float az;
-    float gx;
-    float gy;
-    float gz;
     CoreDebouncer.update();
     if (CoreTimer.intervalPassed()) {
         switch (ApplicationState) {
@@ -34,6 +28,9 @@ void Application::update() {
                 ApplicationState = CurrentState::IDLE;
             }
             if (Accelerometer = CoreMPU.measureAccel(); Accelerometer) {
+                float ax;
+                float ay;
+                float az;
                 Accelerometer->get(ax, ay, az);
                 Serial.print("Accelerometer:       ");
                 Serial.print(ax);
@@ -46,6 +43,9 @@ void Application::update() {
                 AccelBuffer.write(ay);
             }
             if (Gyroscope = CoreMPU.measureGyro(); Gyroscope) {
+                float gx;
+                float gy;
+                float gz;
                 Gyroscope->get(gx, gy, gz);
                 Serial.print("Gyroscope:           ");
                 Serial.print(gx);

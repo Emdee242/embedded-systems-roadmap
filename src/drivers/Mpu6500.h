@@ -17,12 +17,12 @@ enum class Result {
 
 struct AccelerometerReading {
   private:
-    int16_t x;
-    int16_t y;
-    int16_t z;
-    float aX;
-    float aY;
-    float aZ;
+    int16_t x{};
+    int16_t y{};
+    int16_t z{};
+    float aX{};
+    float aY{};
+    float aZ{};
     friend class Mpu6500;
 
   public:
@@ -34,12 +34,12 @@ struct AccelerometerReading {
 };
 struct GyroscopeReading {
   private:
-    int16_t x;
-    int16_t y;
-    int16_t z;
-    float gX;
-    float gY;
-    float gZ;
+    int16_t x{};
+    int16_t y{};
+    int16_t z{};
+    float gX{};
+    float gY{};
+    float gZ{};
     friend class Mpu6500;
 
   public:
@@ -61,13 +61,13 @@ class Mpu6500 {
     static constexpr uint8_t GYRO_ADDRESS = 0x43;
     static constexpr uint8_t ACCEL_ADDRESS = 0x3B;
     static constexpr uint8_t WHO_AM_I_VALUE = 0x70;
-    float accelConfigValue = 16384;
-    float gyroConfigValue = 131;
+    float accelConfigRate = 16384;
+    float gyroConfigRate = 131;
     bool isMpuReady = false;
     TwoWire& MpuWire;
 
   public:
-    Mpu6500(TwoWire& tw);
+    explicit Mpu6500(TwoWire& tw);
     Logger firstLog;
     Result begin();
     void setMpuAddress(uint8_t x) { MPU_ADDRESS = x; }

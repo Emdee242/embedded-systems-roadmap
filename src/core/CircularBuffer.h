@@ -4,7 +4,7 @@
 class CircularBuffer {
   private:
     constexpr static int size = 1024;
-    int buffArray[size];
+    int buffArray[size]{};
     int head = 0;
     int tail = 0;
     int isArrayFull = 0;

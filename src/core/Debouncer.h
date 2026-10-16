@@ -11,7 +11,7 @@ class Debouncer {
     unsigned long changeDetect = 0;
 
   public:
-    Debouncer(const Button& btn);
+    explicit Debouncer(const Button& btn);
     void update();
     bool fall();
     bool lift();
