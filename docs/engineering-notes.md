@@ -379,3 +379,29 @@ ACTIVE
 };
 ```
 **Known Limitations** Current state machine implementation only contains two states. No idea of how much this would fare in accordance to professional standards.
+
+---
+
+# Milestone 5 - Firmware Architecture
+
+Tooling and Verification. Using software to verify and fix syntax and semantics.
+
+---
+
+## Day 1 - Project Organization
+**What it is** Organize into clean folders and fix all remaining compiler warnings
+
+**Reality** Nothing was done today. Every organization and fixes were done during milestone 4.
+
+**Known Limitations** None.
+
+---
+
+## Day 2 - Formatting & Static Analysis
+**What it is** Using clang-format to format my code into one consistent style and using cppckeck to catch real bugs that were unnoticed by the compiler.
+
+**Reality** Each of the tasks were done accordingly. No unexpected learning curves or "problems" were encountered here.
+
+**Known Limitations** None.
+
+---
