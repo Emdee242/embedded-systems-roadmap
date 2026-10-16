@@ -90,6 +90,9 @@ I will publish one or two progress videos every week documenting my learning jou
 
 ### Week 4: Climbing the Embedded Ladder
 [![Week 4 Update](assets/Thumbnails/Week4_thumbnail.jpg)](https://youtu.be/efsMenq2Aro)
+
+### Week 4.5: Climbing the Embedded Ladder
+[![Week 4.5 Update](assets/Thumbnails/Week4.5_thumbnail.jpg)](https://youtu.be/tBLF44FDNxQ)
 ---
 
 ## Final Goal
