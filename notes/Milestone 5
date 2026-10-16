@@ -7,3 +7,25 @@ i learnt about the git mv commands. How to use terminal to directly move, delete
 
 Questions:
 None.
+
+
+
+
+
+
+
+Formatting + Static Analysis
+What I Was Confused About:
+Which based on style to choose
+What exactly i was supposed to write inside my .clang-format file.
+The instructions taken to execute clang-format functions.
+Some cpp-check errors (like the "The struct 'AccelerometerReading' does not declare a constructor although it has private member variables which likely require initialization" and such)
+
+Enlightenment:
+What .clang-format and cpp-check meant, their individual functions and how my day to day use of them would look like
+The steps involved in setting both up.
+More understanding on what cpp-check warning errors meant.. (their "english"..)
+also learnt about the explicit keyword and its relation to class constructors.
+
+Questions:
+None.
