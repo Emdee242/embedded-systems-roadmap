@@ -10,7 +10,6 @@ void Debouncer::update() {
     }
     if ((millis() - changeDetect) >= refBounceTime) {
         officialState = tempReadState;
-    } else {
     }
     lastRawRead = tempReadState;
 }
