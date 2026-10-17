@@ -7,7 +7,10 @@ class Debouncer {
     bool officialState = true;
     bool lastRawRead = true;
     const Button& refButton;
-    unsigned long refBounceTime = 50;
+    static constexpr unsigned long minDebounceTime = 0;
+    static constexpr unsigned long maxDebounceTime = 500;
+    static constexpr unsigned long refBounceTime = 50;
+    static_assert(refBounceTime != minDebounceTime && refBounceTime != maxDebounceTime);;
     unsigned long changeDetect = 0;
 
   public:

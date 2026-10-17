@@ -1,6 +1,8 @@
 #include "CircularBuffer.h"
+#include <cassert>
 #include <Arduino.h>
 void CircularBuffer::write(int x) {
+    assert(head <= 1023);
     buffArray[head] = x;
     head = (head + 1) & (size - 1);
     if (isArrayFull != size) {
@@ -8,9 +10,11 @@ void CircularBuffer::write(int x) {
     } else if (isArrayFull == size) {
         tail = (tail + 1) & (size - 1);
     }
+    assert(isArrayFull <= 1024);
 }
 int CircularBuffer::read() {
     int readVar;
+    assert(tail <= 1023);
     readVar = buffArray[tail];
     if (isArrayFull == 0) {
         return 0;
@@ -19,4 +23,5 @@ int CircularBuffer::read() {
         tail = (tail + 1) & (size - 1);
         return readVar;
     }
+    assert(isArrayFull <= 1024);
 }
