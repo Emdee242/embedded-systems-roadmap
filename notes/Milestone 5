@@ -29,3 +29,30 @@ also learnt about the explicit keyword and its relation to class constructors.
 
 Questions:
 None.
+
+
+
+
+
+
+
+
+
+Assertions & Unit Testing
+What I Was Confused About:
+a lot of things in assert did not make sense to me at first. namely; difference between static_assert and normal assert, the parameters to be passed into which, which scenario would need use case of which, how it worked (following usual c++ logic, you'd think assert(x) would mean "if x is true, assert". but nooooo. It means the opposite surprisingly).
+The strings, the logic of how the strings were being printed and how it was [&&] for assert and [,] for static_assert.
+When and what even deserved static assert and where to impose them (immediately after private member variable creation? or inside its setter function?).
+What deserved assert implementation and what didn't
+As for unit testing... the functions were a tad bit confusing at first.
+why i should make setUp and tearDown functions even though i end up not using them.
+the functions.... the git functions. the whole git implementation thing.. i still haven't memorized the lines
+
+Enlightenment
+How to use the assert keyword, its header and implementation details.
+How to set up unit testing, create a file and run the file using the terminal.
+
+Questions:
+Am i supposed to memorize all the lines on running a unit test afresh? (the 3 lines of thick code jargon)
+What is the use of both setUp and tearDown function?
+My boundaries using these two testing features.
