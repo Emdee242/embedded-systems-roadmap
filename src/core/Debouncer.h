@@ -18,10 +18,7 @@ class Debouncer {
     void update();
     bool fall();
     bool lift();
-    void setBounceTime(unsigned long x) { 
-      refBounceTime = x;
-    assert(refBounceTime != minDebounceTime && refBounceTime != maxDebounceTime);
-  }
+    void setBounceTime(unsigned long x);
 };
 
 #endif

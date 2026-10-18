@@ -2,6 +2,11 @@
 #include "../drivers/Button.h"
 #include <Arduino.h>
 Debouncer::Debouncer(const Button& btn) : refButton(btn){};
+void Debouncer::setBounceTime(unsigned long x) {
+    refBounceTime = x;
+    assert(refBounceTime > minDebounceTime &&
+           refBounceTime < maxDebounceTime);
+    }
 void Debouncer::update() {
     initialState = officialState;
     bool tempReadState = refButton.readPin();

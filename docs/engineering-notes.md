@@ -405,3 +405,17 @@ Tooling and Verification. Using software to verify and fix syntax and semantics.
 **Known Limitations** None.
 
 ---
+
+## Day 3 - Assertions & Unit Testing
+**What it is** Using assertion checks for affirmations. It stops when the code behaves unexpectedly due to its inputs themselves. ("this must be true here. If it isn’t, stop the program and tell me where."). And unit tests to verify code entirely through the laptop.
+
+**Reality** The asserts were done on all the core files and no drivers. This was due to drivers interacting directly with hardware and therefore having very little "user-code dependency". The unit test was only done on the circular buffer due to its independency from hardware. different from the rest of the individual code files.
+- The circular buffer source file has an assert in both write and read function to confirm if the isArrayFull variable never exceeds 1024. It terminates if it does. 
+- The circular buffer header file has a static assert to check if the size of the array (1024) has a non multiple of 2 stored in it. It terminates if it does.
+- The debouncer header file has an assert in its setBounceTime class to check if the reference bounce time is bigger than the inputted minimum debounce time and smaller than the maximum debounce time
+- The software timer source file has an assert to check if the machines recorded time is equal to zero. It also has a second assert to check if the interval for intermittent flags is set to zero. Both terminates if they do.
+- The circular_buffer_test first_test function tests for if the circular buffer can successfully read its first write. And move the head and tail accordingly
+- The circular_buffer_test second_test function tests for if the circular buffer can successfully read its first write after the array is full. And move the head and tail variables accordingly.
+- The circular_buffer_test third_test function tests for if the circular buffer can successfully overwrite the oldest write after it is full, if i can read from the new oldest write and if the tail and head moves accordingly.
+
+**Known Limitations** The assert and unit tests were done on not all of the projects. Asserts due to the nature of the rest of the projects and unit testing due to the dependencies i would have to integrate for the rest of the codebase to be hardware independent (for the test).
