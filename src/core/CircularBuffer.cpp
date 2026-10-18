@@ -1,6 +1,5 @@
 #include "CircularBuffer.h"
 #include <cassert>
-#include <Arduino.h>
 void CircularBuffer::write(int x) {
     assert(head <= 1023);
     buffArray[head] = x;

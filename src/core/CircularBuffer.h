@@ -1,7 +1,6 @@
 #ifndef CIRCULARBUFFER_H
 #define CIRCULARBUFFER_H
 #include <cassert>
-#include <Arduino.h>
 class CircularBuffer {
   private:
     static constexpr int size = 1024;
