@@ -17,7 +17,7 @@ std::optional<int> CircularBuffer::read() {
     assert(tail <= 1023);
     readVar = buffArray[tail];
     if (isArrayFull == 0) {
-        return 0;
+        return {};
     } else {
         isArrayFull--;
         tail = (tail + 1) & (size - 1);
