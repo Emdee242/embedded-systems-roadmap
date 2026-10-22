@@ -149,7 +149,7 @@ A fixed-size array (1024 slots) that wraps around using `head`/`tail` indices an
 **Public API**
 
 - `write(int x)` — writes a value into the buffer. If full, silently overwrites the oldest entry and advances both `head` and `tail`.
-- `read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
+- `std::optional<int> read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
 - `isFull()` — returns the current count of valid items in the buffer.
 
 **Usage**
