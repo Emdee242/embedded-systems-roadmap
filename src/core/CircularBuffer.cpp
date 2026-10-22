@@ -1,5 +1,6 @@
 #include "CircularBuffer.h"
 #include <cassert>
+#include <optional>
 void CircularBuffer::write(int x) {
     assert(head <= 1023);
     buffArray[head] = x;
@@ -11,7 +12,7 @@ void CircularBuffer::write(int x) {
     }
     assert(isArrayFull <= 1024);
 }
-int CircularBuffer::read() {
+std::optional<int> CircularBuffer::read() {
     int readVar;
     assert(tail <= 1023);
     readVar = buffArray[tail];

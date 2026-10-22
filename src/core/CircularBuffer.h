@@ -1,6 +1,7 @@
 #ifndef CIRCULARBUFFER_H
 #define CIRCULARBUFFER_H
 #include <cassert>
+#include <optional>
 class CircularBuffer {
   private:
     static constexpr int size = 1024;
@@ -12,7 +13,7 @@ class CircularBuffer {
 
   public:
     void write(int x);
-    int read();
+    std::optional<int> read();
     int isFull() const { return isArrayFull; }
 };
 #endif
