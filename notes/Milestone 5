@@ -67,11 +67,14 @@ My boundaries using these two testing features.
 
 Finish Unit Testing & Code Review
 What I Was Confused About:
-The entirety of this day and more was used to do basically nothing. I was sick.
-Though i didn't really need to do anything here. mostly because any unit testing and code review was done before today and during milestone 4.
-
+Today involved reviewing my code, picking out redundant logic etc. Basically try to see my project from an outside perspective.
+I pondered things like how many test cases my circular_buffer_test needed or should have. and if my current amount of test functions/ cases were sufficient. It wasn't anyway.
 Enlightenment:
-None
+I learnt new unity test functions from the ones i learnt the week before.
+Seeing it from a different perspective allowed me to see how much simplicity is valuable in documentation.
+I created a helper for my redundant mpu driver if statements. so that taught me a lot too.
+Questions:
+None.
 
 Questions:
 None
