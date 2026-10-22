@@ -68,7 +68,9 @@ class Mpu6500 {
     TwoWire& MpuWire;
     Result beginWrite(uint8_t registerAddress);
     std::optional<uint8_t> read();
-    void write(uint8_t registerAddress, std::optional<uint8_t> registerValue, uint8_t value, uint8_t mask);
+    void write(uint8_t registerAddress, std::optional<uint8_t> registerValue,
+               uint8_t value, uint8_t mask);
+
   public:
     explicit Mpu6500(TwoWire& tw);
     Logger firstLog;
@@ -83,7 +85,6 @@ class Mpu6500 {
     Result configAccel(bool x, bool y);
     Result configGyro(bool x, bool y);
     std::optional<AccelerometerReading> measureAccel();
-
     std::optional<GyroscopeReading> measureGyro();
 };
 #endif
