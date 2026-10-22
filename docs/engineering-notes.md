@@ -419,3 +419,13 @@ Tooling and Verification. Using software to verify and fix syntax and semantics.
 - The circular_buffer_test third_test function tests for if the circular buffer can successfully overwrite the oldest write after it is full, if i can read from the new oldest write and if the tail and head moves accordingly.
 
 **Known Limitations** The assert and unit tests were done on not all of the projects. Asserts due to the nature of the rest of the projects and unit testing due to the dependencies i would have to integrate for the rest of the codebase to be hardware independent (for the test).
+
+---
+
+## Day 4 - Unit Testing & Code Review
+**What it is** Reviewing my codebase through the lens of an outsider. Imitating the perspective of a hiring manager and such.
+
+**Reality** I noticed my code used almost the same redundant if statements for each mpu driver method. So i added a helper (beginWrite, read and write). These functions accept the variables and do the register manipulation internally. This reduced the codebase and increased readability.
+I included two additional tests to circular buffer to check for each possible unique use case and converted read to an std::optional. Replacing the return 0 with an std::optional removed that ambiguity and code error.
+
+**Known Limitations** Not all of the core or drivers were unit tested. Only one (circular buffer) was unit tested due to its independence on hardware and nature of topic (was not learnt to be implemented in the current project).
