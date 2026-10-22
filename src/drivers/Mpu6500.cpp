@@ -1,22 +1,54 @@
 #include "Mpu6500.h"
 #include "../core/Logger.h"
 #include <Wire.h>
+#include <cstdint>
 #include <optional>
-
 Mpu6500::Mpu6500(TwoWire& tw) : MpuWire(tw){};
 Logger firstLog;
-Result Mpu6500::begin() {
-    int storeTransmission;
+Result Mpu6500::beginWrite(uint8_t registerAddress){
+MpuWire.beginTransmission(MPU_ADDRESS);
+MpuWire.write(registerAddress);
+int storeTransmission = MpuWire.endTransmission(false);
+if(storeTransmission == 0){
+return Result::SUCCESS;
+}else if (storeTransmission == 1) {
+        return Result::TOO_MANY_BYTES;
+    } else if (storeTransmission == 2) {
+        return Result::INVALID_SENSOR;
+    } else if (storeTransmission == 3) {
+        return Result::INVALID_REG;
+    } else if (storeTransmission == 4) {
+        return Result::ERROR;
+    } else if (storeTransmission == 5) {
+        return Result::TIMEOUT;
+    } else {
+        return Result::NULL_RETURN_TYPE;
+    }
+}
+std::optional<uint8_t> Mpu6500::read(){
+    int storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
+    if(storeRequest == 1){
+int registerValue = MpuWire.read();
+    return registerValue;
+    }else{
+        return {};
+    }
+}
+void Mpu6500::write(uint8_t registerAddress, std::optional<uint8_t> registerValue, uint8_t value, uint8_t mask){
+    if(registerValue){
+    uint8_t writeValue = (*registerValue & ~mask) | value;  
     MpuWire.beginTransmission(MPU_ADDRESS);
-    MpuWire.write(WHO_AM_I_REGISTER);
-    storeTransmission = MpuWire.endTransmission(false);
-    if (storeTransmission == 0) {
-        int storeRequest;
-        storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-        if (storeRequest == 1) {
-            int storeRead;
-            storeRead = MpuWire.read();
-            if (storeRead == WHO_AM_I_VALUE) {
+    MpuWire.write(registerAddress);
+    MpuWire.write(writeValue);
+    MpuWire.endTransmission(true);
+    }
+}
+Result Mpu6500::begin() {
+    Result tempResult = beginWrite(WHO_AM_I_REGISTER);
+    if (tempResult == Result::SUCCESS) {
+        std::optional<int> tempRead = read();
+        if (tempRead) {
+            if (tempRead == WHO_AM_I_VALUE) {
                 isMpuReady = true;
                 firstLog.Log("Successful", Severity::INFO);
                 return Result::SUCCESS;
@@ -32,23 +64,23 @@ Result Mpu6500::begin() {
                          Severity::ERROR);
             return Result::INVALID_REG_LENGTH;
         }
-    } else if (storeTransmission == 1) {
+    } else if (tempResult == Result::TOO_MANY_BYTES) {
         isMpuReady = false;
         firstLog.Log("Data is too long", Severity::ERROR);
         return Result::TOO_MANY_BYTES;
-    } else if (storeTransmission == 2) {
+    } else if (tempResult == Result::INVALID_SENSOR) {
         isMpuReady = false;
         firstLog.Log("Invalid device address", Severity::ERROR);
         return Result::INVALID_SENSOR;
-    } else if (storeTransmission == 3) {
+    } else if (tempResult == Result::INVALID_REG) {
         isMpuReady = false;
         firstLog.Log("Invalid register address", Severity::ERROR);
         return Result::INVALID_REG;
-    } else if (storeTransmission == 4) {
+    } else if (tempResult == Result::ERROR) {
         isMpuReady = false;
         firstLog.Log("Unrecognized error", Severity::ERROR);
         return Result::ERROR;
-    } else if (storeTransmission == 5) {
+    } else if (tempResult == Result::TIMEOUT) {
         isMpuReady = false;
         firstLog.Log("Timeout", Severity::ERROR);
         return Result::TIMEOUT;
@@ -62,22 +94,15 @@ Result Mpu6500::begin() {
 }
 Result Mpu6500::sleep(bool x) {
     if (isMpuReady) {
-        int storeTransmission;
-        uint8_t SLEEP_MASK = 1 << 6;
-        uint8_t SLEEP_VALUE = x << 6;
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(POWER_MANAGEMENT_REGISTER);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int powerManagementRegisterValue =
-                    (MpuWire.read() & ~SLEEP_MASK) | SLEEP_VALUE;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(POWER_MANAGEMENT_REGISTER);
-                MpuWire.write(powerManagementRegisterValue);
-                MpuWire.endTransmission(true);
+        Result tempResult;
+        tempResult = beginWrite(POWER_MANAGEMENT_REGISTER);
+        if(tempResult == Result::SUCCESS){
+            std::optional<int> tempRead;
+            uint8_t SLEEP_MASK = 1 << 6;
+            uint8_t value = x * SLEEP_MASK;
+            tempRead = read();
+            if(tempRead){
+                write(POWER_MANAGEMENT_REGISTER, tempRead, value, SLEEP_MASK);
                 return Result::SUCCESS;
             } else {
                 firstLog.Log("Number of bytes read from the sleep method is "
@@ -97,30 +122,22 @@ Result Mpu6500::sleep(bool x) {
 }
 Result Mpu6500::cycle(bool x) {
     if (isMpuReady) {
-        int storeTransmission;
+        Result tempResult;
+        tempResult = beginWrite(POWER_MANAGEMENT_REGISTER);
+        if(tempResult == Result::SUCCESS){
+            std::optional<int> tempRead;
         uint8_t CYCLE_MASK = 1 << 5;
-        uint8_t CYCLE_VALUE = x << 5;
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(POWER_MANAGEMENT_REGISTER);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int powerManagementRegisterValue =
-                    (MpuWire.read() & ~CYCLE_MASK) | CYCLE_VALUE;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(POWER_MANAGEMENT_REGISTER);
-                MpuWire.write(powerManagementRegisterValue);
-                MpuWire.endTransmission(true);
-                return Result::SUCCESS;
-            } else {
+        uint8_t value = x * CYCLE_MASK;
+        tempRead = read();
+        if(tempRead){
+            write(POWER_MANAGEMENT_REGISTER, tempRead, value, CYCLE_MASK);
+            return Result::SUCCESS;
+        } else {
                 firstLog.Log("Number of bytes read from the cycle method is "
                              "not the requested amount",
                              Severity::ERROR);
                 return Result::INVALID_REG_LENGTH;
             }
-
         } else {
             firstLog.Log("MPU cycle write operation failed", Severity::ERROR);
             return Result::ERROR;
@@ -133,30 +150,22 @@ Result Mpu6500::cycle(bool x) {
 }
 Result Mpu6500::signalReset(bool x) {
     if (isMpuReady) {
-        int storeTransmission;
+        Result tempResult;
+        tempResult = beginWrite(USER_CONTROL_ADDRESS);
+        if(tempResult == Result::SUCCESS){
+            std::optional<int> tempRead;
         uint8_t SIGNAL_RESET_MASK = 1 << 0;
-        uint8_t SIGNAL_RESET_VALUE = x << 0;
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(USER_CONTROL_ADDRESS);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int userControlValue =
-                    (MpuWire.read() & ~SIGNAL_RESET_MASK) | SIGNAL_RESET_VALUE;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(USER_CONTROL_ADDRESS);
-                MpuWire.write(userControlValue);
-                MpuWire.endTransmission(true);
-                return Result::SUCCESS;
-            } else {
+        uint8_t value = x * SIGNAL_RESET_MASK;
+        tempRead = read();
+        if(tempRead){
+            write(USER_CONTROL_ADDRESS, tempRead, value, SIGNAL_RESET_MASK);
+            return Result::SUCCESS;
+        } else {
                 firstLog.Log("Number of bytes read from the generalReset "
                              "method is not the requested amount",
                              Severity::ERROR);
                 return Result::INVALID_REG_LENGTH;
             }
-
         } else {
             firstLog.Log("general reset write operation failed",
                          Severity::ERROR);
@@ -171,22 +180,15 @@ Result Mpu6500::signalReset(bool x) {
 }
 Result Mpu6500::accelReset(bool x) {
     if (isMpuReady) {
-        int storeTransmission;
-        uint8_t ACCEL_RESET_MASK = 1 << 1;
-        uint8_t ACCEL_RESET_VALUE = x << 1;
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(SIGNAL_PATH_RESET_ADDRESS);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int signalPathResetValue =
-                    (MpuWire.read() & ~ACCEL_RESET_MASK) | ACCEL_RESET_VALUE;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(SIGNAL_PATH_RESET_ADDRESS);
-                MpuWire.write(signalPathResetValue);
-                MpuWire.endTransmission(true);
+        Result tempResult;
+        tempResult = beginWrite(SIGNAL_PATH_RESET_ADDRESS);
+        if(tempResult == Result::SUCCESS){
+            std::optional<int> tempRead;
+            uint8_t ACCEL_RESET_MASK = 1 << 1;
+            uint8_t value = x * ACCEL_RESET_MASK;
+            tempRead = read();
+            if(tempRead){
+                write(SIGNAL_PATH_RESET_ADDRESS, tempRead, value, ACCEL_RESET_MASK);
                 return Result::SUCCESS;
             } else {
                 firstLog.Log("Number of bytes read from the accelReset method "
@@ -209,23 +211,15 @@ Result Mpu6500::accelReset(bool x) {
 
 Result Mpu6500::gyroReset(bool x) {
     if (isMpuReady) {
-        int storeTransmission;
-        uint8_t GYRO_RESET_MASK = 1 << 2;
-        uint8_t GYRO_RESET_VALUE = x << 2;
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(SIGNAL_PATH_RESET_ADDRESS);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int signalPathResetValue =
-                    (MpuWire.read() & ~GYRO_RESET_MASK) | GYRO_RESET_VALUE;
-                ;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(SIGNAL_PATH_RESET_ADDRESS);
-                MpuWire.write(signalPathResetValue);
-                MpuWire.endTransmission(true);
+        Result tempResult;
+        tempResult = beginWrite(SIGNAL_PATH_RESET_ADDRESS);
+        if(tempResult == Result::SUCCESS){
+            std::optional<int> tempRead;
+            uint8_t GYRO_RESET_MASK = 1 << 2;
+            uint8_t value = x * GYRO_RESET_MASK;
+            tempRead = read();
+            if(tempRead){
+                write(SIGNAL_PATH_RESET_ADDRESS, tempRead, value, GYRO_RESET_MASK);
                 return Result::SUCCESS;
             } else {
                 firstLog.Log("Number of bytes read from the gyroReset method "
@@ -266,22 +260,15 @@ Result Mpu6500::configAccel(bool x, bool y) {
             accelConfigRate = 16384;
             break;
         }
-        int storeTransmission;
-        uint8_t CONFIG_ACCEL_MASK = (1 << 3) | (1 << 4);
-        uint8_t CONFIG_ACCEL_VALUE = (x << 3) | (y << 4);
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(ACCEL_CONFIG_ADDRESS);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int accelConfigValue =
-                    (MpuWire.read() & ~CONFIG_ACCEL_MASK) | CONFIG_ACCEL_VALUE;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(ACCEL_CONFIG_ADDRESS);
-                MpuWire.write(accelConfigValue);
-                MpuWire.endTransmission(true);
+        Result tempResult;
+        tempResult = beginWrite(ACCEL_CONFIG_ADDRESS);
+        if(tempResult == Result::SUCCESS){
+            std::optional<int> tempRead;
+            uint8_t CONFIG_ACCEL_MASK = (1 << 3) | (1 << 4);
+            uint8_t CONFIG_ACCEL_VALUE = (y << 3) | (x << 4);
+            tempRead = read();
+            if(tempRead){
+                write(ACCEL_CONFIG_ADDRESS, tempRead, CONFIG_ACCEL_VALUE, CONFIG_ACCEL_MASK);
                 return Result::SUCCESS;
             } else {
                 firstLog.Log("Number of bytes read from the configAccel method "
@@ -321,30 +308,17 @@ Result Mpu6500::configGyro(bool x, bool y) {
             gyroConfigRate = 131;
             break;
         }
-        int storeTransmission;
+        Result tempResult;
+        tempResult = beginWrite(GYRO_CONFIG_ADDRESS);
+        if(tempResult == Result::SUCCESS){
+        std::optional<int> tempRead;
         uint8_t CONFIG_GYRO_MASK = (1 << 3) | (1 << 4);
-        uint8_t CONFIG_GYRO_VALUE = (x << 3) | (y << 4);
-        MpuWire.beginTransmission(MPU_ADDRESS);
-        MpuWire.write(GYRO_CONFIG_ADDRESS);
-        storeTransmission = MpuWire.endTransmission(false);
-        if (storeTransmission == 0) {
-            int storeRequest;
-            storeRequest = MpuWire.requestFrom(MPU_ADDRESS, 1);
-            if (storeRequest == 1) {
-                int gyroConfigValue =
-                    (MpuWire.read() & ~CONFIG_GYRO_MASK) | CONFIG_GYRO_VALUE;
-                MpuWire.beginTransmission(MPU_ADDRESS);
-                MpuWire.write(GYRO_CONFIG_ADDRESS);
-                MpuWire.write(gyroConfigValue);
-                MpuWire.endTransmission(true);
+        uint8_t CONFIG_GYRO_VALUE = (y << 3) | (x << 4);
+            tempRead = read();
+            if(tempRead){
+                write(GYRO_CONFIG_ADDRESS, tempRead, CONFIG_GYRO_VALUE, CONFIG_GYRO_MASK);
                 return Result::SUCCESS;
             } else {
-                firstLog.Log("Number of bytes read from the configGyro method "
-                             "is not the requested amount",
-                             Severity::ERROR);
-                return Result::INVALID_REG_LENGTH;
-            }
-        } else {
             firstLog.Log("gyroscope configuration write operation failed",
                          Severity::ERROR);
             return Result::ERROR;
@@ -355,6 +329,7 @@ Result Mpu6500::configGyro(bool x, bool y) {
             Severity::ERROR);
         return Result::INVALID_SENSOR;
     }
+}
 }
 std::optional<AccelerometerReading> Mpu6500::measureAccel() {
     if (isMpuReady) {

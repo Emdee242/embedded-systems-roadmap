@@ -2,6 +2,7 @@
 #define MPU6500_H
 #include "../core/Logger.h"
 #include <Wire.h>
+#include <cstdint>
 #include <optional>
 enum class Result {
     SUCCESS,
@@ -65,7 +66,9 @@ class Mpu6500 {
     float gyroConfigRate = 131;
     bool isMpuReady = false;
     TwoWire& MpuWire;
-
+    Result beginWrite(uint8_t registerAddress);
+    std::optional<uint8_t> read();
+    void write(uint8_t registerAddress, std::optional<uint8_t> registerValue, uint8_t value, uint8_t mask);
   public:
     explicit Mpu6500(TwoWire& tw);
     Logger firstLog;
