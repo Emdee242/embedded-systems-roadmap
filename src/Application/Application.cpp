@@ -40,7 +40,7 @@ void Application::update() {
                 AccelBuffer.write(ay);
                 Serial.print("       ");
                 Serial.println(az);
-                AccelBuffer.write(ay);
+                AccelBuffer.write(az);
             }
             if (Gyroscope = CoreMPU.measureGyro(); Gyroscope) {
                 float gx;
