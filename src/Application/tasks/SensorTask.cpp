@@ -4,11 +4,13 @@
 #include <Wire.h>
  void SensorTask::task1(void *parameters){
     for(;;){
-        if (Accelerometer = CoreMPU.measureAccel(); Accelerometer) {
+        SensorTask *CoreTask = static_cast<SensorTask*>(parameters);
+        CoreTask->Accelerometer = CoreTask->CoreMPU.measureAccel(); 
+        if (CoreTask->Accelerometer) {
                 float ax;
                 float ay;
                 float az;
-                Accelerometer->get(ax, ay, az);
+                CoreTask->Accelerometer->get(ax, ay, az);
                 Serial.print("Accelerometer:       ");
                 Serial.print(ax);
                 Serial.print("       ");
@@ -16,11 +18,12 @@
                 Serial.print("       ");
                 Serial.println(az);
             }
-            if (Gyroscope = CoreMPU.measureGyro(); Gyroscope) {
+            CoreTask->Gyroscope = CoreTask->CoreMPU.measuerAccel();
+            if (CoreTask->Gyroscope) {
                 float gx;
                 float gy;
                 float gz;
-                Gyroscope->get(gx, gy, gz);
+                CoreTask->Gyroscope->get(gx, gy, gz);
                 Serial.print("Gyroscope:           ");
                 Serial.print(gx);
                 Serial.print("       ");
@@ -42,7 +45,7 @@ xTaskCreate(
     task1,
     "Task 1",
     1000,
-    NULL,
+    this,
     1,
     NULL
 );   
