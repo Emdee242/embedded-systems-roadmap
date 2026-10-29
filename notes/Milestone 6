@@ -17,3 +17,28 @@ I do not fully understand why i am creating an object of itself inside itself. i
 What other functions lay in store for me, idk but i sure am curious.
 I am also to integrate this sensor task code into my application. How i am going to do that is still elusive to me. Though it is a design decision so it should be interesting.
 I also do not fully understand the purpose of the last parameter or xTaskCreate (the task handle). I understand that it is for manipulating tasks outside their normal boundary by binding them to a variable?, but i feel like i am missing something.
+
+
+
+
+
+
+
+
+
+FreeRTOS Priorities
+What I Was Confused About:
+Today was focused on understanding the vTaskDelay functions, how the ticks worked and how to use it in my projects. If anything, it was short and a little bit fun (a teeny tiny bit)
+i learnt about vTaskDelay and vTaskDelayUntil. What i was confused about was the TickType_t at first. It is a data type for storing ticks. both functions were relatively easy to understand. The pdMS_TO_TICKS macro was also easy to understand (how it converted ticks to milliseconds)
+
+Enlightenment:
+I learnt about xTaskDelay(), how it is used to make a task delay for specific amounts of ticks and if when the pdMS_TO_TICKS() macro is applied, how it converts that number of ticks to milliseconds.
+How the xTaskDelayUntil() also works with the same principle as xTaskDelay(). Except, it calculates blocked state time relative to the time allocated and the amount of time taken for the task to execute. (if allocated time is 100 ticks and task uses 40 ticks, it stays in the blocked state for 60 ticks. if task uses 30, stays blocked for 70 and so on)
+I also learnt about data types and freeRTOS data types (TickType_t for example that stores number of ticks).
+I was mostly in the official github repo of freeRTOS, reading the kernel book so that might have also enlightened me in some way that i can't put to words (helped me read stuff in github better?).
+Throughout the entirety of this, i have also been exposed to pointers and void pointers too. so i am, little by little, starting to understand how that works.
+
+Questions:
+The application. What are the use cases?
+What will my day to day usage of the two functions learnt to day be like?
+Is its only application under the for loop for transitioning tasks from running to the blocked state?
