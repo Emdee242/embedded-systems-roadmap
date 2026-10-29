@@ -441,7 +441,7 @@ Learning about FreeRTOS and how to run concurrent tasks.
 ## Day 1 - FreeRTOS Tasks
 **What it is** Build a task reading a sensor.
 
-**Reality** I created a FreeRTOS task reading a sensor in 1000 second succession. The build involved pointer allocation, static funcions understanding, and how to allocate a void pointer to a class.
+**Reality** I created a FreeRTOS task reading a sensor in 1000 second succession. The build involved pointer allocation, static funcions understanding, and how to allocate a void pointer to a class. I decided to pass in the SensorTask class itself for void parameter pointer to point to and not mpu driver because passing to the mpu driver would involve me creating an mpu driver pointer independent of the already declared CoreMPU.
 
 **Components**
 - Mpu6500 CoreMPU{Wire} - This is an mpu object inside the SensorTask class.
@@ -462,3 +462,28 @@ void loop() {}
 **Known Limitations** Today was used for a test build. It is not the real applied application and as such, does not and is not tested for multiple tasks. It also does not make use of task handles.
 
 ---
+
+## Day 2 - Priorities
+**What it is** This is a purely theoretical day. Aimed at understanding why a higher priority task can starve a lower priority one of CPU time without certain API calls.
+**Reality** I read about the vTaskDelay function, how it counts time depending on number of ticks and how to change to milliseconds by using the pdMS_TO_TICKS() macro. I also read about the vTaskDelayUntil function. Which is almost the same as the vTaskDelay function except, it calculates time relative to the alloted time and time taken for each task to execute (100 ticks regardless of how long the task ran for).
+
+**Usage:**
+```cpp
+void vTaskFunction( void * pvParameters )
+{
+    char * pcTaskName;
+
+    const TickType_t xDelay250ms = pdMS_TO_TICKS( 250 );
+
+    pcTaskName = ( char * ) pvParameters;
+
+
+    for( ;; )
+    {
+        vPrintLine( pcTaskName );
+        vTaskDelay( xDelay250ms );
+    }
+}
+```
+
+**Knoqn LimirRION** It does not calculate the blocking time relative the the time taken for the whole task to run and the time alloted for each cycle. It dedicates 250 ticks for each blocked state regardless of the time taken for the task to run. Not really a limitation but it is good to know such an alternative exists.
