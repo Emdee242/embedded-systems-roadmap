@@ -1,0 +1,19 @@
+FreeRTOS Tasks
+What I Was Confused About:
+The whole project structure of FreeRTOS was confusing; the functions, the parameters, the null pointers, pointers in general.. I pulled on my hair more times than the normal amount of "pulling"
+How did void *parameter parameter relate with wrapping an object?
+Why and what static_cast was doing in my code.. stuff like that
+
+Enlightenment:
+A little bit about FreeRTOS. although i have to admit that i have even more questions than when i started.
+and if i do not solidify this knowledge, i will definately forget it.
+I also gained some knowledge and insight as to how pointers, especially the void pointers that was used as the parameter to the task structure in freeRTOS.
+I have also gotten more insight as to why they recommend python as a first language and not c++
+
+Questions:
+Where do i start.. 
+I kind of? understand the purpose of static_cast and why and how i wrapped the parameter to my pointer object inside the class? 
+I do not fully understand why i am creating an object of itself inside itself. i understand the theory, (static functions and whatnot), but i feel like i am missing something.
+What other functions lay in store for me, idk but i sure am curious.
+I am also to integrate this sensor task code into my application. How i am going to do that is still elusive to me. Though it is a design decision so it should be interesting.
+I also do not fully understand the purpose of the last parameter or xTaskCreate (the task handle). I understand that it is for manipulating tasks outside their normal boundary by binding them to a variable?, but i feel like i am missing something.
