@@ -18,7 +18,7 @@
                 Serial.print("       ");
                 Serial.println(az);
             }
-            CoreTask->Gyroscope = CoreTask->CoreMPU.measuerAccel();
+            CoreTask->Gyroscope = CoreTask->CoreMPU.measureGyro();
             if (CoreTask->Gyroscope) {
                 float gx;
                 float gy;

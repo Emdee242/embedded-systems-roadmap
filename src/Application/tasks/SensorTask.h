@@ -3,6 +3,7 @@
 #include "../../drivers/Mpu6500.h"
 #include <Arduino.h>
 #include <Wire.h>
+#include <optional>
 class SensorTask{
 private:
     Mpu6500 CoreMPU{Wire};

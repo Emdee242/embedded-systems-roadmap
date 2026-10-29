@@ -5,7 +5,6 @@
 #include "../drivers/Button.h"
 #include "../drivers/Mpu6500.h"
 #include <Wire.h>
-#include <optional>
 void Application::start() {
     Wire.begin();
     Serial.begin(115200);
