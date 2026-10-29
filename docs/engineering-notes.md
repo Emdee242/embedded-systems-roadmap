@@ -429,3 +429,20 @@ Tooling and Verification. Using software to verify and fix syntax and semantics.
 I included two additional tests to circular buffer to check for each possible unique use case and converted read to an std::optional. Replacing the return 0 with an std::optional removed that ambiguity and code error.
 
 **Known Limitations** Not all of the core or drivers were unit tested. Only one (circular buffer) was unit tested due to its independence on hardware and nature of topic (was not learnt to be implemented in the current project).
+
+---
+
+# Milestone 6 - FreeRTOS
+
+Learning about FreeRTOS and how to run concurrent tasks.
+
+---
+
+## Day 1 - Tasks
+**What it is** Build a task in SensorTask file
+
+**Reality** Nothing was done today. Every organization and fixes were done during milestone 4.
+
+**Known Limitations** None.
+
+---
