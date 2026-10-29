@@ -35,6 +35,8 @@
     }
 }
 void SensorTask::start(){
+    Wire.begin();
+    Serial.begin(115200);
     CoreMPU.begin();
     CoreMPU.sleep(0);
     CoreMPU.cycle(0);

@@ -438,11 +438,27 @@ Learning about FreeRTOS and how to run concurrent tasks.
 
 ---
 
-## Day 1 - Tasks
-**What it is** Build a task in SensorTask file
+## Day 1 - FreeRTOS Tasks
+**What it is** Build a task reading a sensor.
 
-**Reality** Nothing was done today. Every organization and fixes were done during milestone 4.
+**Reality** I created a FreeRTOS task reading a sensor in 1000 second succession. The build involved pointer allocation, static funcions understanding, and how to allocate a void pointer to a class.
 
-**Known Limitations** None.
+**Components**
+- Mpu6500 CoreMPU{Wire} - This is an mpu object inside the SensorTask class.
+- std::optional<AccelerometerReading> Accelerometer - A accelerometer class of std::optional wrapper type (can contain a accelerometer that may or may not be empty).
+- std::optional<GyroscopeReading> Gyroscope - A gyroscope class of std::optional wrapper type (can contain a gyroscope that may or may not be empty).
+- static void task1 (void *parameters) - This is the main function. In it is the main loop and the code that reads and prints from the gyroscope and accelerometer sensor.
+- void start() - This is the function that goes into void setup() in the main arduino based file. It pre configures the mpu driver, serial monitor and calls the xTaskCreate function that begins the whole task.
+
+**Usage:**
+```cpp
+#include "src/Application/tasks/SensorTask.h"
+SensorTask Task1;
+void setup() { Task1.start(); }
+
+void loop() {}
+```
+
+**Known Limitations** Today was used for a test build. It is not the real applied application and as such, does not and is not tested for multiple tasks. It also does not make use of task handles.
 
 ---
