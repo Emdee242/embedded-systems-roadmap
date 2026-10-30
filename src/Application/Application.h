@@ -21,7 +21,6 @@ class Application {
     std::optional<GyroscopeReading> Gyroscope;
     CurrentState ApplicationState = CurrentState::IDLE;
     unsigned long readInterval = 1000;
-
   public:
     void start();
     void update();

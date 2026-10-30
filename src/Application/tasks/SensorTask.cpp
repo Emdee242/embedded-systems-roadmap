@@ -1,39 +1,46 @@
 #include "SensorTask.h"
 #include "../../drivers/Mpu6500.h"
+#include "../../core/CircularBuffer.h"
+#include "../../core/Debouncer.h"
+#include "../../core/SoftwareTimer.h"
+#include "../../drivers/Button.h"
 #include "../Application.h"
 #include <Arduino.h>
+#include <Arduino.h>
 #include <Wire.h>
-void SensorTask::sensorTaskEntry(void *parameters){
+#include <optional>
+void sensorTaskEntry(void *parameters){
 for(;;){
-    Application *SensorApplication = static_cast<Application*>(parameters);
-    SensorApplication->CoreDebouncer.update();
-    if (ProcessApplication->CoreTimer.intervalPassed()) {
-        switch (ProcessApplication->ApplicationState) {
+    SensorTaskParam *SensorParameter = static_cast<SensorTaskParam*>(parameters);
+    SensorParameter->debounce->update();
+    if (SensorParameter->timer->intervalPassed()) {
+        switch (*SensorParameter->state) {
         case (CurrentState::ACTIVE):
-            if (CoreDebouncer.lift()) {
-                ApplicationState = CurrentState::IDLE;
+            if (SensorParameter->debounce->lift()) {
+                *SensorParameter -> state = CurrentState::IDLE;
             }
-            if (Accelerometer = CoreMPU.measureAccel(); Accelerometer) {
+            if (*SensorParameter->Accelerometer = SensorParameter->mpu->measureAccel(); *SensorParameter->Accelerometer) {
                 float ax;
                 float ay;
                 float az;
-                Accelerometer->get(ax, ay, az);
-                AccelBuffer.write(ax);
-                AccelBuffer.write(ay);
-                AccelBuffer.write(az);
+                *SensorParameter->Accelerometer->get(ax, ay, az);
+                SensorParameter->AccelBuffer->write(ax);
+                SensorParameter->AccelBuffer->write(ay);
+                SensorParameter->AccelBuffer->write(az);
             }
-            if (Gyroscope = CoreMPU.measureGyro(); Gyroscope) {
+            if (*SensorParameter->Gyroscope = SensorParameter->mpu->measureGyro(); *SensorParameter->Gyroscope) {
                 float gx;
                 float gy;
                 float gz;
-                GyroBuffer.write(gx);
-                GyroBuffer.write(gy);
-                GyroBuffer.write(gz);
+                *SensorParameter->Gyroscope->get(gx, gy, gz);
+                SensorParameter->GyroBuffer->write(gx);
+                SensorParameter->GyroBuffer->write(gy);;
+                SensorParameter->GyroBuffer->write(gz);;
             }
             break;
         case (CurrentState::IDLE):
-            if (CoreDebouncer.fall()) {
-                ApplicationState = CurrentState::ACTIVE;
+            if (SensorParameter->debounce->fall()) {
+                *SensorParameter -> state = CurrentState::ACTIVE;
             }
             Serial.println("----------------------");
             break;
