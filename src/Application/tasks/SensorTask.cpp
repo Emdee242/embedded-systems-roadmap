@@ -1,38 +1,48 @@
 #include "SensorTask.h"
 #include "../../drivers/Mpu6500.h"
+#include "../Application.h"
 #include <Arduino.h>
 #include <Wire.h>
- void SensorTask::task1(void *parameters){
-    for(;;){
-        SensorTask *CoreTask = static_cast<SensorTask*>(parameters);
-        CoreTask->Accelerometer = CoreTask->CoreMPU.measureAccel(); 
-        if (CoreTask->Accelerometer) {
+void SensorTask::sensorTaskEntry(void *parameters){
+for(;;){
+    Application *SensorApplication = static_cast<Application*>(parameters);
+    SensorApplication->CoreDebouncer.update();
+    if (ProcessApplication->CoreTimer.intervalPassed()) {
+        switch (ProcessApplication->ApplicationState) {
+        case (CurrentState::ACTIVE):
+            if (CoreDebouncer.lift()) {
+                ApplicationState = CurrentState::IDLE;
+            }
+            if (Accelerometer = CoreMPU.measureAccel(); Accelerometer) {
                 float ax;
                 float ay;
                 float az;
-                CoreTask->Accelerometer->get(ax, ay, az);
-                Serial.print("Accelerometer:       ");
-                Serial.print(ax);
-                Serial.print("       ");
-                Serial.print(ay);
-                Serial.print("       ");
-                Serial.println(az);
+                Accelerometer->get(ax, ay, az);
+                AccelBuffer.write(ax);
+                AccelBuffer.write(ay);
+                AccelBuffer.write(az);
             }
-            CoreTask->Gyroscope = CoreTask->CoreMPU.measureGyro();
-            if (CoreTask->Gyroscope) {
+            if (Gyroscope = CoreMPU.measureGyro(); Gyroscope) {
                 float gx;
                 float gy;
                 float gz;
-                CoreTask->Gyroscope->get(gx, gy, gz);
-                Serial.print("Gyroscope:           ");
-                Serial.print(gx);
-                Serial.print("       ");
-                Serial.print(gy);
-                Serial.print("       ");
-                Serial.println(gz);
+                GyroBuffer.write(gx);
+                GyroBuffer.write(gy);
+                GyroBuffer.write(gz);
             }
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
+            break;
+        case (CurrentState::IDLE):
+            if (CoreDebouncer.fall()) {
+                ApplicationState = CurrentState::ACTIVE;
+            }
+            Serial.println("----------------------");
+            break;
+        default:
+            Serial.println(".........................");
+            break;
+        }
     }
+}
 }
 void SensorTask::start(){
     Wire.begin();

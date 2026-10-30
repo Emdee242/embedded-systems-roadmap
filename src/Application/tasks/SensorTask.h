@@ -10,7 +10,7 @@ private:
     std::optional<AccelerometerReading> Accelerometer;
     std::optional<GyroscopeReading> Gyroscope;
 public:
-static void task1(void *parameters);
+static void sensorTaskEntry(void *parameters);
 void start();
 };
 #endif
