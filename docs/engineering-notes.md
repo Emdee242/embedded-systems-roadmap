@@ -486,4 +486,4 @@ void vTaskFunction( void * pvParameters )
 }
 ```
 
-**Knoqn LimirRION** It does not calculate the blocking time relative the the time taken for the whole task to run and the time alloted for each cycle. It dedicates 250 ticks for each blocked state regardless of the time taken for the task to run. Not really a limitation but it is good to know such an alternative exists.
+**Known Limitations** It does not calculate the blocking time relative the the time taken for the whole task to run and the time alloted for each cycle. It dedicates 250 ticks for each blocked state regardless of the time taken for the task to run. Not really a limitation but it is good to know such an alternative exists.
