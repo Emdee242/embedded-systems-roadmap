@@ -4,8 +4,6 @@
 #include "../../core/Debouncer.h"
 #include "../Application.h"
 #include <Arduino.h>
-#include <Arduino.h>
-#include <Wire.h>
 #include <optional>
 void sensorTaskEntry(void *parameters){
     SensorTaskParam *SensorParameter = static_cast<SensorTaskParam*>(parameters);
