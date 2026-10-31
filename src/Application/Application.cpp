@@ -4,6 +4,8 @@
 #include "../core/SoftwareTimer.h"
 #include "../drivers/Button.h"
 #include "../drivers/Mpu6500.h"
+#include "/tasks/ProcessTask.h"
+#include "/tasks/SensorTask.h"
 #include <Wire.h>
 void Application::start() {
     Wire.begin();

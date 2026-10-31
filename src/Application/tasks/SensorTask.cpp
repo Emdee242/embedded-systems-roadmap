@@ -7,13 +7,12 @@
 #include <optional>
 void sensorTaskEntry(void *parameters){
     SensorTaskParam *SensorParameter = static_cast<SensorTaskParam*>(parameters);
-    SensorVariables SensorTaskVariables;
-    MessageType sensorMessage;
+    QueueTask SensorTaskEntry;
 for(;;){
     SensorParameter->debounce->update();
         switch (*SensorParameter->state) {
         case (CurrentState::ACTIVE):
-        SensorParameter->sensorMessage = MessageType::BUTTON_HELD;
+        SensorTaskEntry.QueueMessage = MessageType::BUTTON_HELD;
             if (SensorParameter->debounce->lift()) {
                 *SensorParameter -> state = CurrentState::IDLE;
             }
@@ -21,24 +20,24 @@ for(;;){
                 float ax;
                 float ay;
                 float az;
-                *SensorParameter->Accelerometer->get(SensorTaskVariables.ax, SensorTaskVariables.ay, SensorTaskVariables.az);
-                SensorParameter->AccelBuffer->write(SensorTaskVariables.ax);
-                SensorParameter->AccelBuffer->write(SensorTaskVariables.ay);
-                SensorParameter->AccelBuffer->write(SensorTaskVariables.az);
+                *SensorParameter->Accelerometer->get(SensorTaskEntry.QueueVariables.ax, SensorTaskEntry.QueueVariables.ay, SensorTaskEntry.QueueVariables.az);
+                SensorParameter->AccelBuffer->write(SensorTaskEntry.QueueVariables.ax);
+                SensorParameter->AccelBuffer->write(SensorTaskEntry.QueueVariables.ay);
+                SensorParameter->AccelBuffer->write(SensorTaskEntry.QueueVariables.az);
             }
             if (*SensorParameter->Gyroscope = SensorParameter->mpu->measureGyro(); *SensorParameter->Gyroscope) {
                 float gx;
                 float gy;
                 float gz;
-                *SensorParameter->Gyroscope->get(SensorTaskVariables.gx, SensorTaskVariables.gy, SensorTaskVariables.gz);
-                SensorParameter->GyroBuffer->write(SensorTaskVariables.gx);
-                SensorParameter->GyroBuffer->write(SensorTaskVariables.gy);
-                SensorParameter->GyroBuffer->write(SensorTaskVariables.gz);
+                *SensorParameter->Gyroscope->get(SensorTaskEntry.QueueVariables.gx, SensorTaskEntry.QueueVariables.gy, SensorTaskEntry.QueueVariables.gz);
+                SensorParameter->GyroBuffer->write(SensorTaskEntry.QueueVariables.gx);
+                SensorParameter->GyroBuffer->write(SensorTaskEntry.QueueVariables.gy);
+                SensorParameter->GyroBuffer->write(SensorTaskEntry.QueueVariables.gz);
 
             }
             break;
         case (CurrentState::IDLE):
-        SensorParameter->sensorMessage = MessageType::BUTTON_RELEASED;
+        SensorTaskEntry.QueueMessage = MessageType::BUTTON_RELEASED;
             if (SensorParameter->debounce->fall()) {
                 *SensorParameter -> state = CurrentState::ACTIVE;
             }
@@ -46,8 +45,7 @@ for(;;){
         default:
             break;
         }
-        xQueueSendToBack(SensorParamter->messageHandle, *SensorMessage, pdMS_TO_TICKS(30));
-        xQueueSendToBack(SensorParameter->sensorHandle, &SensorTaskVariables, pdMS_TO_TICKS( 30 ));
+        xQueueSendToBack(SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 ));
         vTaskDelay(pdMS_TO_TICKS( 1000 ));
 }
 }

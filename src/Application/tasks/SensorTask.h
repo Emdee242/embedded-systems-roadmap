@@ -23,7 +23,6 @@ CurrentState *state;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
 QueueHandle_t sensorHandle;
-QueueHandle_t messageHandle;
 };
 struct SensorVariables{
     float ax;
@@ -32,6 +31,10 @@ struct SensorVariables{
     float gx;
     float gy;
     float gz;
+};
+struct QueueTask{
+MessageType QueueMessage;
+SensorVariables QueueVariables;
 };
 void sensorTaskEntry(void *parameters);
 #endif
