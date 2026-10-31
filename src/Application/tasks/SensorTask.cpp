@@ -2,18 +2,17 @@
 #include "../../drivers/Mpu6500.h"
 #include "../../core/CircularBuffer.h"
 #include "../../core/Debouncer.h"
-#include "../../core/SoftwareTimer.h"
-#include "../../drivers/Button.h"
 #include "../Application.h"
 #include <Arduino.h>
 #include <Arduino.h>
 #include <Wire.h>
 #include <optional>
 void sensorTaskEntry(void *parameters){
-for(;;){
     SensorTaskParam *SensorParameter = static_cast<SensorTaskParam*>(parameters);
+    SensorVariables SensorTaskVariables;
+for(;;){
+    vTaskDelay(pdMS_TO_TICKS( 1000 ));
     SensorParameter->debounce->update();
-    if (SensorParameter->timer->intervalPassed()) {
         switch (*SensorParameter->state) {
         case (CurrentState::ACTIVE):
             if (SensorParameter->debounce->lift()) {
@@ -23,49 +22,29 @@ for(;;){
                 float ax;
                 float ay;
                 float az;
-                *SensorParameter->Accelerometer->get(ax, ay, az);
-                SensorParameter->AccelBuffer->write(ax);
-                SensorParameter->AccelBuffer->write(ay);
-                SensorParameter->AccelBuffer->write(az);
+                *SensorParameter->Accelerometer->get(SensorTaskVariables.ax, SensorTaskVariables.ay, SensorTaskVariables.az);
+                SensorParameter->AccelBuffer->write(SensorTaskVariables.ax);
+                SensorParameter->AccelBuffer->write(SensorTaskVariables.ay);
+                SensorParameter->AccelBuffer->write(SensorTaskVariables.az);
             }
             if (*SensorParameter->Gyroscope = SensorParameter->mpu->measureGyro(); *SensorParameter->Gyroscope) {
                 float gx;
                 float gy;
                 float gz;
-                *SensorParameter->Gyroscope->get(gx, gy, gz);
-                SensorParameter->GyroBuffer->write(gx);
-                SensorParameter->GyroBuffer->write(gy);;
-                SensorParameter->GyroBuffer->write(gz);;
+                *SensorParameter->Gyroscope->get(SensorTaskVariables.gx, SensorTaskVariables.gy, SensorTaskVariables.gz);
+                SensorParameter->GyroBuffer->write(SensorTaskVariables.gx);
+                SensorParameter->GyroBuffer->write(SensorTaskVariables.gy);;
+                SensorParameter->GyroBuffer->write(SensorTaskVariables.gz);;
             }
+            xQueueSendToBack(SensorParameter->QueueHandle, &SensorTaskVariables, pdMS_TO_TICKS( 30 ));
             break;
         case (CurrentState::IDLE):
             if (SensorParameter->debounce->fall()) {
                 *SensorParameter -> state = CurrentState::ACTIVE;
             }
-            Serial.println("----------------------");
             break;
         default:
-            Serial.println(".........................");
             break;
         }
-    }
 }
-}
-void SensorTask::start(){
-    Wire.begin();
-    Serial.begin(115200);
-    CoreMPU.begin();
-    CoreMPU.sleep(0);
-    CoreMPU.cycle(0);
-    CoreMPU.configAccel(0, 0);
-    CoreMPU.configGyro(0, 0);
-    CoreMPU.firstLog.setLimit(Severity::INFO);
-xTaskCreate(
-    task1,
-    "Task 1",
-    1000,
-    this,
-    1,
-    NULL
-);   
 }

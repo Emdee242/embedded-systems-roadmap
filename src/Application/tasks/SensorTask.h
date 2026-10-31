@@ -18,5 +18,15 @@ Button *button;
 CurrentState *state;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
+QueueHandle_t QueueHandle;
 };
+struct SensorVariables{
+    float ax;
+    float ay;
+    float az;
+    float gx;
+    float gy;
+    float gz;
+};
+void sensorTaskEntry(void *parameters);
 #endif
