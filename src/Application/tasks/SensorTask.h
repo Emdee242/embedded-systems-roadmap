@@ -8,6 +8,10 @@
 #include "../Application.h"
 #include <Arduino.h>
 #include <optional>
+enum class MessageType{
+    BUTTON_HELD,
+    BUTTON_RELEASED
+}
 struct SensorTaskParam{
 Mpu6500 *mpu;
 CircularBuffer *AccelBuffer;
@@ -18,7 +22,8 @@ Button *button;
 CurrentState *state;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
-QueueHandle_t QueueHandle;
+QueueHandle_t sensorHandle;
+QueueHandle_t messageHandle;
 };
 struct SensorVariables{
     float ax;
