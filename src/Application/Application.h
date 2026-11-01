@@ -5,11 +5,10 @@
 #include "../core/SoftwareTimer.h"
 #include "../drivers/Button.h"
 #include "../drivers/Mpu6500.h"
-#include "/tasks/ProcessTask.h"
-#include "/tasks/SensorTask.h"
+#include "tasks/ProcessTask.h"
+#include "tasks/SensorTask.h"
 #include <Wire.h>
 #include <optional>
-enum class CurrentState { IDLE, ACTIVE };
 class Application {
   private:
     const uint8_t buttonPin = 7;
@@ -21,8 +20,7 @@ class Application {
     SoftwareTimer CoreTimer;
     std::optional<AccelerometerReading> Accelerometer;
     std::optional<GyroscopeReading> Gyroscope;
-    CurrentState ApplicationState = CurrentState::IDLE;
-    SensorTaskParam CoreTaskParam;
+    SensorTaskParam CoreTaskParam{};
     QueueHandle_t startQueue;
     unsigned long readInterval = 1000;
   public:

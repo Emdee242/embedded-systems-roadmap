@@ -1,13 +1,12 @@
 #include "ProcessTask.h"
 #include "SensorTask.h"
-#include "../Application.h"
 #include "../../drivers/Mpu6500.h"
-static void processTaskEntry(void *parameters){
-    QueueHandle_t *processHandle = static_cast<*QueueHandle_t>(parameters);
+void processTaskEntry(void *parameters){
+    QueueHandle_t *processHandle = static_cast<QueueHandle_t*>(parameters);
     QueueTask ProcessedMessage;
 for(;;){
-    if(xQueueRecieve(*processHandle->messageHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
-        if(ProcessedMessage.QueueMessage == MessageType::BUTTON_HELD){
+    if(xQueueReceive(*processHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
+        if(ProcessedMessage.QueueMessage == CurrentState::ACTIVE){
                 Serial.print("Accelerometer:       ");
                 Serial.print(ProcessedMessage.QueueVariables.ax);
                 Serial.print("       ");

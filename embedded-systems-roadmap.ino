@@ -1,5 +1,5 @@
-#include "src/Application/tasks/SensorTask.h"
-SensorTask Task1;
-void setup() { Task1.start(); }
+#include "src/Application/Application.h"
+Application MainApplication;
+void setup() { MainApplication.start(); }
 
 void loop() {}

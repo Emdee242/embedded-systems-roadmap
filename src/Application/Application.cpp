@@ -4,8 +4,8 @@
 #include "../core/SoftwareTimer.h"
 #include "../drivers/Button.h"
 #include "../drivers/Mpu6500.h"
-#include "/tasks/ProcessTask.h"
-#include "/tasks/SensorTask.h"
+#include "tasks/ProcessTask.h"
+#include "tasks/SensorTask.h"
 #include <Wire.h>
 void Application::start() {
     Wire.begin();
@@ -19,18 +19,18 @@ void Application::start() {
     CoreMPU.configAccel(0, 0);
     CoreMPU.configGyro(0, 0);
     CoreMPU.firstLog.setLimit(Severity::INFO);
-    CoreTaskParam.Button = &CoreButton;
+    CoreTaskParam.button = &CoreButton;
     CoreTaskParam.debounce = &CoreDebouncer;
     CoreTaskParam.timer = &CoreTimer;
     CoreTaskParam.AccelBuffer = &AccelBuffer;
     CoreTaskParam.GyroBuffer = &GyroBuffer;
     CoreTaskParam.mpu = &CoreMPU;
-    CoreTaskParam.state = &ApplicationState;
     CoreTaskParam.Accelerometer = &Accelerometer;
     CoreTaskParam.Gyroscope = &Gyroscope;
     startQueue = xQueueCreate(1, sizeof(QueueTask));
     if(startQueue == nullptr){
         Serial.println("Queue creation failed!");
+        return;
     }
     CoreTaskParam.sensorHandle = startQueue;
     xTaskCreate(sensorTaskEntry, "sensor task", 4096, &CoreTaskParam, 1, nullptr);

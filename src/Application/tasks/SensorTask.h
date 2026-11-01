@@ -5,13 +5,9 @@
 #include "../../core/Debouncer.h"
 #include "../../core/SoftwareTimer.h"
 #include "../../drivers/Button.h"
-#include "../Application.h"
 #include <Arduino.h>
 #include <optional>
-enum class MessageType{
-    BUTTON_HELD,
-    BUTTON_RELEASED
-};
+enum class CurrentState { IDLE, ACTIVE };
 struct SensorTaskParam{
 Mpu6500 *mpu;
 CircularBuffer *AccelBuffer;
@@ -19,7 +15,7 @@ CircularBuffer *GyroBuffer;
 Debouncer *debounce;
 SoftwareTimer *timer;
 Button *button;
-CurrentState *state;
+CurrentState state = CurrentState::IDLE;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
 QueueHandle_t sensorHandle;
@@ -33,7 +29,7 @@ struct SensorVariables{
     float gz;
 };
 struct QueueTask{
-MessageType QueueMessage;
+CurrentState QueueMessage;
 SensorVariables QueueVariables;
 };
 void sensorTaskEntry(void *parameters);
