@@ -45,7 +45,9 @@ for(;;){
         default:
             break;
         }
-        xQueueSendToBack(SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 ));
+        if(xQueueSendToBack(SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
+            QueueOverwrite(SensorParameter->sensorHandle, &SensorTaskEntry);
+        };
         vTaskDelay(pdMS_TO_TICKS( 1000 ));
 }
 }

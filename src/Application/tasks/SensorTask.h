@@ -11,7 +11,7 @@
 enum class MessageType{
     BUTTON_HELD,
     BUTTON_RELEASED
-}
+};
 struct SensorTaskParam{
 Mpu6500 *mpu;
 CircularBuffer *AccelBuffer;

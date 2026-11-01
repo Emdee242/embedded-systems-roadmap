@@ -5,6 +5,8 @@
 #include "../core/SoftwareTimer.h"
 #include "../drivers/Button.h"
 #include "../drivers/Mpu6500.h"
+#include "/tasks/ProcessTask.h"
+#include "/tasks/SensorTask.h"
 #include <Wire.h>
 #include <optional>
 enum class CurrentState { IDLE, ACTIVE };
@@ -20,6 +22,8 @@ class Application {
     std::optional<AccelerometerReading> Accelerometer;
     std::optional<GyroscopeReading> Gyroscope;
     CurrentState ApplicationState = CurrentState::IDLE;
+    SensorTaskParam CoreTaskParam;
+    QueueHandle_t startQueue;
     unsigned long readInterval = 1000;
   public:
     void start();

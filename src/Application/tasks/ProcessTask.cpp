@@ -6,7 +6,7 @@ static void processTaskEntry(void *parameters){
     QueueHandle_t *processHandle = static_cast<*QueueHandle_t>(parameters);
     QueueTask ProcessedMessage;
 for(;;){
-    if(xQueueRecieve(*processHandle->messageHandle, &ProcessedMessage, pdMS_TO_TICKS(30))){
+    if(xQueueRecieve(*processHandle->messageHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
         if(ProcessedMessage.QueueMessage == MessageType::BUTTON_HELD){
                 Serial.print("Accelerometer:       ");
                 Serial.print(ProcessedMessage.QueueVariables.ax);
