@@ -29,6 +29,9 @@ void Application::start() {
     CoreTaskParam.Accelerometer = &Accelerometer;
     CoreTaskParam.Gyroscope = &Gyroscope;
     startQueue = xQueueCreate(1, sizeof(QueueTask));
+    if(startQueue == nullptr){
+        Serial.println("Queue creation failed!");
+    }
     CoreTaskParam.sensorHandle = startQueue;
     xTaskCreate(sensorTaskEntry, "sensor task", 4096, &CoreTaskParam, 1, nullptr);
     xTaskCreate(processTaskEntry, "process task", 4096, &startQueue, 1, nullptr);
