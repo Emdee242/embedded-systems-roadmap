@@ -42,3 +42,28 @@ Questions:
 The application. What are the use cases?
 What will my day to day usage of the two functions learnt to day be like?
 Is its only application under the for loop for transitioning tasks from running to the blocked state?
+
+
+
+
+
+
+
+
+FreeRTOS Queues
+What I Was Confused About:
+This day consisted of integrating freeRTOS to my actual application and allocating tasks to two seperate files (sensorTask and processTask)
+This day really put my knowledge about pointers into perspective. I thought i understood pointers till this day. When i had to use pointers beyond normal variables and use them in terms of structs, struct pointers and std::optionals. In short, pulled my hair a little..
+I was also confused about the operator overloading of the asterisk sign (in terms of, why it could either dereference a variable, or get the actual value of an std::optional object)
+I was also confused on why i needed to add the static to every freeRTOS task function i create inside a class but not add it outside. Only temporarily of course. I quickly came to terms with the *this pointer concept and "ownership" concept.
+This was the first time i have been introduced to the concept of a pointer object, with pointer parameters.
+I was also introduced to tasks sharing a single queue and architectur'ing around vTaskDelay.
+Queue handles, task handles, rtos in general..
+properly seperating tasks also took me a while.. 
+
+Enlightenment:
+I understood all the stuff listed above; allocation of tasks, pointer allocation, dereferencing variables and std::optionals etc..
+I have also touched a fair share of github readmes and kernel books.
+
+Questions:
+What are the thresholds of my capabilities when creating a handle for each tasks?
