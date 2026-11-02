@@ -38,9 +38,9 @@ void loop() {}
 ### Sensor Task
 
 **What it is:**
-A freeRTOS task function that reads the sensor values during button press sends the readings to the process task function.
+A freeRTOS task function that reads the sensor values during button press sends the readings to the `processTask` function.
 
-**Public AP**
+**Public API**
 
 - `sensorTaskEntry(void *parameters)` — uses the object passed into it through its parameter to read the sensor and send sensor values in 1000 millisecond intervals while the button is held
 
@@ -55,6 +55,30 @@ void loop(){}
 ```
 
 **Known limitations:** During the short 1000 millisecond intervals, the task enters a blocked state and does not execute any physical change until it enters the active change (after the 1000 millisecond interval).
+
+---
+
+### Process Task
+
+**What it is:**
+A freeRTOS task function that sends the sensor readings sent by the `sensorTask` function to the serial monitor.
+
+**Public API**
+
+- `processTaskEntry(void *parameters)` — copies the value from the queue into its internal parameters and sends those values to the serial monitor. It sends a pre-determined string (`-----`) when the button is released.
+
+`void *parameters` is a pointer pointing to the Queue Handle containing the data sent by `sensorTask`.
+
+
+**Usage**
+```cpp
+
+void setup(){    xTaskCreate(processTaskEntry, "process task", 4096, &startQueue, 1, nullptr);}
+
+void loop(){}
+```
+
+**Known limitations:** The 1000 millisecond interval in sensorTask is also reflected here. This means the output has a 1000 millisecond buffer during short intervals.
 
 ---
 
