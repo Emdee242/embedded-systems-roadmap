@@ -1,3 +1,36 @@
+#Application/
+
+---
+
+##Application
+
+**What it is**
+A class that begins the implementation of the mpu driver and other drivers combined. It uses freeRTOS to seperate different tasks and has a single function.
+
+**Public API**
+
+- `start()`
+
+Initializes the communication protocols
+
+Initializes the necessary hardware drivers and core objects
+
+Implementation of the application-level freeRTOS tasks
+
+**Usage**
+
+```cpp
+Application MainApplication;
+
+void setup() { MainApplication.start(); }
+
+void loop() {}
+```
+
+**Known limitations:** No instantaneous change in serial output when hardware change is detected (1 second maximum buffer between input and output). This is due to the 1 second delay between each task.
+
+---
+
 # drivers/
 
 ---
