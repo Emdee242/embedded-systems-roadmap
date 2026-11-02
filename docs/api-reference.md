@@ -1,8 +1,8 @@
-#Application/
+# Application/
 
 ---
 
-##Application
+## Application
 
 **What it is**
 A class that begins the implementation of the mpu driver and other drivers combined. It uses freeRTOS to seperate different tasks and has a single function.
@@ -27,7 +27,34 @@ void setup() { MainApplication.start(); }
 void loop() {}
 ```
 
-**Known limitations:** No instantaneous change in serial output when hardware change is detected (1 second maximum buffer between input and output). This is due to the 1 second delay between each task.
+**Known limitations:** No instantaneous change in serial output when hardware change is detected (1 second maximum buffer between input and output). This is due to the 1000 millisecond delay between each task.
+
+---
+
+## tasks/
+
+---
+
+### Sensor Task
+
+**What it is:**
+A freeRTOS task function that reads the sensor values during button press sends the readings to the process task function.
+
+**Public AP**
+
+- `sensorTaskEntry(void *parameters)` — uses the object passed into it through its parameter to read the sensor and send sensor values in 1000 millisecond intervals while the button is held
+
+`void *parameters` is a pointer pointing to a `SensorTaskParam` struct containing the necessary drivers and core objects(Mpu driver pointer, circular buffer pointer, debouncer pointer, software timer pointer, button pointer, current state enum, accelerometer reading pointer, gyroscope reading pointer and the queue handle).
+
+**Usage**
+```cpp
+
+void setup(){   xTaskCreate(sensorTaskEntry, "sensor task", 4096, &CoreTaskParam, 1, nullptr); }
+
+void loop(){}
+```
+
+**Known limitations:** During the short 1000 millisecond intervals, the task enters a blocked state and does not execute any physical change until it enters the active change (after the 1000 millisecond interval).
 
 ---
 
