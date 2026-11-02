@@ -4,7 +4,7 @@
 
 ## Application
 
-**What it is**
+**What it is:**
 A class that begins the implementation of the mpu driver and other drivers combined. It uses freeRTOS to seperate different tasks and has a single function.
 
 **Public API**
