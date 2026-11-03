@@ -1,9 +1,11 @@
 #include "ProcessTask.h"
 #include "SensorTask.h"
 #include "../../drivers/Mpu6500.h"
+#include "../../core/Logger.h"
 void processTaskEntry(void *parameters){
     QueueHandle_t *processHandle = static_cast<QueueHandle_t*>(parameters);
     QueueTask ProcessedMessage;
+    Logger ProcessLogger;
 for(;;){
     if(xQueueReceive(*processHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
         if(ProcessedMessage.QueueMessage == CurrentState::ACTIVE){
@@ -22,6 +24,8 @@ for(;;){
             }else{
             Serial.println("----------------------");
             }
+        }else{
+            ProcessLogger.Log("timeout (empty queue)", Severity::ERROR);
         }
     }
 }
