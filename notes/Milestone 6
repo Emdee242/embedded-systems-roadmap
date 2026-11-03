@@ -67,3 +67,25 @@ I have also touched a fair share of github readmes and kernel books.
 
 Questions:
 What are the thresholds of my capabilities when creating a handle for each tasks?
+
+
+
+
+
+
+
+
+FreeRTOS Mutexes
+What I Was Confused About:
+If i could implement a mutex in a normal function and how that works since they do not have the normal priority hierarchy.
+why i can't use normal freeRTOS functions in ISR functions
+How to implement the mutex in code with multiple branches
+Header dependencies, where to include freeRTOS headers, does indirect use count? (had to go back and solidify my knowledge on headers)
+If integrating my logger to my application would count as overengineering or if i should go on with it (ended up doing it sha)
+
+Enlightenment:
+I learnt about priority inheritence. and how any task owning a mutex temporarily inherits the priority of the highest task trying to own the same mutex. till it releases said mutex.
+How on multicore ESP-IDF systems, scheduler suspension only suspends scheduling on the core that called it and does not stop other calls from accessing shared memory.
+
+Questions:
+I read about apis like `taskYIELD` and concepts like Deadlock, Priority Inversion and how to take hold of the default (taskYIELD) and other apis like vTaskSuspend, xTaskResume etc.. i did not get to apply them here so i am pretty curious on their application in relation to my api.. if at all.
