@@ -42,9 +42,11 @@ for(;;){
             }
             break;
         default:
+        SensorParameter->SensorLogger.Log("Invalid State", Severity::ERROR);
             break;
         }
         if(xQueueSendToBack(SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
+            SensorParameter->SensorLogger.Log("Timeout (Queue is full, overwriting)", Severity::WARN);
             xQueueOverwrite(SensorParameter->sensorHandle, &SensorTaskEntry);
         };
         vTaskDelay(pdMS_TO_TICKS( 1000 ));

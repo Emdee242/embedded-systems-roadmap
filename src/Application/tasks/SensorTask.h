@@ -4,6 +4,7 @@
 #include "../../core/CircularBuffer.h"
 #include "../../core/Debouncer.h"
 #include "../../core/SoftwareTimer.h"
+#include "../../core/Logger.h"
 #include "../../drivers/Button.h"
 #include <Arduino.h>
 #include <optional>
@@ -19,6 +20,7 @@ CurrentState state = CurrentState::IDLE;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
 QueueHandle_t sensorHandle;
+Logger SensorLogger;
 };
 struct SensorVariables{
     float ax;

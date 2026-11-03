@@ -11,6 +11,7 @@ class Logger {
     Severity maxLogger = Severity::INFO;
 
   public:
+    SemaphoreHandle_t LogMutex = xSemaphoreCreateMutex();
     void setLimit(Severity Level);
     void Log(const char* message, Severity Level);
 };
