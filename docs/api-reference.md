@@ -301,8 +301,7 @@ enum class Severity {
 **Public API**
 
 - `Log(const char* message, Severity Level)` — displays the inputted string message as well as severity level.
-- `read()` — returns the oldest unread value and advances `tail`. Returns `0` if the buffer is empty.
-- `isFull()` — returns the current count of valid items in the buffer.
+- `setLimit(Severity Level)` — configures the severity of messages that should be viewed.
 
 **Usage**
 
