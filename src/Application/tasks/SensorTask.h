@@ -8,6 +8,8 @@
 #include "../../drivers/Button.h"
 #include <Arduino.h>
 #include <optional>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
 enum class CurrentState { IDLE, ACTIVE };
 struct SensorTaskParam{
 Mpu6500 *mpu;

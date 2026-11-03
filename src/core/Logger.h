@@ -1,5 +1,7 @@
 #ifndef LOGGER_H
 #define LOGGER_H
+#include <freertos/FreeRTOS.h>
+#include <freertos/semphr.h>
 enum class Severity {
     INFO,
     WARN,

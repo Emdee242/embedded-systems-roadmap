@@ -2,12 +2,14 @@
 #include "SensorTask.h"
 #include "../../drivers/Mpu6500.h"
 #include "../../core/Logger.h"
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
 void processTaskEntry(void *parameters){
     ProcessTaskParam *ProcessHandle = static_cast<ProcessTaskParam*>(parameters);
     QueueTask ProcessedMessage;
     Logger ProcessLogger;
 for(;;){
-    if(xQueueReceive(ProcessHandle->processHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
+    if(xQueueReceive(*ProcessHandle->processHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
         if(ProcessedMessage.QueueMessage == CurrentState::ACTIVE){
                 Serial.print("Accelerometer:       ");
                 Serial.print(ProcessedMessage.QueueVariables.ax);

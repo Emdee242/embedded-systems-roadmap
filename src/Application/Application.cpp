@@ -7,6 +7,9 @@
 #include "tasks/ProcessTask.h"
 #include "tasks/SensorTask.h"
 #include <Wire.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+#include <freertos/task.h>
 void Application::start() {
     Wire.begin();
     Serial.begin(115200);
@@ -25,7 +28,7 @@ void Application::start() {
     CoreTaskParam.AccelBuffer = &AccelBuffer;
     CoreTaskParam.GyroBuffer = &GyroBuffer;
     CoreTaskParam.mpu = &CoreMPU;
-    CoreTaskParam.logger = &logger;
+    CoreTaskParam.logger = &CoreLogger;
     CoreTaskParam.Accelerometer = &Accelerometer;
     CoreTaskParam.Gyroscope = &Gyroscope;
     startQueue = xQueueCreate(1, sizeof(QueueTask));

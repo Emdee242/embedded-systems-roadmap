@@ -4,6 +4,9 @@
 #include "../../core/Debouncer.h"
 #include <Arduino.h>
 #include <optional>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+#include <freertos/task.h>
 void sensorTaskEntry(void *parameters){
     SensorTaskParam *SensorParameter = static_cast<SensorTaskParam*>(parameters);
     QueueTask SensorTaskEntry;
@@ -47,7 +50,7 @@ for(;;){
         }
         if(xQueueSendToBack(*SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
             SensorParameter->logger->Log("Timeout (Queue is full, overwriting)", Severity::WARN);
-            xQueueOverwrite(SensorParameter->sensorHandle, &SensorTaskEntry);
+            xQueueOverwrite(*SensorParameter->sensorHandle, &SensorTaskEntry);
         };
         vTaskDelay(pdMS_TO_TICKS( 1000 ));
 }

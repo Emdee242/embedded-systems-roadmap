@@ -10,6 +10,8 @@
 #include "../core/Logger.h"
 #include <Wire.h>
 #include <optional>
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
 class Application {
   private:
     const uint8_t buttonPin = 7;

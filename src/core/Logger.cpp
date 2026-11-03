@@ -1,8 +1,10 @@
 #include "Logger.h"
 #include <Arduino.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/semphr.h>
 void Logger::setLimit(Severity Level) { maxLogger = Level; }
 void Logger::Log(const char* message, Severity Level) {
-xSemaphoreCreateMutex(LogMutex, portMAX_DELAY);
+xSemaphoreTake(LogMutex, portMAX_DELAY);
     if (Level >= maxLogger) {
         switch (Level) {
         case (Severity::INFO):
