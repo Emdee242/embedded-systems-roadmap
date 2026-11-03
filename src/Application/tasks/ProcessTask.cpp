@@ -3,11 +3,11 @@
 #include "../../drivers/Mpu6500.h"
 #include "../../core/Logger.h"
 void processTaskEntry(void *parameters){
-    QueueHandle_t *processHandle = static_cast<QueueHandle_t*>(parameters);
+    ProcessTaskParam *ProcessHandle = static_cast<ProcessTaskParam*>(parameters);
     QueueTask ProcessedMessage;
     Logger ProcessLogger;
 for(;;){
-    if(xQueueReceive(*processHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
+    if(xQueueReceive(ProcessHandle->processHandle, &ProcessedMessage, pdMS_TO_TICKS(30)) == pdPASS){
         if(ProcessedMessage.QueueMessage == CurrentState::ACTIVE){
                 Serial.print("Accelerometer:       ");
                 Serial.print(ProcessedMessage.QueueVariables.ax);
@@ -25,7 +25,7 @@ for(;;){
             Serial.println("----------------------");
             }
         }else{
-            ProcessLogger.Log("timeout (empty queue)", Severity::ERROR);
+            ProcessHandle->logger->Log("timeout (empty queue)", Severity::ERROR);
         }
     }
 }

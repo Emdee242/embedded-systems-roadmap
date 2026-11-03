@@ -45,7 +45,7 @@ for(;;){
         SensorParameter->logger->Log("Invalid State", Severity::ERROR);
             break;
         }
-        if(xQueueSendToBack(SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
+        if(xQueueSendToBack(*SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
             SensorParameter->logger->Log("Timeout (Queue is full, overwriting)", Severity::WARN);
             xQueueOverwrite(SensorParameter->sensorHandle, &SensorTaskEntry);
         };

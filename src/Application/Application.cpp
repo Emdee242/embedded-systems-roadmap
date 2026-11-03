@@ -33,7 +33,8 @@ void Application::start() {
         Serial.println("Queue creation failed!");
         return;
     }
-    CoreTaskParam.sensorHandle = startQueue;
+    CoreTaskParam.sensorHandle = &startQueue;
+    CorePTaskParam.processHandle = &startQueue;
     xTaskCreate(sensorTaskEntry, "sensor task", 4096, &CoreTaskParam, 1, nullptr);
-    xTaskCreate(processTaskEntry, "process task", 4096, &startQueue, 1, nullptr);
+    xTaskCreate(processTaskEntry, "process task", 4096, &CorePTaskParam, 1, nullptr);
 }

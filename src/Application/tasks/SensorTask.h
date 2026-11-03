@@ -19,7 +19,7 @@ Button *button;
 CurrentState state = CurrentState::IDLE;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
-QueueHandle_t sensorHandle;
+QueueHandle_t *sensorHandle;
 Logger *logger;
 };
 struct SensorVariables{

@@ -22,6 +22,7 @@ class Application {
     std::optional<AccelerometerReading> Accelerometer;
     std::optional<GyroscopeReading> Gyroscope;
     SensorTaskParam CoreTaskParam{};
+    ProcessTaskParam CorePTaskParam{};
     QueueHandle_t startQueue;
     Logger CoreLogger;
     unsigned long readInterval = 1000;
