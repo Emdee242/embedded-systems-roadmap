@@ -465,6 +465,7 @@ void loop() {}
 
 ## Day 2 - Priorities
 **What it is** This is a purely theoretical day. Aimed at understanding why a higher priority task can starve a lower priority one of CPU time without certain API calls.
+
 **Reality** I read about the vTaskDelay function, how it counts time depending on number of ticks and how to change to milliseconds by using the pdMS_TO_TICKS() macro. I also read about the vTaskDelayUntil function. Which is almost the same as the vTaskDelay function except, it calculates time relative to the alloted time and time taken for each task to execute (100 ticks regardless of how long the task ran for).
 
 **Usage:**
@@ -487,3 +488,23 @@ void vTaskFunction( void * pvParameters )
 ```
 
 **Known Limitations** It does not calculate the blocking time relative the the time taken for the whole task to run and the time alloted for each cycle. It dedicates 250 ticks for each blocked state regardless of the time taken for the task to run. Not really a limitation but it is good to know such an alternative exists.
+
+---
+
+## Day 3 - Queues
+**What it is** Understanding the concept of two tasks using one queue to achieve a singular goal. Why it is necessary (faster task execution, code allocation and much more) and the apis involved (xQueueCreate, xQueueSendToBack etc.)
+
+**Reality** I integrated the queue concept with my application. Delegating two main tasks between two files; `sensorTask` for using the mpu driver api to measure the values in real time and `processTask` to process these values and send them to the serial monitor.
+
+The sensorTask has a 1 second delay between each read. This means every physical change will take around 1 second to reflect in the serial monitor. This followed the design choice i choose of outputting to the serial monitor every second when the button is pressed.
+
+**Known Limitations** The 1 second delay (not a limitation but a design choice though). It also lacks proper error logging.
+
+---
+
+## Day 4 - Mutexes
+**What it is** How one task can interrupt another task or access variable currently being modified mid session. Copying corrupted variables or causing output interleaving. This task involves learning about mutexes and wrapping my logger with a mutex for one task to "wait for its turn".
+
+**Reality** After integrating the mutex with my logger, i added the logger to my application. I made this decision because the application lacked proper error logging. This made me to modify the original application by modifying the original `processTask` pointer to point to two objects and not one. By putting them in a pointer struct that the file uses as its parameter.
+
+**Known Limitation** None.
