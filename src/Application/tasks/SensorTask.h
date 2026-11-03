@@ -20,7 +20,7 @@ CurrentState state = CurrentState::IDLE;
 std::optional<AccelerometerReading> *Accelerometer;
 std::optional<GyroscopeReading> *Gyroscope;
 QueueHandle_t sensorHandle;
-Logger SensorLogger;
+Logger *logger;
 };
 struct SensorVariables{
     float ax;

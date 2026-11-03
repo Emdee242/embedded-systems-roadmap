@@ -25,6 +25,7 @@ void Application::start() {
     CoreTaskParam.AccelBuffer = &AccelBuffer;
     CoreTaskParam.GyroBuffer = &GyroBuffer;
     CoreTaskParam.mpu = &CoreMPU;
+    CoreTaskParam.logger = &logger;
     CoreTaskParam.Accelerometer = &Accelerometer;
     CoreTaskParam.Gyroscope = &Gyroscope;
     startQueue = xQueueCreate(1, sizeof(QueueTask));

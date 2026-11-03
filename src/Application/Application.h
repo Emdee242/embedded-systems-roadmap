@@ -7,6 +7,7 @@
 #include "../drivers/Mpu6500.h"
 #include "tasks/ProcessTask.h"
 #include "tasks/SensorTask.h"
+#include "../core/Logger.h"
 #include <Wire.h>
 #include <optional>
 class Application {
@@ -22,6 +23,7 @@ class Application {
     std::optional<GyroscopeReading> Gyroscope;
     SensorTaskParam CoreTaskParam{};
     QueueHandle_t startQueue;
+    Logger CoreLogger;
     unsigned long readInterval = 1000;
   public:
     void start();
