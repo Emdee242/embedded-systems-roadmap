@@ -7,7 +7,9 @@ void printButton(void *param){
 
 }
 void buttonInterrupt(int x){
-xSemaphoreGiveFromISR(buttonSemaphore, printButton);
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+xSemaphoreGiveFromISR(buttonSemaphore, &xHigherPriorityTaskWoken);
+portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
 void setup(){
     TestButton.begin();

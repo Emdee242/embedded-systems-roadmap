@@ -38,6 +38,6 @@ void Application::start() {
     }
     CoreTaskParam.sensorHandle = &startQueue;
     CorePTaskParam.processHandle = &startQueue;
-    xTaskCreate(sensorTaskEntry, "sensor task", 4096, &CoreTaskParam, 1, nullptr);
+    xTaskCreate(sensorTaskEntry, "sensor task", 4096, &CoreTaskParam, 2, nullptr);
     xTaskCreate(processTaskEntry, "process task", 4096, &CorePTaskParam, 1, nullptr);
 }
