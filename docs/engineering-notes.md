@@ -508,3 +508,54 @@ The sensorTask has a 1 second delay between each read. This means every physical
 **Reality** After integrating the mutex with my logger, i added the logger to my application. I made this decision because the application lacked proper error logging. This made me to modify the original application by modifying the original `processTask` pointer to point to two objects and not one. By putting them in a pointer struct that the file uses as its parameter.
 
 **Known Limitation** None.
+
+---
+
+## Day 5 - Semaphores & Timers
+**What it is** Understanding how to signal to a task when an event happens instead of the task continuously checking if an event has occured. This reduces processing time as you spend less cpu time checking for events.
+
+**Reality** After going through the kernel book of all the necessary topics and apis, i proceeded to implementing it. My application does not need the implementation of a software timer though, since it makes use of intermittent pauses to print values to the serial monitor and i am making use of a single device (mpu sensor).
+
+### How Software Timers Work
+The rtos software timer makes use of the devices tick count to calculate time and actuate callbacks during the end of said time.
+They are created using the xTimerCreate api and accept six parameters:
+`    buttonTimer = xTimerCreate("buttonTimer", pdMS_TO_TICKS(1000), pdTRUE, NULL, buttonCallback);`
+"buttonTimer" is purely for debugging purposes, to name the particular timer during compile time.
+
+pdMS_TO_TICKS(1000) specifies the timeframe of each callback (specified to be 1 second).
+
+pdTRUE is to create the timer as an autoreload timer (intermittently fire).
+
+NULL is there because i do not need an ID due to the nature of the experiment file.
+
+buttonCallback is the function to be executed during the end period of each 1 second timeframe.
+
+it returns the handle of the timer which will be used by the xTimerStart api during the api call inside the implementation function.
+
+#### Implementation
+```
+TimerHandle_t buttonTimer = xTimerCreate("buttonTimer", pdMS_TO_TICKS(1000), pdTRUE, NULL, buttonCallback);    
+void printButton(void *param){
+    for(;;){
+if(xSemaphoreTake(buttonSemaphore, portMAX_DELAY) == pdTRUE){
+    xTimerStart(buttonTimer, pdMS_TO_TICKS(0));
+            Serial.println("Thy button is pressed!!!");
+        }
+
+    }
+}
+```
+
+### How Semaphores Work
+Semaphores have multiple uses, including mutexes. But in accordance to an ISR or software timer, they communicate using a kind of buffer, kind of. Only this buffer transmits signals and not actual data. Instead of the function continuously checking for data, it waits for the isr or software timer to "alarm" it when a change has occured.
+
+The functions "wait" for data using this api:
+xSemaphoreTake(buttonSemaphore, portMAX_DELAY)
+buttonSemaphore is the semaphore handle that the two functions communicate in
+portMAX_DELAY is how much time it would take waiting for an input in the semaphore (which is indefinately in this case).
+
+The implementation shown below demonstrates how it is used.
+
+[View Semaphore & Software Timer Experimental Implementation](../experiments/FreeRTOS/timer.ino)
+
+**Known Limitations** Experiment does not make use of the timer ID.
