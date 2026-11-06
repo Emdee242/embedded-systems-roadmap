@@ -1,6 +1,6 @@
 #include "../../src/drivers/Button.h"
 #include "../../src/core/Debouncer.h"
-SemaphoreHandle_t buttonSemaphore = xSemaphoreCreateBinary();
+SemaphoreHandle_t buttonSemaphore;
 TimerHandle_t buttonTimer;
 int buttonPin = 7;
 Button TestButton(buttonPin);
@@ -23,6 +23,7 @@ xSemaphoreGive(buttonSemaphore);
 }
 void setup(){
     TestButton.begin();
+    buttonSemaphore = xSemaphoreCreateBinary();
     xTaskCreate(printButton, "Print Button", 1000, NULL, 1, NULL);
     buttonTimer = xTimerCreate("buttonTimer", pdMS_TO_TICKS(1000), pdTRUE, NULL, buttonCallback);    
     attachInterrupt(buttonPin, buttonInterrupt, FALLING);
