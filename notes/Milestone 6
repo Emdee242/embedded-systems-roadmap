@@ -89,3 +89,44 @@ How on multicore ESP-IDF systems, scheduler suspension only suspends scheduling 
 
 Questions:
 I read about apis like `taskYIELD` and concepts like Deadlock, Priority Inversion and how to take hold of the default (taskYIELD) and other apis like vTaskSuspend, xTaskResume etc.. i did not get to apply them here so i am pretty curious on their application in relation to my api.. if at all.
+
+
+
+
+
+
+
+
+
+
+FreeRTOS Semaphores & Timers
+What I Was Confused About:
+I was confused about the difference between a binary (single) semaphore and a counting semaphore at first.
+A callback function.. This took me some time to understand.
+A semaphore in general. It took me some time to form the mental model of it being a kind of signal. or connection. Two functions communicating using a sort of queue. a sort of.
+It was even more confusing clearly differentiating them and a mutex despite both using the same APIs to read and write.
+Differentiating between the actual data sent between functions and just a signal for when an event happened.
+a software timer, what a daemon task means and how a daemon task and a callback is connected to a software timer.
+the header files that would need to be pre-configured and weren't because i was using an arduino IDE
+the commands man.... they were plentiful to say in the least.
+what command initialized the timer (clicked on the start button (in this case, sent the 'START' command to the daemon)).
+
+Enlightenment:
+they use semaphore give to flip the semaphore to 1. take flips back to 0.
+so concurent gives leaves the semaphore at 1. indicating there is still something not attended to.
+the semaphore stuff and mutex share the same function because they do kind of the same thing but with different motives. one is for owning and releasing mutex. while one is for taking the binary semaphore, blocking until it directly 'recieves orders' from the semaphore itself (by the semaphore flipping ig).
+counting semaphores is only to know the number of events that happened. it does not access the data in any way. it is useful when you want to know number of events after a certain amount of time, or someting is important to be implemented after a certain number of events etc.
+the RTOS software timer is also quite similar to my original software timer. in the sense that it determines if a certain amount of time has elapsed. More on that tomorrow (technically today) anyways.
+freeRTOS software timers are not related to any hardware timer or counters (in the sense that they share the microcontrollers natural tick count. and don't each need a seperate timer).
+software timer callbacks and isrs shouldn't enter a blocked state because that halts the execution of all the tasks under one bane.
+one shot and auto reload timers
+Timer service tasks are what execute the freeRTOS callback functions when the timer is due.
+Two callbacks can also not execute at the same time. So even when ones timer is due, if the tst is executing a callback currently, the other will have to wait.
+there is also a queue for the TST to stack commands (xTimerStart, xTimerStop, Reset, ChangePeriod, Delete etc). using configTIMER_QUEUE_LENGTH, one can select the length they want the queue to be.
+so basically, semaphores (software timer semaphores specifically) are for knowing when an event happens instead of checking constantly if task a has done a thing through task b. It does this by directly "telling" the task when an event has occured. While the timer is for planning an event (callback) to happen after a specific allocated amount of time.
+if you start a task before starting a scheduler, your task doesn't wait before executing. and if it does successfully start, it only begins counting when the scheduler starts.
+the semaphore stuff... completely dependent on context. also, you don't need to get a return value if you set to portMAX_DELAY.
+
+Questions:
+I am a little curious about all the api functions in the freeRTOS kernel i did not read due to me not really needing to. Maybe when i see nothing better to do or feel slightly masochistic i'll go read them...
+Would it be the right design decision to integrate the rtos software timer into my application or will vTaskDelay do? what is the professional standard?
