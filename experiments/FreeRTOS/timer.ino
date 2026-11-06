@@ -1,7 +1,7 @@
 #include "../../src/drivers/Button.h"
 #include "../../src/core/Debouncer.h"
-SemaphoreHandle_t buttonSemaphore;
-TimerHandle_t buttonTimer;
+SemaphoreHandle_t buttonSemaphorev = NULL;
+TimerHandle_t buttonTimer = NULL;
 int buttonPin = 7;
 Button TestButton(buttonPin);
 void printButton(void *param){
