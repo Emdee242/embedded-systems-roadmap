@@ -1,13 +1,10 @@
-#include "../../src/drivers/Button.h"
-#include "../../src/core/Debouncer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
 #include "freertos/timers.h"
-SemaphoreHandle_t buttonSemaphorev = NULL;
+SemaphoreHandle_t buttonSemaphore = NULL;
 TimerHandle_t buttonTimer = NULL;
 int buttonPin = 7;
-Button TestButton(buttonPin);
 void printButton(void *param){
     for(;;){
 if(xSemaphoreTake(buttonSemaphore, portMAX_DELAY) == pdTRUE){
@@ -22,11 +19,11 @@ void buttonInterrupt(){
 xSemaphoreGiveFromISR(buttonSemaphore, &xHigherPriorityTaskWoken);
 portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
-void buttonCallback(){
+void buttonCallback(TimerHandle_t timer){
 xSemaphoreGive(buttonSemaphore);
 }
 void setup(){
-    TestButton.begin();
+    pinMode(buttonPin, INPUT_PULLUP);;
     buttonSemaphore = xSemaphoreCreateBinary();
     xTaskCreate(printButton, "Print Button", 1000, NULL, 1, NULL);
     buttonTimer = xTimerCreate("buttonTimer", pdMS_TO_TICKS(1000), pdTRUE, NULL, buttonCallback);    
