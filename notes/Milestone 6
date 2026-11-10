@@ -139,6 +139,11 @@ Would it be the right design decision to integrate the rtos software timer into 
 
 FreeRTOS ISR + Dual-Core Checks
 What I Was Confused About:
+I did not understand at first, the difference between an interrupt input (which is the channel and of which we have a limited resource of) and an interrupt source (what generates the signal itself)
+Also of whether it was interrupt input or source that was limited in a micrcontroller (31 for esp32 c3). And their corellation
+The meaning of an interrupt matrix (which routes the interrupt sources to interrupt inputs. especially for shared interrupts)
+The meaning of a channel (basically an interrupt input)
+The difference between an interrupt source and an interrupt peripheral
 
 Enlightenment:
 
