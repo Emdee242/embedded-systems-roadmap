@@ -148,10 +148,12 @@ The meaning of a channel (basically an interrupt input)
 The difference between an interrupt source and an interrupt peripheral
 Difference between a flash, DRAM, IRAM and an IROM.
 What it means when a cache is temporarily disabled due to the flash executing in interrupt. And how it affects the code in general.
-As well as tradeoffs involved in an intentional design decision of still using that method (latency) or, using IRAM-safe functions (reduced codebase size)
+As well as tradeoffs involved in an intentional design decision of still using that method (latency) or, using IRAM-safe functions (reduced codebase size).
+Why level detection is used and not edge detection for shared interrupts (cuz you risk losing signal due to the shared resource thing).
+Interrupt mask meaning and its purpose (which interrupt conditions are allowed to generate interrupt requests).
 
 Enlightenment:
-i learnt about isr
+i learnt about isr.
 interrupt deferring and why it is generally bad to make your isr bulky.
 How and why interrupts cannot do context switches.
 How to make an interrupt context switches.
@@ -159,10 +161,10 @@ Learnt a single arduino based function on sending a signal to an isr function.
 learnt about isr safe apis. semaphores specifically.
 the difference between a binary semaphore and a counting semaphore (one for only one event and the other for counting a particular number of events).
 learnt about the consequences of an interrupt or two interrupt happening whilst one is still being processed. effectively losing signals because the semaphore is already full. This can be predicted early if one does not wait indefinately if the semaphore is full and instead waits for a specified amount of time.
-if i understand correctly, the second parameter for the counting semaphores is for knowing the amount of resources inherently available inside a semaphore at creation. Which, granted, for an ISR context would be a useless? feature... but it is not for isrs (i think). it is for monitoring control. which task is making use of this "space" at thsi particular "time". (i think).
+if i understand correctly, the second parameter for the counting semaphores is for knowing the amount of resources inherently available inside a semaphore at creation. Which, granted, for an ISR context would be a useless? feature... but it is not for isrs (i think). it is for monitoring control. which task is making use of this "space" at this particular "time". (i think).
 The more cores a cpu has, the more processes/tasks it can run at the same time.
-The specific microcontroller i am using (esp32 c3), has 31 interrupt inputs. which does not necessarily mean i can only create 31 ISRs. But ISRs interact with stuff using those peripherals.
-an interrupt allocator, allocates interrupts. It abstracts that from you, searching for the most suitable interrupt input when an interrupt is detected from the peripheral..?
+The specific microcontroller i am using (esp32 c3), has 31 interrupt inputs. which does not necessarily mean i can only create 31 ISRs. But that i have access to 31 interrupts at a time. Which can be shared of course.
+an interrupt allocator, allocates interrupts. It abstracts that from you, searching for the most suitable interrupt input when an interrupt is created (yes, it processes and links interrupts before actual interrupt signal has occured. It is done as soon as the interrupt process is created.
 
 Questions:
-
+I now understand (a little), how much is being abstracted concerning interrupts when using arduino relative to the esp. I am curious to see how much of what i have learnt is actually necessary in actualization. What i'll actually be using and is necessary to know and what is just theoretical knowledge for maybe a use case one day basically.
