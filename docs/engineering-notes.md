@@ -559,3 +559,30 @@ The implementation shown below demonstrates how it is used.
 [View Semaphore & Software Timer Experimental Implementation](../experiments/FreeRTOS/timer.ino)
 
 **Known Limitations** Experiment does not make use of the timer ID.
+
+---
+
+## Day 6 - ISR & Dual-Core Checks
+**What it is** This is a purely theoretical day. I learnt about Interrupt Service Requests and their relation to my micrcontroller cores. How to create an interrupt and well as its service request, as well as the logic going on internally during interrupt creation and usage.
+
+**Reality** I integrated the ISR concept learnt to the timer experiment class created. 
+
+### ISR Experiment
+It detects a button fall or rise and sends a signal through the semaphore. Alerting the main task function through the ISR. 
+
+The interrupt is created using an arduino specific function:
+`    attachInterrupt(buttonPin, buttonInterrupt, FALLING);`
+
+buttonPin is the pin which the button is attached to.
+
+buttonInterrupt is the ISR function that the isr sends the signal to.
+
+FALLING is the interrupt context.
+
+The implementation shown below demonstrates how it is used.
+
+[View Semaphore & Software Timer Experimental Implementation](../experiments/FreeRTOS/timer.ino)
+
+**Known Limitation** I make use of an arduino based interrupt function in the experiment. And since i will be moving to an entirely different ide (esp idf), i might be required to modify that aspect of the function to an esp based function.
+
+---
