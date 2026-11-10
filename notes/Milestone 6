@@ -130,3 +130,16 @@ the semaphore stuff... completely dependent on context. also, you don't need to 
 Questions:
 I am a little curious about all the api functions in the freeRTOS kernel i did not read due to me not really needing to. Maybe when i see nothing better to do or feel slightly masochistic i'll go read them...
 Would it be the right design decision to integrate the rtos software timer into my application or will vTaskDelay do? what is the professional standard?
+
+
+
+
+
+
+
+FreeRTOS ISR + Dual-Core Checks
+What I Was Confused About:
+
+Enlightenment:
+
+Questions:
