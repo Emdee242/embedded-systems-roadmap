@@ -27,6 +27,7 @@ class Application {
     ProcessTaskParam CorePTaskParam{};
     QueueHandle_t startQueue;
     Logger CoreLogger;
+    CorePTaskParam->logger = &CoreLogger;
     unsigned long readInterval = 1000;
   public:
     void start();

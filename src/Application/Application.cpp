@@ -31,6 +31,7 @@ void Application::start() {
     CoreTaskParam.logger = &CoreLogger;
     CoreTaskParam.Accelerometer = &Accelerometer;
     CoreTaskParam.Gyroscope = &Gyroscope;
+    CorePTaskParam.logger = &CoreLogger;
     startQueue = xQueueCreate(1, sizeof(QueueTask));
     if(startQueue == nullptr){
         Serial.println("Queue creation failed!");
