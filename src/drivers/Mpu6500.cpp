@@ -89,7 +89,7 @@ Result Mpu6500::begin() {
     } else {
         isMpuReady = false;
         firstLog.Log("non-existing return type, check current endTransmission "
-                     "documentation",
+                     "documentation and hardware wiring",
                      Severity::ERROR);
         return Result::NULL_RETURN_TYPE;
     }
