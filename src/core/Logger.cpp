@@ -22,8 +22,9 @@ xSemaphoreTake(LogMutex, portMAX_DELAY);
             Serial.print("      ");
             Serial.println("ERROR");
             break;
+        default:
+        Serial.print("wrong initialization");
         }
-    } else {
     }
 xSemaphoreGive(LogMutex);
 }

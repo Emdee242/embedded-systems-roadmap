@@ -11,9 +11,8 @@ enum class Severity {
 class Logger {
   private:
     Severity maxLogger = Severity::INFO;
-
-  public:
     SemaphoreHandle_t LogMutex = xSemaphoreCreateMutex();
+  public:
     void setLimit(Severity Level);
     void Log(const char* message, Severity Level);
 };
