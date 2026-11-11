@@ -23,21 +23,8 @@ void setup() {
   FirstMPU.configGyro(0, 0);
 }
 void loop() {
-      if (someResult == Result::TOO_MANY_BYTES) {
-        someLog.Log("Data is too long", Severity::ERROR);
-    } else if (someResult == Result::INVALID_SENSOR) {
-        someLog.Log("Invalid device address", Severity::ERROR);
-    } else if (someResult == Result::INVALID_REG) {
-        someLog.Log("Invalid register address", Severity::ERROR);
-    } else if (someResult == Result::ERROR) {
-        someLog.Log("Unrecognized error", Severity::ERROR);
-    } else if (someResult == Result::TIMEOUT) {
-        someLog.Log("Timeout", Severity::ERROR);
-    } else {
-        someLog.Log("non-existing return type, check current endTransmission "
-                     "documentation", Severity::ERROR);
-    }
-  /*if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
+
+  if (Accelerometer = FirstMPU.measureAccel(); Accelerometer) {
     Accelerometer->get(ax, ay, az);
     Serial.print("Accelerometer:       ");
     Serial.print(ax);
@@ -56,5 +43,5 @@ void loop() {
     Serial.println(gz);
   }
   delay(500);
-  */
+  
 }
