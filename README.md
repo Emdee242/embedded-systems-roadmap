@@ -49,13 +49,93 @@ Every milestone builds upon the previous one.
 ## Repository Structure
 
 ```
-assets/
-docs/
-notes/
-src/
-experiments/
-embedded-systems-roadmap.ino
-README.md
+embedded-systems-roadmap/
+├── assets/
+│   ├── Diagram/
+│   │   ├── embedded_utility_library.svg
+│   │   └── state_machine_application.svg
+│   ├── Thumbnails
+│   │   ├── Week1_thumbnail.jpg
+│   │   ├── Week2_thumbnail.jpg
+│   │   ├── Week3_thumbnail.jpg
+│   │   ├── Week4_thumbnail.jpg
+│   │   └── Week4.5_thumbnail.jpg
+├── docs/
+│   ├── api-reference.md
+│   └── engineering-notes.md
+├── experiments/
+│   ├── FreeRTOS/
+│   │   └── timer/
+│   │       └── timer.ino
+│   ├── I2C/
+│   │   └── I2C.ino
+│   ├── Legacy/
+│   │   ├── Button.ino
+│   │   ├── CircularBuffer.ino
+│   │   ├── Debouncer.ino
+│   │   ├── embedded-systems-roadmap.ino
+│   │   ├── Led.ino
+│   │   ├── Logger.ino
+│   │   ├── Mpu6500
+│   │   │   └── Mpu6500.ino
+│   │   └── SoftwareTimer.ino
+│   ├── MPU6500_bringup/
+│   │   └── MPU6500_bringup.ino
+│   ├── SPI/
+│   │   └── SPI.ino
+│   └── UART/
+│       └── UART.ino
+│
+├── notes/
+│   ├── Milestone 1.txt
+│   ├── Milestone 2.txt
+│   ├── Milestone 3.txt
+│   ├── Milestone 4.txt
+│   ├── Milestone 5.txt
+│   └── Milestone 6.txt
+├── src/
+│   ├── Application/
+│   │   ├── tasks/
+│   │   │    ├── ProcessTask.cpp
+│   │   │    ├── ProcessTask.h
+│   │   │    ├── SensorTask.cpp
+│   │   │    └── SensorTask.h
+│   │   ├── Application.cpp
+│   │   └── Application.h
+│   │
+│   ├── core
+│   │   ├── CircularBuffer.cpp
+│   │   ├── CircularBuffer.h
+│   │   ├── Debouncer.cpp
+│   │   ├── Debouncer.h
+│   │   ├── Logger.cpp
+│   │   ├── Logger.h
+│   │   ├── SoftwareTimer.cpp
+│   │   └── SoftwareTimer.h
+│   │
+│   └── drivers
+│       ├── Button.cpp
+│       ├── Button.h
+│       ├── Led.cpp
+│       ├── Led.h
+│       ├── Mpu6500.cpp
+│       └── Mpu6500.h
+│
+├── test/
+│   ├── unity/
+│   │   ├── LICENSE.txt
+│   │   ├── unity.c
+│   │   ├── unity.h
+│   │   └── unity_internals.h
+│   │
+│   ├── run_tests
+│   └── test_circular_buffer.cpp
+│
+├── embedded-systems-roadmap.ino
+├── .gitignore
+├── README.md
+├── .clang-format
+└── test.sh
 ```
 
 More folders will be added as the project evolves.
