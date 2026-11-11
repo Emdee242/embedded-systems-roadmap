@@ -565,7 +565,7 @@ The implementation shown below demonstrates how it is used.
 ## Day 6 - ISR & Dual-Core Checks
 **What it is** This is a purely theoretical day. I learnt about Interrupt Service Requests and their relation to my micrcontroller cores. How to create an interrupt and well as its service request, as well as the logic going on internally during interrupt creation and usage.
 
-**Reality** I integrated the ISR concept learnt to the timer experiment class created. 
+**Reality** I integrated the ISR concept learnt to the timer experiment class created. I also decided on using my delay function on the printing task instead. As this would make the code easier to modify if i wanted to change the print intervals. Or remove it entirely.
 
 ### ISR Experiment
 It detects a button fall or rise and sends a signal through the semaphore. Alerting the main task function through the ISR. 
