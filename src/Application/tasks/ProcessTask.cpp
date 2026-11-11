@@ -29,5 +29,6 @@ for(;;){
         }else{
             ProcessHandle->logger->Log("timeout (empty queue)", Severity::ERROR);
         }
+        vTaskDelay(pdMS_TO_TICKS( 1000 ));
     }
 }

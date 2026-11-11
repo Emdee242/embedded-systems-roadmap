@@ -9,12 +9,12 @@
 #include <freertos/task.h>
 void sensorTaskEntry(void *parameters){
     SensorTaskParam *SensorParameter = static_cast<SensorTaskParam*>(parameters);
-    QueueTask SensorTaskEntry;
+    QueueTask SensorQueueTaskEntry;
 for(;;){
     SensorParameter->debounce->update();
         switch (SensorParameter->state) {
         case (CurrentState::ACTIVE):
-        SensorTaskEntry.QueueMessage = CurrentState::ACTIVE;
+        SensorQueueTaskEntry.QueueMessage = CurrentState::ACTIVE;
             if (SensorParameter->debounce->lift()) {
                 SensorParameter -> state = CurrentState::IDLE;
             }
@@ -22,24 +22,24 @@ for(;;){
                 float ax;
                 float ay;
                 float az;
-                (*SensorParameter->Accelerometer)->get(SensorTaskEntry.QueueVariables.ax, SensorTaskEntry.QueueVariables.ay, SensorTaskEntry.QueueVariables.az);
-                SensorParameter->AccelBuffer->write(SensorTaskEntry.QueueVariables.ax);
-                SensorParameter->AccelBuffer->write(SensorTaskEntry.QueueVariables.ay);
-                SensorParameter->AccelBuffer->write(SensorTaskEntry.QueueVariables.az);
+                (*SensorParameter->Accelerometer)->get(SensorQueueTaskEntry.QueueVariables.ax, SensorQueueTaskEntry.QueueVariables.ay, SensorQueueTaskEntry.QueueVariables.az);
+                SensorParameter->AccelBuffer->write(SensorQueueTaskEntry.QueueVariables.ax);
+                SensorParameter->AccelBuffer->write(SensorQueueTaskEntry.QueueVariables.ay);
+                SensorParameter->AccelBuffer->write(SensorQueueTaskEntry.QueueVariables.az);
             }
             if (*SensorParameter->Gyroscope = SensorParameter->mpu->measureGyro(); *SensorParameter->Gyroscope) {
                 float gx;
                 float gy;
                 float gz;
-                (*SensorParameter->Gyroscope)->get(SensorTaskEntry.QueueVariables.gx, SensorTaskEntry.QueueVariables.gy, SensorTaskEntry.QueueVariables.gz);
-                SensorParameter->GyroBuffer->write(SensorTaskEntry.QueueVariables.gx);
-                SensorParameter->GyroBuffer->write(SensorTaskEntry.QueueVariables.gy);
-                SensorParameter->GyroBuffer->write(SensorTaskEntry.QueueVariables.gz);
+                (*SensorParameter->Gyroscope)->get(SensorQueueTaskEntry.QueueVariables.gx, SensorQueueTaskEntry.QueueVariables.gy, SensorQueueTaskEntry.QueueVariables.gz);
+                SensorParameter->GyroBuffer->write(SensorQueueTaskEntry.QueueVariables.gx);
+                SensorParameter->GyroBuffer->write(SensorQueueTaskEntry.QueueVariables.gy);
+                SensorParameter->GyroBuffer->write(SensorQueueTaskEntry.QueueVariables.gz);
 
             }
             break;
         case (CurrentState::IDLE):
-        SensorTaskEntry.QueueMessage = CurrentState::IDLE;
+        SensorQueueTaskEntry.QueueMessage = CurrentState::IDLE;
             if (SensorParameter->debounce->fall()) {
                 SensorParameter -> state = CurrentState::ACTIVE;
             }
@@ -48,10 +48,8 @@ for(;;){
         SensorParameter->logger->Log("Invalid State", Severity::ERROR);
             break;
         }
-        if(xQueueSendToBack(*SensorParameter->sensorHandle, &SensorTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
-            SensorParameter->logger->Log("Timeout (Queue is full, overwriting)", Severity::WARN);
-            xQueueOverwrite(*SensorParameter->sensorHandle, &SensorTaskEntry);
+        if(xQueueSendToBack(*SensorParameter->sensorHandle, &SensorQueueTaskEntry, pdMS_TO_TICKS( 30 )) != pdPASS){
+            xQueueOverwrite(*SensorParameter->sensorHandle, &SensorQueueTaskEntry);
         };
-        vTaskDelay(pdMS_TO_TICKS( 1000 ));
 }
 }
