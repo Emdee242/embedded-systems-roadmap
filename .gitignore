@@ -1,1 +1,7 @@
 test/run_tests
+
+# ESP-IDF generated build files
+build/
+
+# ESP-IDF managed external components
+managed_components/
