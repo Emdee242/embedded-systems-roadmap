@@ -5,3 +5,6 @@ build/
 
 # ESP-IDF managed external components
 managed_components/
+
+# System-specific entries
+.vscode/
