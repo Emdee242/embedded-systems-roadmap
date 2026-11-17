@@ -586,3 +586,24 @@ The implementation shown below demonstrates how it is used.
 **Known Limitation** I make use of an arduino based interrupt function in the experiment. And since i will be moving to an entirely different ide (esp idf), i might be required to modify that aspect of the function to an esp based function.
 
 ---
+
+# Milestone 3 — ESP IDF
+
+A migration from the arduino IDE to the official ESP-IDF. An official porting
+
+---
+
+## Day 1 - Installation & idf.py basics
+**What it is** Installing the Espressif toolchain and learning about program structure and APIS.
+
+**Reality** The migration is to be done in steps. The first step is for me to get comfortable using ESP specific APIs and be more familiar with its terminologies and have a general mental model of how it works. So It also involved making a hello world experiment build/project. And Therefore, I used the ESP-IDF extention and not the PlatformIO because several reasons:
+- It uses a different project structure than what i wish to learn. (The ESP build structure).
+- It is a generalized extention for many micro-controllers. So will have less IDF specific functionality that the esp idf extention itself.
+
+## Hello World Experiment
+It just prints a Hello World string in 1000 millisecond succession.
+
+[View Hello World Implementation](../experiments/ESP-IDF/hello_world/main/hello_world.cpp)
+
+**Known Limitations** Its an experiment. And my knowledge remains largely incomplete yet.
+
