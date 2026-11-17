@@ -1,0 +1,46 @@
+Install, Project Structure, idf.py basics in ESP-IDF
+What I Was Confused About:
+What "cryptographic signatures" meant and why i was trusting the official package with something like that (for checking authenticity of package. In other words, safe... as long as you are downloading the right thing)
+Meaning of project-wide CMake variales. The difference between a CMake file and the freeRTOS compilation (PS: Waaay different).
+The difference between a normal compilation of c++ and the esp-idf build process.
+Meaning and purpose of sdkconfig
+Connection between sdkconfig, sdkconfig.default, sdkconfig.old and Kconfig... and menuconfig too(different and easy to differentiate (one for current project, one for default creation, one is former iteration of project and one is the interface itself).
+components...
+dependencies. meaning of them, what they contained (cuz it was definately not code) etc. (which was the versions and list of components)
+what idf_component.yml meant and what it also contained (metadata of components (details of which component it is,)
+If it still doesn't make sense, basically, they are both related to the ESP-IDF Component Manager. One (dependencies.lock) is generated automatically by esp idf. recording managed components versions and dependencies (other functions that they also rely on). idf_component.yml is the file you maintain. it is the one you call and actually tell which components you download and write details/stuff about your managed components in there.
+A bootloader (which is basically the file that runs before your main code. can be modified if you need certain stuff to run before your main project).
+idf.py, how different it is from arduino ide. What is the function, how it is structured, how the internals worked.
+There are also files that you modify directly, files you manage through the command prompt and files you don't manage at all and are managed my esp. Like the idf_component.yml is to be managed by you (directly through the file), dependencies are managed by esp itself, and depending on the sdkconfig, you could be managing it through an interface, directly in your main code, in the file itself or the esp configures it. Same for your CMake file. you edit those directly
+*inhales aggressively..      APIs.. 
+difference between the idf.py build and idf.py flash.
+why i was using a python script for a c/c++ program
+How to configure in my vs codium. (had to download espressif official extention.. yep, chose it over PlatformIO. More on that in the next section).
+difference between pullup and pulldown resistors in esp idf (for some reason i forgot this and had to understand it again)
+An interrupt, and how to configure it. (very different from arduino's 'attachInterrupt()'. multiple steps involved)
+what to do with the return values of these functions (depends, if it is non-detrimental (like an unsuccessful ping), continue or, control it to do something else if it is detrimental.
+Now that i have ESP_LOG, what is the purpose of my actual Logger (this is a question i still have). ESP_LOGGER can print, also has a severity level and i can also limit the messages popping up depending on the severity level. So i dunno that.
+difference between ESP_LOG, printf, std::cout and uart sending to the serial monitor like arduino's serial.print (printf sends a bunch of strings. and you can choose if you want to use UART or JTAG. Unlike serial.print which is primarily sent to the serial monitor through the UART0).
+
+Enlightenment:
+The professional method is for, instead of using trusted=yes, to use signed-by=<path to keyring file>. whatever that means... what that means, is that i am not doing it. but i should come up with a reasonable reason as to why, how i found out and ... some other buncha stuff. you should also not that apt-key is deprecated. so you avoid that ig.
+The folder was heavy? and due to that, the thing failed. there are a bunch of options to try before retrying. like choosing my own mirror, doing an offline installation, switching the http version etc.. lemme just retry tho.
+
+CMake helps to "give a mental model" your project for the your esp. It processes your files, links stuff etc. This is to "tell" your esp idf your project structure. So very different from compilation.
+components are for your files that you coded and will reuse
+sdkconfig are preconfigured settings. the saved settings that are configured using sdkconfig.default. the skdconfig.h and .cpp are different structures for if you want to port it to different environment
+bootloader_components are for external components that you will download
+dependencies.lock are the saved info/metadata (yeah.. that should be the right word)
+Kconfig is the config file. Containing the settings you want to modify.. 
+idf_component.yml is the file that describes the descriptive information/metadata of the component you want to port using the IDF Component Manager.
+IDF Component Manager is what you use to download and manage external esp components.
+so from what i am seeing, flashing, uses the files from the build directory and not the main comonent
+I learnt more about the compilation process of the file, the build process, purpose of the bootloader, the partition table etc. The process involved in the build process, as well as the process involved in the flash process
+
+Learning these all.... was an experience to say in the least.
+First off, i had to install the esp idf. And newsflash to me, espressif documentation is not made for beginners. They are made for people who know what they are doing and have come to see specific things. So i had to go to youtube and other sites i have forgotten of, and search. I used the video and material of an official espressif website taught by Darian Leung (shoutout to him). Through that and ai, i was able to install the esp idf. luckily, it wasn't nearly as complicated to install as it was 3 years ago, when he taught the stuff. After that, i had to build a simple hello world project... except it wasn't so simple. It involved me creating the project, knowing if there is anything i should configure that i didn't, gitignore my build folder cuz it would make my repo unnecessarily bulky. I also had to learn afew other "niche" commands. like entering the esp environment through my command line, know where a file is declared through its api (more on that below), as well as some commands for maneuvering through the command line. Then i had to go to my IDE (vs codium for me), and install any extention i am going to be using to code. I chose espressif and not platformIO because i am using an esp currently. and i wanted to get the most "experience" i could. And i thought it would give me a better "esp environment" experience overall.
+after that, i had to link it to my actual esp directory and version. And then download clangd and configure that too (was a 2 step process tho).
+Then... I could finally run my hello world project.
+
+Questions:
+Now that i have ESP_LOG, what is the purpose of my actual Logger? They seem to have the same functionality.. (esp can do all that logger can do i mean. not the reverse). should i delete the logger entirely? or should i wrap my former arduino print apis in the log functions? since current functions rely on it? This is a design decision i am yet to make.
