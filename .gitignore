@@ -9,8 +9,8 @@ managed_components/
 # System-specific entries
 .vscode/
 
-## ESP-IDF cached files
+## ESP-IDF temporary cached files
 .cache/
 
-## previous configuration
+## Previous configuration
 sdkconfig.old
