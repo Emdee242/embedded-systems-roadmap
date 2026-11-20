@@ -1,8 +1,10 @@
 #ifndef LED_H
 #define LED_H
+#include <cstdint>
+#include "driver/gpio.h"
 class Led {
   private:
-    const uint8_t pin;
+    const gpio_num_t pin;
     const uint64_t mask;
     bool isOn = false;
 

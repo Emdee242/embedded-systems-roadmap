@@ -1,12 +1,13 @@
 #include "Led.h"
-#include "drivers/gpio.h"
-Led::Led(uint8_t x) : pin(x), mask(1ULL << pin) {}
+#include <cstdint>
+#include "driver/gpio.h"
+Led::Led(uint8_t x) : pin(static_cast<gpio_num_t>(x)), mask(1ULL << pin) {}
 void Led::off() {
-    gpio_set_level(mask, 0);
+    gpio_set_level(pin, 0);
     isOn = false;
 }
 void Led::on() {
-    gpio_set_level(mask, 1);
+    gpio_set_level(pin, 1);
     isOn = true;
 }
 void Led::begin() const {

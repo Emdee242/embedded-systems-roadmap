@@ -14,3 +14,6 @@ managed_components/
 
 ## Previous configuration
 sdkconfig.old
+
+## Current configuration
+sdkconfig

@@ -1,6 +1,7 @@
 #include "include/Button.h"
+#include <cstdint>
 #include "driver/gpio.h"
-Button::Button(uint8_t x) : pin(x), mask(1ULL << pin){};
+Button::Button(uint8_t x) : pin(static_cast<gpio_num_t>(x)), mask(1ULL << pin){};
 void Button::begin() const {
     gpio_config_t ButtonConfig = {};
     ButtonConfig.intr_type = GPIO_INTR_DISABLE;
@@ -10,4 +11,4 @@ void Button::begin() const {
     ButtonConfig.pull_up_en = GPIO_PULLUP_DISABLE;
     gpio_config(&ButtonConfig);
     }
-bool Button::readPin() const { return gpio_get_level(mask); }
+bool Button::readPin() const { return gpio_get_level(pin); }
